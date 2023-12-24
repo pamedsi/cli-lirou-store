@@ -1,4 +1,4 @@
-package com.lirou.store.mapper.glasses;
+package com.lirou.store.mapper;
 
 import com.lirou.store.DTOs.GlassesDTO;
 import com.lirou.store.entities.Glasses;
