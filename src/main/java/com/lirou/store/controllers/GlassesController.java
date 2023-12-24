@@ -33,8 +33,8 @@ public class GlassesController extends BaseController {
 
     @PutMapping("/put-glasses")
     public ResponseEntity<?> putGlasses(@RequestBody GlassesDTO glassesDTO) {
-        List<String> changes = glassesService.updateGlasses(glassesDTO);
-        return ResponseEntity.ok(new Message(STR."Atualização feita com sucesso! Mudanças feitas: \{changes.toString()}"));
+        glassesService.updateGlasses(glassesDTO);
+        return ResponseEntity.ok(new Message("Atualização feita com sucesso!"));
     }
 
     @DeleteMapping("/delete-glasses/{identifier}")

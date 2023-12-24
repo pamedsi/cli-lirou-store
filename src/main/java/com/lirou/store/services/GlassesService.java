@@ -34,46 +34,12 @@ public class GlassesService {
         glassesRepository.save(newGlasses);
     }
 
-    public List<String> updateGlasses(GlassesDTO changes) {
+    public void updateGlasses(GlassesDTO changes) {
         Glasses glassesToEdit = glassesRepository.findByIdentifierAndDeletedFalse(changes.identifier());
         if (glassesToEdit == null) throw new NotFoundException("Óculos não encontrado!");
 
-        List<String> changesForResponse = new ArrayList<>();
-
-        if (!Objects.equals(glassesToEdit.getTitle(), changes.title())) {
-            glassesToEdit.setTitle(changes.title());
-            changesForResponse.add(STR."Título modificado! Agora se chama: \{changes.title()}");
-        }
-        if (!Objects.equals(glassesToEdit.getPic(), changes.pic())) {
-            glassesToEdit.setPic(changes.pic());
-            changesForResponse.add(STR."Foto modificada! Agora a URL é: \{changes.pic()}");
-        }
-        if (!Objects.equals(glassesToEdit.getFrame(), changes.frame())) {
-            glassesToEdit.setFrame(changes.frame());
-            changesForResponse.add(STR."Armação atualizada, agora é: \{changes.frame()}");
-        }
-        if (!Objects.equals(glassesToEdit.getColor(), changes.color())) {
-            glassesToEdit.setColor(changes.color());
-            changesForResponse.add(STR."Cor atualizada, agora é: \{changes.color()}");
-        }
-        if (!Objects.equals(glassesToEdit.getModel(), changes.model())) {
-            glassesToEdit.setModel(changes.model());
-            changesForResponse.add(STR."Modelo atualizado, agora é: \{changes.model()}");
-        }
-        if (glassesToEdit.getPrice().compareTo(changes.price()) != 0) {
-            glassesToEdit.setPrice(changes.price());
-            changesForResponse.add(STR."Preço alterado! Agora custa: \{changes.price()}");
-        }
-        if (glassesToEdit.getInStock() != changes.inStock()) {
-            glassesToEdit.setInStock(changes.inStock());
-            if (changes.inStock()) changesForResponse.add(STR."\{changes.title()} disponibilizado!");
-            else changesForResponse.add(STR."\{changes.title()} indisponibilizado!");
-        }
-
-        if (changesForResponse.isEmpty()) throw new BadRequestException("Nenhuma mudança solicitada é diferente dos dados já presentes!");
         glassesToEdit.setLastEditedIn(LocalDateTime.now());
         glassesRepository.save(glassesToEdit);
-        return changesForResponse;
     }
 
     public String removeGlasses(String glassesIdentifier) {
