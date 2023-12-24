@@ -21,7 +21,7 @@ public abstract class Product {
     @Column
     @Setter(AccessLevel.NONE)
     private String identifier = UUID.randomUUID().toString();
-    @Column (nullable = false)
+    @Column (nullable = false, unique = true)
     private String title;
     @Column
     private BigDecimal price;
