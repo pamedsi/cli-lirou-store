@@ -13,6 +13,7 @@ public record GlassesDTO(
         Boolean inStock,
         @NotBlank
         String model,
+        String frame,
         @NotBlank
         String color,
         @NotBlank

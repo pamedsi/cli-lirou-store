@@ -15,6 +15,7 @@ public class GlassesMapper {
                 glassesEntity.getPic(),
                 glassesEntity.getInStock(),
                 glassesEntity.getModel(),
+                glassesEntity.getFrame(),
                 glassesEntity.getColor(),
                 glassesEntity.getBrand(),
                 glassesEntity.getPrice()
