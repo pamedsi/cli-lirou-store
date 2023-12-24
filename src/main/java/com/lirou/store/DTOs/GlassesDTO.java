@@ -1,8 +1,12 @@
 package com.lirou.store.DTOs;
 
+import jakarta.validation.constraints.NotBlank;
+
 import java.math.BigDecimal;
 
-public record InputGlassesDTO(
+public record GlassesDTO(
+        String identifier,
+        @NotBlank
         String title,
         String pic,
         Boolean inStock,
@@ -10,5 +14,4 @@ public record InputGlassesDTO(
         String color,
         String brand,
         BigDecimal price
-
 ) {}
