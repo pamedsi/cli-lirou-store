@@ -22,4 +22,9 @@ public class GlassesService {
         List<Glasses> glassesAsEntity = glassesRepository.findAllByDeletedFalse();
         return glassesMapper.severalToDTO(glassesAsEntity);
     }
+
+    public void saveNewGlasses(GlassesDTO glassesDTO) {
+        Glasses newGlasses = new Glasses(glassesDTO);
+        glassesRepository.save(newGlasses);
+    }
 }
