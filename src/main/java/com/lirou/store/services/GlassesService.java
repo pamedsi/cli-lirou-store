@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -70,6 +71,7 @@ public class GlassesService {
         }
 
         if (changesForResponse.isEmpty()) throw new BadRequestException("Nenhuma mudança solicitada é diferente dos dados já presentes!");
+        glassesToEdit.setLastEditedIn(LocalDateTime.now());
         glassesRepository.save(glassesToEdit);
         return changesForResponse;
     }
