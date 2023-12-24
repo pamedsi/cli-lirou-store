@@ -6,10 +6,7 @@ import com.lirou.store.models.Message;
 import com.lirou.store.services.GlassesService;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -31,6 +28,19 @@ public class GlassesController extends BaseController {
     @PostMapping("/post-glasses")
     public ResponseEntity<?> postGlasses(@RequestBody GlassesDTO glassesDTO) {
         glassesService.saveNewGlasses(glassesDTO);
-        return ResponseEntity.ok(new Message(glassesDTO.title() + " salvo!"));
+        return ResponseEntity.status(201).body(new Message(glassesDTO.title() + " salvo!"));
     }
+
+    @PutMapping("/put-glasses")
+    public ResponseEntity<?> putGlasses(@RequestBody GlassesDTO glassesDTO) {
+        List<String> changes = glassesService.updateGlasses(glassesDTO);
+        return ResponseEntity.ok(new Message(STR."Atualização feita com sucesso! Mudanças feitas: \{changes.toString()}"));
+    }
+
+    @DeleteMapping("/delete-glasses/{identifier}")
+    public ResponseEntity<?> deleteGlasses(@PathVariable("identifier") String glassesIdentifier) {
+        String titleOfDeletedGlasses = glassesService.removeGlasses(glassesIdentifier);
+        return ResponseEntity.ok(new Message(STR."\{titleOfDeletedGlasses} deletado!"));
+    }
+
 }
