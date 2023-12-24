@@ -2,7 +2,7 @@ package com.lirou.store.services;
 
 import com.lirou.store.DTOs.GlassesDTO;
 import com.lirou.store.entities.Glasses;
-import com.lirou.store.mapper.glasses.GlassesMapper;
+import com.lirou.store.mapper.GlassesMapper;
 import com.lirou.store.repository.GlassesRepository;
 import org.springframework.stereotype.Service;
 
