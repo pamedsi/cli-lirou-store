@@ -9,6 +9,7 @@ import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.Columns;
 
 @Entity
 @Table
@@ -18,6 +19,8 @@ import lombok.Setter;
 public class Glasses extends Product {
     @Column
     private String model;
+    @Column
+    private String frame;
     @Column
     private String color;
     @Column
