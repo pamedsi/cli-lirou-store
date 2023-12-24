@@ -9,9 +9,14 @@ public record GlassesDTO(
         @NotBlank
         String title,
         String pic,
+        @NotBlank
         Boolean inStock,
+        @NotBlank
         String model,
+        @NotBlank
         String color,
+        @NotBlank
         String brand,
+        @NotBlank
         BigDecimal price
 ) {}
