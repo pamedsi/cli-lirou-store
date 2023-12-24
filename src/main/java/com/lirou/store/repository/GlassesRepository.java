@@ -11,4 +11,6 @@ import java.util.List;
 public interface GlassesRepository extends JpaRepository<Glasses, Long> {
 
     List<Glasses> findAllByDeletedFalse();
+
+    Glasses findByIdentifierAndDeletedFalse(String glassesIdentifier);
 }
