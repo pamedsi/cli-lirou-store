@@ -47,6 +47,18 @@ public class GlassesService {
             glassesToEdit.setPic(changes.pic());
             changesForResponse.add(STR."Foto modificada! Agora a URL é: \{changes.pic()}");
         }
+        if (!Objects.equals(glassesToEdit.getFrame(), changes.frame())) {
+            glassesToEdit.setFrame(changes.frame());
+            changesForResponse.add(STR."Armação atualizada, agora é: \{changes.frame()}");
+        }
+        if (!Objects.equals(glassesToEdit.getColor(), changes.color())) {
+            glassesToEdit.setColor(changes.color());
+            changesForResponse.add(STR."Cor atualizada, agora é: \{changes.color()}");
+        }
+        if (!Objects.equals(glassesToEdit.getModel(), changes.model())) {
+            glassesToEdit.setModel(changes.model());
+            changesForResponse.add(STR."Modelo atualizado, agora é: \{changes.model()}");
+        }
         if (glassesToEdit.getPrice().compareTo(changes.price()) != 0) {
             glassesToEdit.setPrice(changes.price());
             changesForResponse.add(STR."Preço alterado! Agora custa: \{changes.price()}");
