@@ -5,6 +5,7 @@ import com.lirou.store.models.BaseController;
 import com.lirou.store.models.Message;
 import com.lirou.store.services.GlassesService;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,7 +33,7 @@ public class GlassesController extends BaseController {
     }
 
     @PutMapping("/put-glasses")
-    public ResponseEntity<?> putGlasses(@RequestBody GlassesDTO glassesDTO) {
+    public ResponseEntity<?> putGlasses(@RequestBody @Valid GlassesDTO glassesDTO) {
         glassesService.updateGlasses(glassesDTO);
         return ResponseEntity.ok(new Message("Atualização feita com sucesso!"));
     }
