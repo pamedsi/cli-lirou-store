@@ -28,7 +28,7 @@ public class GlassesController extends BaseController {
     @PostMapping("/post-glasses")
     public ResponseEntity<?> postGlasses(@RequestBody GlassesDTO glassesDTO) {
         glassesService.saveNewGlasses(glassesDTO);
-        return ResponseEntity.status(201).body(new Message(glassesDTO.title() + " salvo!"));
+        return ResponseEntity.status(201).body(new Message(STR."\{glassesDTO.title()} salvo!"));
     }
 
     @PutMapping("/put-glasses")
