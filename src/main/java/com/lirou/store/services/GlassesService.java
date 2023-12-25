@@ -38,6 +38,15 @@ public class GlassesService {
         Glasses glassesToEdit = glassesRepository.findByIdentifierAndDeletedFalse(changes.identifier());
         if (glassesToEdit == null) throw new NotFoundException("Óculos não encontrado!");
 
+        glassesToEdit.setTitle(changes.title());
+        glassesToEdit.setPic(changes.pic());
+        glassesToEdit.setInStock(changes.inStock());
+        glassesToEdit.setModel(changes.model());
+        glassesToEdit.setFrame(changes.frame());
+        glassesToEdit.setColor(changes.color());
+        glassesToEdit.setBrand(changes.brand());
+        glassesToEdit.setPrice(changes.price());
+
         glassesToEdit.setLastEditedIn(LocalDateTime.now());
         glassesRepository.save(glassesToEdit);
     }
