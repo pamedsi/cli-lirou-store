@@ -1,25 +1,17 @@
 package com.lirou.store.models;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Data
 @MappedSuperclass
 public abstract class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Setter(AccessLevel.NONE)
-    @Getter(AccessLevel.NONE)
     private Long id;
     @Column
-    @Setter(AccessLevel.NONE)
     private String identifier = UUID.randomUUID().toString();
     @Column (nullable = false, unique = true)
     private String title;
@@ -32,8 +24,63 @@ public abstract class Product {
     @Column
     private Boolean deleted = false;
     @Column
-    @Setter(AccessLevel.NONE)
     private LocalDateTime createdAt = LocalDateTime.now();
     @Column
     private LocalDateTime lastEditedIn;
+
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public BigDecimal getPrice() {
+        return price;
+    }
+
+    public String getPic() {
+        return pic;
+    }
+
+    public Boolean getInStock() {
+        return inStock;
+    }
+
+    public Boolean getDeleted() {
+        return deleted;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getLastEditedIn() {
+        return lastEditedIn;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setPrice(BigDecimal price) {
+        this.price = price;
+    }
+
+    public void setPic(String pic) {
+        this.pic = pic;
+    }
+
+    public void setInStock(Boolean inStock) {
+        this.inStock = inStock;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.deleted = deleted;
+    }
+
+    public void setLastEditedIn(LocalDateTime lastEditedIn) {
+        this.lastEditedIn = lastEditedIn;
+    }
 }
