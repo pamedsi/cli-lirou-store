@@ -29,7 +29,7 @@ public class GlassesController extends BaseController {
     @PostMapping("/post-glasses")
     public ResponseEntity<?> postGlasses(@RequestBody GlassesDTO glassesDTO) {
         glassesService.saveNewGlasses(glassesDTO);
-        return ResponseEntity.status(201).body(new Message(STR."\{glassesDTO.title()} salvo!"));
+        return ResponseEntity.status(201).body(new Message(glassesDTO.title() + "salvo!"));
     }
 
     @PutMapping("/put-glasses")
@@ -41,7 +41,7 @@ public class GlassesController extends BaseController {
     @DeleteMapping("/delete-glasses/{identifier}")
     public ResponseEntity<?> deleteGlasses(@PathVariable("identifier") String glassesIdentifier) {
         String titleOfDeletedGlasses = glassesService.removeGlasses(glassesIdentifier);
-        return ResponseEntity.ok(new Message(STR."\{titleOfDeletedGlasses} deletado!"));
+        return ResponseEntity.ok(new Message(titleOfDeletedGlasses + "deletado!"));
     }
 
 }
