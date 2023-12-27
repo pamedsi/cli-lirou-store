@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/glasses")
 public class GlassesController extends BaseController {
 
     private final GlassesService glassesService;
@@ -21,24 +22,24 @@ public class GlassesController extends BaseController {
     }
 
     // Para a parte admin:
-    @GetMapping("/get-all-glasses")
+    @GetMapping
     public ResponseEntity<?> getGlasses() {
         List<GlassesDTO> glassesDTO = glassesService.getAllGlasses();
         return ResponseEntity.ok(glassesDTO);
     }
-    @PostMapping("/post-glasses")
+    @PostMapping
     public ResponseEntity<?> postGlasses(@RequestBody GlassesDTO glassesDTO) {
         glassesService.saveNewGlasses(glassesDTO);
         return ResponseEntity.status(201).body(new Message(glassesDTO.title() + "salvo!"));
     }
 
-    @PutMapping("/put-glasses")
-    public ResponseEntity<?> putGlasses(@RequestBody @Valid GlassesDTO glassesDTO) {
-        glassesService.updateGlasses(glassesDTO);
+    @PutMapping("/{identifier}")
+    public ResponseEntity<?> putGlasses(@RequestBody @Valid GlassesDTO glassesDTO, @PathVariable("identifier") String glassesIdentifier) {
+        glassesService.updateGlasses(glassesIdentifier, glassesDTO);
         return ResponseEntity.ok(new Message("Atualização feita com sucesso!"));
     }
 
-    @DeleteMapping("/delete-glasses/{identifier}")
+    @DeleteMapping("/{identifier}")
     public ResponseEntity<?> deleteGlasses(@PathVariable("identifier") String glassesIdentifier) {
         String titleOfDeletedGlasses = glassesService.removeGlasses(glassesIdentifier);
         return ResponseEntity.ok(new Message(titleOfDeletedGlasses + "deletado!"));

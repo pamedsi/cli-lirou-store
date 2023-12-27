@@ -7,12 +7,9 @@ import com.lirou.store.repository.GlassesRepository;
 
 import org.springframework.stereotype.Service;
 
-import javax.ws.rs.BadRequestException;
 import javax.ws.rs.NotFoundException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class GlassesService {
@@ -34,8 +31,8 @@ public class GlassesService {
         glassesRepository.save(newGlasses);
     }
 
-    public void updateGlasses(GlassesDTO changes) {
-        Glasses glassesToEdit = glassesRepository.findByIdentifierAndDeletedFalse(changes.identifier());
+    public void updateGlasses(String glassesIdentifier, GlassesDTO changes) {
+        Glasses glassesToEdit = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
         if (glassesToEdit == null) throw new NotFoundException("Óculos não encontrado!");
 
         glassesToEdit.setTitle(changes.title());
