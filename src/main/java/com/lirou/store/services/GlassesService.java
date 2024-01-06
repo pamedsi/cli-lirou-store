@@ -37,7 +37,6 @@ public class GlassesService {
 
         glassesToEdit.setTitle(changes.title());
         glassesToEdit.setPic(changes.pic());
-        glassesToEdit.setInStock(changes.inStock());
         glassesToEdit.setModel(changes.model());
         glassesToEdit.setFrame(changes.frame());
         glassesToEdit.setColor(changes.color());
@@ -56,5 +55,13 @@ public class GlassesService {
         glassesRepository.save(glassesToDelete);
 
         return glassesToDelete.getTitle();
+    }
+
+    public String changeAvailability(String identifier, Boolean available){
+        Glasses glasses = glassesRepository.findByIdentifierAndDeletedFalse(identifier);
+        if (glasses == null) throw new NotFoundException("Óculos não encontrado!");
+        glasses.setInStock(available);
+        if (available) return "disponibilizado!";
+        return "indisponibilizado!";
     }
 }

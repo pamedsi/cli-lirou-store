@@ -45,4 +45,10 @@ public class GlassesController extends BaseController {
         return ResponseEntity.ok(new Message(titleOfDeletedGlasses + "deletado!"));
     }
 
+    @PatchMapping("/{identifier}")
+    public ResponseEntity<?> changeAvailability(@PathVariable("identifier") String glassesIdentifier, @RequestBody Boolean availability) {
+        String available = glassesService.changeAvailability(glassesIdentifier, availability);
+        return ResponseEntity.ok(new Message("Óculos " + available));
+    }
+
 }
