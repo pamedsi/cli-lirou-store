@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import javax.ws.rs.NotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class GlassesService {
@@ -34,6 +35,7 @@ public class GlassesService {
     public void updateGlasses(String glassesIdentifier, GlassesDTO changes) {
         Glasses glassesToEdit = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
         if (glassesToEdit == null) throw new NotFoundException("Óculos não encontrado!");
+        if (!someChange(glassesToEdit, changes)) return;
 
         glassesToEdit.setTitle(changes.title());
         glassesToEdit.setPic(changes.pic());
@@ -45,6 +47,16 @@ public class GlassesService {
 
         glassesToEdit.setLastEditedIn(LocalDateTime.now());
         glassesRepository.save(glassesToEdit);
+    }
+
+    private Boolean someChange(Glasses glassesToEdit, GlassesDTO changes) {
+        return !Objects.equals(glassesToEdit.getTitle(), changes.title()) ||
+                !Objects.equals(glassesToEdit.getPic(), changes.pic()) ||
+                !Objects.equals(glassesToEdit.getModel(), changes.model()) ||
+                !Objects.equals(glassesToEdit.getFrame(), changes.frame()) ||
+                !Objects.equals(glassesToEdit.getColor(), changes.color()) ||
+                !Objects.equals(glassesToEdit.getBrand(), changes.brand()) ||
+                glassesToEdit.getPrice().compareTo(changes.price()) != 0;
     }
 
     public String removeGlasses(String glassesIdentifier) {
