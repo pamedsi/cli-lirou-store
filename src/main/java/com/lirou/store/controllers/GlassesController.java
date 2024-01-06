@@ -2,6 +2,7 @@ package com.lirou.store.controllers;
 
 import com.lirou.store.DTOs.GlassesDTO;
 import com.lirou.store.models.BaseController;
+import com.lirou.store.models.GlassesAvailability;
 import com.lirou.store.models.Message;
 import com.lirou.store.services.GlassesService;
 
@@ -46,8 +47,8 @@ public class GlassesController extends BaseController {
     }
 
     @PatchMapping("/{identifier}")
-    public ResponseEntity<?> changeAvailability(@PathVariable("identifier") String glassesIdentifier, @RequestBody Boolean availability) {
-        String available = glassesService.changeAvailability(glassesIdentifier, availability);
+    public ResponseEntity<?> changeAvailability(@PathVariable("identifier") String glassesIdentifier, @RequestBody GlassesAvailability availability) {
+        String available = glassesService.changeAvailability(glassesIdentifier, availability.available());
         return ResponseEntity.ok(new Message("Óculos " + available));
     }
 
