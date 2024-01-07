@@ -2,7 +2,6 @@ package com.lirou.store.controllers;
 
 import com.lirou.store.DTOs.GlassesDTO;
 
-import com.lirou.store.models.BaseController;
 import com.lirou.store.models.GlassesAvailability;
 import com.lirou.store.models.Message;
 import com.lirou.store.services.GlassesService;
