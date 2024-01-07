@@ -1,6 +1,9 @@
 package com.lirou.store.controllers;
 
 import com.lirou.store.DTOs.GlassesDTO;
+
+import com.lirou.store.models.BaseController;
+import com.lirou.store.models.GlassesAvailability;
 import com.lirou.store.models.Message;
 import com.lirou.store.services.GlassesService;
 
@@ -21,26 +24,32 @@ public class GlassesController{
     }
 
     // Para a parte admin:
-    @GetMapping("/get-all-glasses")
+    @GetMapping
     public ResponseEntity<?> getGlasses() {
         List<GlassesDTO> glassesDTO = glassesService.getAllGlasses();
         return ResponseEntity.ok(glassesDTO);
     }
-    @PostMapping("/post-glasses")
+    @PostMapping
     public ResponseEntity<?> postGlasses(@RequestBody GlassesDTO glassesDTO) {
         glassesService.saveNewGlasses(glassesDTO);
-        return ResponseEntity.status(201).body(new Message(glassesDTO.title() + "salvo!"));
+        return ResponseEntity.status(201).body(new Message(glassesDTO.title() + " salvo!"));
     }
 
-    @PutMapping("/put-glasses")
-    public ResponseEntity<?> putGlasses(@RequestBody @Valid GlassesDTO glassesDTO) {
-        glassesService.updateGlasses(glassesDTO);
+    @PutMapping("/{identifier}")
+    public ResponseEntity<?> putGlasses(@RequestBody @Valid GlassesDTO glassesDTO, @PathVariable("identifier") String glassesIdentifier) {
+        glassesService.updateGlasses(glassesIdentifier, glassesDTO);
         return ResponseEntity.ok(new Message("Atualização feita com sucesso!"));
     }
 
-    @DeleteMapping("/delete-glasses/{identifier}")
+    @DeleteMapping("/{identifier}")
     public ResponseEntity<?> deleteGlasses(@PathVariable("identifier") String glassesIdentifier) {
         String titleOfDeletedGlasses = glassesService.removeGlasses(glassesIdentifier);
         return ResponseEntity.ok(new Message(titleOfDeletedGlasses + "deletado!"));
+    }
+  
+    @PatchMapping("/{identifier}")
+    public ResponseEntity<?> changeAvailability(@PathVariable("identifier") String glassesIdentifier, @RequestBody GlassesAvailability availability) {
+        String availableOrNot = glassesService.changeAvailability(glassesIdentifier, availability.available());
+        return ResponseEntity.ok(new Message("Óculos " + availableOrNot));
     }
 }
