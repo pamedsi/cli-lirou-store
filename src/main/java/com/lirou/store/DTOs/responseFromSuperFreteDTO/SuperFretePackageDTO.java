@@ -1,4 +1,4 @@
-package com.lirou.store.DTOs.packageDTO;
+package com.lirou.store.DTOs.responseFromSuperFreteDTO;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -14,5 +14,5 @@ public record SuperFretePackageDTO(
         List<PackageData> packages,
         AdditionalServices additionalServices,
         Company company,
-        boolean hasError
+        Boolean hasError
 ) {}
