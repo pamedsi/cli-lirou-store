@@ -31,7 +31,7 @@ public class GlassesController extends BaseController {
     @PostMapping
     public ResponseEntity<?> postGlasses(@RequestBody GlassesDTO glassesDTO) {
         glassesService.saveNewGlasses(glassesDTO);
-        return ResponseEntity.status(201).body(new Message(glassesDTO.title() + "salvo!"));
+        return ResponseEntity.status(201).body(new Message(glassesDTO.title() + " salvo!"));
     }
 
     @PutMapping("/{identifier}")
@@ -48,8 +48,7 @@ public class GlassesController extends BaseController {
 
     @PatchMapping("/{identifier}")
     public ResponseEntity<?> changeAvailability(@PathVariable("identifier") String glassesIdentifier, @RequestBody GlassesAvailability availability) {
-        String available = glassesService.changeAvailability(glassesIdentifier, availability.available());
-        return ResponseEntity.ok(new Message("Óculos " + available));
+        String availableOrNot = glassesService.changeAvailability(glassesIdentifier, availability.available());
+        return ResponseEntity.ok(new Message("Óculos " + availableOrNot));
     }
-
 }
