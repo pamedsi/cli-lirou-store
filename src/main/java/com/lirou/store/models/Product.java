@@ -25,8 +25,6 @@ public abstract class Product {
     private Boolean deleted = false;
     @Column
     private LocalDateTime createdAt = LocalDateTime.now();
-    @Column
-    private LocalDateTime lastEditedIn;
 
     public String getIdentifier() {
         return identifier;
@@ -56,10 +54,6 @@ public abstract class Product {
         return createdAt;
     }
 
-    public LocalDateTime getLastEditedIn() {
-        return lastEditedIn;
-    }
-
     public void setTitle(String title) {
         this.title = title;
     }
@@ -78,9 +72,5 @@ public abstract class Product {
 
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
-    }
-
-    public void setLastEditedIn(LocalDateTime lastEditedIn) {
-        this.lastEditedIn = lastEditedIn;
     }
 }
