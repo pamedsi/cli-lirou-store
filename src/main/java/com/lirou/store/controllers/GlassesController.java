@@ -1,7 +1,7 @@
 package com.lirou.store.controllers;
 
 import com.lirou.store.DTOs.GlassesDTO;
-import com.lirou.store.models.BaseController;
+import com.lirou.store.DTOs.PostalCodes;
 import com.lirou.store.models.Message;
 import com.lirou.store.services.GlassesService;
 
@@ -12,7 +12,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-public class GlassesController extends BaseController {
+@RequestMapping("/api")
+public class GlassesController{
 
     private final GlassesService glassesService;
 
@@ -43,5 +44,4 @@ public class GlassesController extends BaseController {
         String titleOfDeletedGlasses = glassesService.removeGlasses(glassesIdentifier);
         return ResponseEntity.ok(new Message(titleOfDeletedGlasses + "deletado!"));
     }
-
 }
