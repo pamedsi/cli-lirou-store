@@ -7,7 +7,7 @@ import java.io.IOException;
 
 @Service
 public class SuperFreteService {
-    public SuperFreteService() throws IOException {
+    public  void calculateShipping(String from, String to) throws IOException {
         OkHttpClient client = new OkHttpClient();
 
         MediaType mediaType = MediaType.parse("application/json");
@@ -16,7 +16,7 @@ public class SuperFreteService {
                 .url("https://sandbox.superfrete.com/api/v0/calculator")
                 .post(body)
                 .addHeader("accept", "application/json")
-                .addHeader("User-Agent", "Lirou Store API 1.0 (email para contato técnico)")
+                .addHeader("User-Agent", "Lirou Store API 1.0 (liroustore@gmail.com)")
                 .addHeader("content-type", "application/json")
                 .build();
 
