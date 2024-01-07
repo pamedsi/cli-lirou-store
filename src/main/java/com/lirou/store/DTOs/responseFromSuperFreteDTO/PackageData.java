@@ -1,4 +1,4 @@
-package com.lirou.store.DTOs.packageDTO;
+package com.lirou.store.DTOs.responseFromSuperFreteDTO;
 
 import java.math.BigDecimal;
 
