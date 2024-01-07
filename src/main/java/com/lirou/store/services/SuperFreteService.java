@@ -1,25 +1,39 @@
 package com.lirou.store.services;
 
-import okhttp3.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.lirou.store.DTOs.bodyForCalculateShipping.BodyForCalculateShipping;
+
+import com.lirou.store.DTOs.bodyForCalculateShipping.PackageDimensions;
+import com.lirou.store.DTOs.bodyForCalculateShipping.PostalCode;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 public class SuperFreteService {
-    public Response calculateShipping(String from, String to) throws IOException {
-        OkHttpClient client = new OkHttpClient();
 
-        MediaType mediaType = MediaType.parse("application/json");
-        RequestBody body = RequestBody.create(mediaType, "{\"from\":{\"postal_code\":\"01153000\"},\"to\":{\"postal_code\":\"20020050\"},\"services\":\"1,2,17\",\"options\":{\"own_hand\":false,\"receipt\":false,\"insurance_value\":0,\"use_insurance_value\":false},\"package\":{\"height\":2,\"width\":11,\"length\":16,\"weight\":0.3}}");
-        Request request = new Request.Builder()
-                .url("https://sandbox.superfrete.com/api/v0/calculator")
-                .post(body)
-                .addHeader("accept", "application/json")
-                .addHeader("User-Agent", "Lirou Store API 1.0 (liroustore@gmail.com)")
-                .addHeader("content-type", "application/json")
-                .build();
+    @Value("${token}")
+    private String token;
 
-        return client.newCall(request).execute();
+    public ResponseEntity<?> calculateShipping(String from, String to) throws IOException {
+        RestTemplate restTemplate = new RestTemplate();
+        String url = "https://sandbox.superfrete.com/api/v0/calculator";
+        String services =  "1,2,17";
+        BodyForCalculateShipping body = new BodyForCalculateShipping(new PostalCode(from), new PostalCode(to), services, new PackageDimensions(75, 11, 16, 0.3));
+        String json = new ObjectMapper().writeValueAsString(body).replace("_dimensions", "");
+        System.out.println(json);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        headers.set("User-Agent", "Lirou Store (liroustore@gmail.com)");
+        headers.set("Authorization", "Bearer " + token);
+
+        HttpEntity<?> requestEntity = new HttpEntity<>(json, headers);
+        return restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
     }
 }
