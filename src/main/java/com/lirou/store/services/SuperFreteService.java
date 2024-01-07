@@ -7,7 +7,7 @@ import java.io.IOException;
 
 @Service
 public class SuperFreteService {
-    public  void calculateShipping(String from, String to) throws IOException {
+    public Response calculateShipping(String from, String to) throws IOException {
         OkHttpClient client = new OkHttpClient();
 
         MediaType mediaType = MediaType.parse("application/json");
@@ -20,6 +20,6 @@ public class SuperFreteService {
                 .addHeader("content-type", "application/json")
                 .build();
 
-        Response response = client.newCall(request).execute();
+        return client.newCall(request).execute();
     }
 }
