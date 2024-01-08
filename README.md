@@ -10,10 +10,24 @@ Endpoints
 
 Aqui estão alguns dos principais endpoints disponíveis na nossa API:
 
-GET /api/get-all-glasses: retorna uma lista de todos os óculos da loja, para a parte admin gerir os óculos.
-POST /api/post-glasses: salva um novo óculos no banco de dados. 
-PUT /api/put-glasses: edita um óculos já existente.
-DELETE /api/delete-glasses/{identifier}: exclui um determinado óculos da base de dados. 
+Para os óculos:
+
+  GET /api/glasses: retorna uma lista de todos os óculos da loja, para a parte admin gerir os óculos.
+  
+  POST /api/glasses: salva um novo óculos no banco de dados. 
+  
+  PUT /api/glasses/{identifier}: edita um óculos já existente.
+  
+  DELETE /api/glasses/{identifier}: exclui um determinado óculos da base de dados.
+
+  PATCH /api/set-available/{identifier}: atualiza óculos para "disponível" ou "indisponível"
+
+Para frete:
+
+  GET /api/shipping/calculate: retorna os preços do frete entre o CEP do cliente e o da loja.
+
+  POST /api/shipping/send-to-superfrete: envia para o SuperFrete as informações de envio para gerar etiqueta.  
+
 
 Frontend
 
