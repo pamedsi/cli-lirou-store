@@ -6,3 +6,8 @@ public record BodyForCalculateShipping(
         String services,
         PackageDimensions package_dimensions
 ) {}
+
+record FromAndTo(
+        String from,
+        String to
+) {}

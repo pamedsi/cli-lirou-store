@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import java.io.IOException;
 import java.util.List;
 
+
 @Service
 public class SuperFreteService {
 
@@ -35,5 +36,9 @@ public class SuperFreteService {
 
         HttpEntity<?> requestEntity = new HttpEntity<>(json, headers);
         return restTemplate.exchange(url, HttpMethod.POST, requestEntity, String.class);
+    }
+
+    public ResponseEntity<?> generateTag(){
+        return null;
     }
 }
