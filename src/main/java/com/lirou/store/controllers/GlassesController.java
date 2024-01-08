@@ -46,7 +46,7 @@ public class GlassesController{
         return ResponseEntity.ok(new Message(titleOfDeletedGlasses + "deletado!"));
     }
   
-    @PatchMapping("/{identifier}")
+    @PatchMapping("/set-available/{identifier}")
     public ResponseEntity<?> changeAvailability(@PathVariable("identifier") String glassesIdentifier, @RequestBody GlassesAvailability availability) {
         String availableOrNot = glassesService.changeAvailability(glassesIdentifier, availability.available());
         return ResponseEntity.ok(new Message("Óculos " + availableOrNot));
