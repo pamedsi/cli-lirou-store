@@ -2,7 +2,7 @@ package com.lirou.store.DTOs;
 
 import java.util.List;
 
-public record ShippingInfoDTO (
+public record ShippingInfToSendToSuperFreteDTO(
         String Platform,
         Address From,
         Address To,
