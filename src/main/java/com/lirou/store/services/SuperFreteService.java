@@ -2,9 +2,7 @@ package com.lirou.store.services;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.lirou.store.DTOs.superfrete.ProtocolData;
-import com.lirou.store.DTOs.superfrete.ShippingPricesDTO;
-import com.lirou.store.DTOs.superfrete.SuperFretePackageDTO;
+import com.lirou.store.DTOs.superfrete.*;
 import com.lirou.store.DTOs.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
 import com.lirou.store.DTOs.superfrete.bodyForCalculateShipping.BodyForCalculateShipping;
 
@@ -24,7 +22,7 @@ public class SuperFreteService {
 
     @Value("${token}")
     private String token;
-    private final String baseURL = "https://sandbox.superfrete.com/api";
+    private final String baseURL = "https://sandbox.superfrete.com/api/v0";
 
     public List<ShippingPricesDTO> calculateShipping(String to) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
@@ -34,7 +32,7 @@ public class SuperFreteService {
         HttpHeaders headers = createHeaders();
         HttpEntity<?> requestEntity = new HttpEntity<>(jsonBody, headers);
 
-        String jsonResponseBody = restTemplate.exchange(baseURL + "/v0/calculator", HttpMethod.POST, requestEntity, String.class).getBody();
+        String jsonResponseBody = restTemplate.exchange(baseURL + "/calculator", HttpMethod.POST, requestEntity, String.class).getBody();
 
         Type pricesList = new TypeToken<List<SuperFretePackageDTO>>(){}.getType();
         List<SuperFretePackageDTO> responseBody = new Gson().fromJson(jsonResponseBody, pricesList);
@@ -44,14 +42,23 @@ public class SuperFreteService {
     }
 
     public ProtocolData sendShippingToSuperFrete(ShippingInfToSendToSuperFreteDTO body) {
-        String json = new Gson().toJson(body);
         HttpHeaders headers = createHeaders();
+        String json = new Gson().toJson(body);
         HttpEntity<?> requestEntity = new HttpEntity<>(json, headers);
         RestTemplate restTemplate = new RestTemplate();
 
-        String responseBody = restTemplate.exchange(baseURL + "/v0/cart" , HttpMethod.POST, requestEntity, String.class).getBody();
-
+        String responseBody = restTemplate.exchange(baseURL + "/cart" , HttpMethod.POST, requestEntity, String.class).getBody();
         return new Gson().fromJson(responseBody, ProtocolData.class);
+    }
+
+    public ShippingOfOrderDTO finishOrderAndSendTag(OrdersIDs orders){
+        HttpHeaders headers = createHeaders();
+        String json = new Gson().toJson(orders);
+        HttpEntity<?> requestEntity = new HttpEntity<>(json, headers);
+        RestTemplate restTemplate = new RestTemplate();
+
+        String responseBody = restTemplate.exchange(baseURL + "/v0/checkout" , HttpMethod.POST, requestEntity, String.class).getBody();
+        return new Gson().fromJson(responseBody, ShippingOfOrderDTO.class);
     }
 
     private HttpHeaders createHeaders () {
