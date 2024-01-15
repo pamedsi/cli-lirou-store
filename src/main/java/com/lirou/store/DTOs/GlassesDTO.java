@@ -2,6 +2,8 @@ package com.lirou.store.DTOs;
 
 import com.lirou.store.entities.Glasses;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.NumberFormat;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,7 +22,8 @@ public record GlassesDTO(
         String color,
         @NotBlank
         String brand,
-        @NotBlank
+        @NotNull
+        @NumberFormat
         BigDecimal price
 ) {
         public GlassesDTO(Glasses glassesEntity) {
