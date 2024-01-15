@@ -2,7 +2,7 @@ package com.lirou.store.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import com.lirou.store.DTOs.bodyForCalculateShipping.FromAndToDTO;
+import com.lirou.store.DTOs.bodyForCalculateShipping.CEPToSendDTO;
 import com.lirou.store.DTOs.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
 import com.lirou.store.services.SuperFreteService;
 
@@ -22,8 +22,8 @@ public class ShippingController {
     }
 
     @GetMapping("/calculate")
-    public ResponseEntity<?> calculateShipping(@RequestBody FromAndToDTO postalCodes) throws IOException {
-        ResponseEntity<?> response = superFreteService.calculateShipping(postalCodes.from(), postalCodes.to());
+    public ResponseEntity<?> calculateShipping(@RequestBody CEPToSendDTO postalCodes) throws IOException {
+        ResponseEntity<?> response = superFreteService.calculateShipping(postalCodes.CEP());
         return ResponseEntity.ok(response.getBody());
     }
     @PostMapping("/send-to-superfrete")
