@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.lirou.store.DTOs.ShippingPricesDTO;
 import com.lirou.store.DTOs.SuperFretePackageDTO;
 import com.lirou.store.DTOs.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.List;
 
 @Service
@@ -26,7 +28,7 @@ public class SuperFreteService {
     private String token;
     private final String baseURL = "https://sandbox.superfrete.com/api";
 
-    public ShippingPricesDTO calculateShipping(String to) throws IOException {
+    public List<ShippingPricesDTO> calculateShipping(String to) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
         String services =  "1,2,17";
         BodyForCalculateShipping body = new BodyForCalculateShipping(new PostalCode("54340070"), new PostalCode(to), services, new PackageDimensions(75, 11, 16, 0.3));
@@ -35,9 +37,12 @@ public class SuperFreteService {
         HttpEntity<?> requestEntity = new HttpEntity<>(jsonBody, headers);
 
         String jsonResponseBody = restTemplate.exchange(baseURL + "/v0/calculator", HttpMethod.POST, requestEntity, String.class).getBody();
-        SuperFretePackageDTO responseBody = new Gson().fromJson(jsonResponseBody, SuperFretePackageDTO.class);
 
-        return new ShippingPricesDTO(responseBody);
+        Type pricesList = new TypeToken<List<SuperFretePackageDTO>>(){}.getType();
+        List<SuperFretePackageDTO> responseBody = new Gson().fromJson(jsonResponseBody, pricesList);
+
+        assert responseBody != null;
+        return ShippingPricesDTO.severalToDTO(responseBody);
     }
 
     public ResponseEntity<?> sendShippingToSuperFrete(ShippingInfToSendToSuperFreteDTO body) throws JsonProcessingException {
