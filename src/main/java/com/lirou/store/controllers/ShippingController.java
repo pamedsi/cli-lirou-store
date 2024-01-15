@@ -2,9 +2,10 @@ package com.lirou.store.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import com.lirou.store.DTOs.ShippingPricesDTO;
-import com.lirou.store.DTOs.bodyForCalculateShipping.CEPToSendToDTO;
-import com.lirou.store.DTOs.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
+import com.lirou.store.DTOs.superfrete.ProtocolData;
+import com.lirou.store.DTOs.superfrete.ShippingPricesDTO;
+import com.lirou.store.DTOs.superfrete.bodyForCalculateShipping.CEPToSendToDTO;
+import com.lirou.store.DTOs.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
 import com.lirou.store.services.SuperFreteService;
 
 import org.springframework.http.ResponseEntity;
@@ -30,7 +31,7 @@ public class ShippingController {
     }
     @PostMapping("/send-to-superfrete")
     public ResponseEntity<?> sendShippingToSuperFrete(@RequestBody ShippingInfToSendToSuperFreteDTO body) throws JsonProcessingException {
-        ResponseEntity<?> response = superFreteService.sendShippingToSuperFrete(body);
-        return ResponseEntity.ok(response.getBody());
+        ProtocolData response = superFreteService.sendShippingToSuperFrete(body);
+        return ResponseEntity.ok(response);
     }
 }

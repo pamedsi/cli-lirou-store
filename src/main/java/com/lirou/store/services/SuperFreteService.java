@@ -5,13 +5,14 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.lirou.store.DTOs.ShippingPricesDTO;
-import com.lirou.store.DTOs.SuperFretePackageDTO;
-import com.lirou.store.DTOs.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
-import com.lirou.store.DTOs.bodyForCalculateShipping.BodyForCalculateShipping;
+import com.lirou.store.DTOs.superfrete.ProtocolData;
+import com.lirou.store.DTOs.superfrete.ShippingPricesDTO;
+import com.lirou.store.DTOs.superfrete.SuperFretePackageDTO;
+import com.lirou.store.DTOs.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
+import com.lirou.store.DTOs.superfrete.bodyForCalculateShipping.BodyForCalculateShipping;
 
-import com.lirou.store.DTOs.bodyForCalculateShipping.PackageDimensions;
-import com.lirou.store.DTOs.bodyForCalculateShipping.PostalCode;
+import com.lirou.store.DTOs.superfrete.bodyForCalculateShipping.PackageDimensions;
+import com.lirou.store.DTOs.superfrete.bodyForCalculateShipping.PostalCode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -45,14 +46,19 @@ public class SuperFreteService {
         return ShippingPricesDTO.severalToDTO(responseBody);
     }
 
-    public ResponseEntity<?> sendShippingToSuperFrete(ShippingInfToSendToSuperFreteDTO body) throws JsonProcessingException {
+    public ProtocolData sendShippingToSuperFrete(ShippingInfToSendToSuperFreteDTO body) throws JsonProcessingException {
         String json = new ObjectMapper().writeValueAsString(body);
         HttpHeaders headers = createHeaders();
         HttpEntity<?> requestEntity = new HttpEntity<>(json, headers);
         RestTemplate restTemplate = new RestTemplate();
 
-        return restTemplate.exchange(baseURL + "/v0/cart" , HttpMethod.POST, requestEntity, String.class);
+        String responseBody = restTemplate.exchange(baseURL + "/v0/cart" , HttpMethod.POST, requestEntity, String.class).getBody();
+
+        return new Gson().fromJson(responseBody, ProtocolData.class);
+
     }
+
+
 
     private HttpHeaders createHeaders () {
         HttpHeaders headers = new HttpHeaders();
