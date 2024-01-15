@@ -1,5 +1,5 @@
 package com.lirou.store.DTOs.bodyForCalculateShipping;
 
-public record CEPToSendDTO(
+public record CEPToSendToDTO(
         String CEP
 ) {}
