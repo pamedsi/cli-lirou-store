@@ -57,7 +57,7 @@ public class SuperFreteService {
         HttpEntity<?> requestEntity = new HttpEntity<>(json, headers);
         RestTemplate restTemplate = new RestTemplate();
 
-        String responseBody = restTemplate.exchange(baseURL + "/v0/checkout" , HttpMethod.POST, requestEntity, String.class).getBody();
+        String responseBody = restTemplate.exchange(baseURL + "/checkout" , HttpMethod.POST, requestEntity, String.class).getBody();
         return new Gson().fromJson(responseBody, ShippingOfOrderDTO.class);
     }
 
