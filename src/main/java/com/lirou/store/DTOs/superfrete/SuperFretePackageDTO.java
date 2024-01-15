@@ -1,4 +1,4 @@
-package com.lirou.store.DTOs;
+package com.lirou.store.DTOs.superfrete;
 
 import java.math.BigDecimal;
 import java.util.List;

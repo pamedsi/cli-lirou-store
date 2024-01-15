@@ -1,4 +1,4 @@
-package com.lirou.store.DTOs.bodyForCalculateShipping;
+package com.lirou.store.DTOs.superfrete.bodyForCalculateShipping;
 
 public record PackageDimensions (
         Number height,

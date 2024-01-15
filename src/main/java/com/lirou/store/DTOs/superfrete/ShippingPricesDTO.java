@@ -1,6 +1,5 @@
-package com.lirou.store.DTOs;
+package com.lirou.store.DTOs.superfrete;
 
-import com.lirou.store.controllers.ShippingController;
 import org.springframework.format.annotation.NumberFormat;
 
 import java.math.BigDecimal;

@@ -1,4 +1,4 @@
-package com.lirou.store.DTOs.shippingInfToSendToSuperFrete;
+package com.lirou.store.DTOs.superfrete.shippingInfToSendToSuperFrete;
 
 import java.util.List;
 
