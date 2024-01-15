@@ -5,17 +5,21 @@ import org.springframework.format.annotation.NumberFormat;
 import java.math.BigDecimal;
 
 public record ShippingPricesDTO(
-        String id,
+        Number id,
         String name,
         Number delivery_time,
         @NumberFormat
         BigDecimal price,
         CompanyInfo company
 
-) {}
-
-record CompanyInfo (
-        Number id,
-        String name,
-        String picture
-){}
+) {
+        public ShippingPricesDTO(SuperFretePackageDTO responseBody) {
+                this(
+                        responseBody.id(),
+                        responseBody.name(),
+                        responseBody.deliveryTime(),
+                        responseBody.packages().getFirst().price(),
+                        responseBody.company()
+                );
+        }
+}

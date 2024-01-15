@@ -3,6 +3,9 @@ package com.lirou.store.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import com.google.gson.Gson;
+import com.lirou.store.DTOs.ShippingPricesDTO;
+import com.lirou.store.DTOs.SuperFretePackageDTO;
 import com.lirou.store.DTOs.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
 import com.lirou.store.DTOs.bodyForCalculateShipping.BodyForCalculateShipping;
 
@@ -23,15 +26,18 @@ public class SuperFreteService {
     private String token;
     private final String baseURL = "https://sandbox.superfrete.com/api";
 
-    public ResponseEntity<?> calculateShipping(String to) throws IOException {
+    public ShippingPricesDTO calculateShipping(String to) throws IOException {
         RestTemplate restTemplate = new RestTemplate();
         String services =  "1,2,17";
         BodyForCalculateShipping body = new BodyForCalculateShipping(new PostalCode("54340070"), new PostalCode(to), services, new PackageDimensions(75, 11, 16, 0.3));
-        String json = new ObjectMapper().writeValueAsString(body).replace("_dimensions", "");
+        String jsonBody = new ObjectMapper().writeValueAsString(body).replace("_dimensions", "");
         HttpHeaders headers = createHeaders();
-        HttpEntity<?> requestEntity = new HttpEntity<>(json, headers);
+        HttpEntity<?> requestEntity = new HttpEntity<>(jsonBody, headers);
 
-        return restTemplate.exchange(baseURL + "/v0/calculator" , HttpMethod.POST, requestEntity, String.class);
+        String jsonResponseBody = restTemplate.exchange(baseURL + "/v0/calculator", HttpMethod.POST, requestEntity, String.class).getBody();
+        SuperFretePackageDTO responseBody = new Gson().fromJson(jsonResponseBody, SuperFretePackageDTO.class);
+
+        return new ShippingPricesDTO(responseBody);
     }
 
     public ResponseEntity<?> sendShippingToSuperFrete(ShippingInfToSendToSuperFreteDTO body) throws JsonProcessingException {

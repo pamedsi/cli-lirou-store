@@ -13,7 +13,7 @@ public record SuperFretePackageDTO(
         DeliveryRange deliveryRange,
         List<PackageData> packages,
         AdditionalServices additionalServices,
-        Company company,
+        CompanyInfo company,
         Boolean hasError
 ) {}
 
@@ -22,7 +22,7 @@ record AdditionalServices(
         Boolean own_hand
 ) {}
 
-record Company(
+record CompanyInfo(
         Number id,
         String name,
         String picture,
