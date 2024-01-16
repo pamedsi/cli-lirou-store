@@ -15,11 +15,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/shipping")
-public class ShippingController {
+public class SuperFreteController {
 
     private final SuperFreteService superFreteService;
 
-    public ShippingController(SuperFreteService superFreteService) {
+    public SuperFreteController(SuperFreteService superFreteService) {
         this.superFreteService = superFreteService;
     }
 
@@ -46,6 +46,11 @@ public class ShippingController {
     @GetMapping("/printable-label")
     public ResponseEntity<?> getPrintableLabel(@RequestBody OrdersIDs orders) {
         PrintInfo response = superFreteService.getPrintableLabel(orders);
+        return ResponseEntity.ok(response);
+    }
+    @DeleteMapping("/abort-order")
+    public ResponseEntity<?> cancelOrder(@RequestBody AbortingRequestDTO body) {
+        OrderCancellationResponse response = superFreteService.cancelOrder(body);
         return ResponseEntity.ok(response);
     }
 }

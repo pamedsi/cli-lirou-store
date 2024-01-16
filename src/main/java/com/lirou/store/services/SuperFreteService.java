@@ -8,6 +8,7 @@ import com.lirou.store.DTOs.superfrete.bodyForCalculateShipping.BodyForCalculate
 
 import com.lirou.store.DTOs.superfrete.bodyForCalculateShipping.PackageDimensions;
 import com.lirou.store.DTOs.superfrete.bodyForCalculateShipping.PostalCode;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -66,7 +67,7 @@ public class SuperFreteService {
         HttpEntity<?> requestEntity = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
 
-        String responseBody = restTemplate.exchange(baseURL + "/tag/print/" + orderID , HttpMethod.GET, requestEntity, String.class).getBody();
+        String responseBody = restTemplate.exchange(baseURL + "/order/info/" + orderID , HttpMethod.GET, requestEntity, String.class).getBody();
         return new Gson().fromJson(responseBody, DeliveryInfoDTO.class);
     }
 
@@ -79,7 +80,16 @@ public class SuperFreteService {
         return new Gson().fromJson(responseBody, PrintInfo.class);
     }
 
+    public OrderCancellationResponse cancelOrder(AbortingRequestDTO requestBody){
+        HttpHeaders headers = createHeaders(true);
+        HttpEntity<?> requestEntity = new HttpEntity<>(requestBody, headers);
+        RestTemplate restTemplate = new RestTemplate();
 
+        ResponseEntity<?> response = restTemplate.exchange(baseURL + "/order/cancel" , HttpMethod.POST, requestEntity, String.class);
+
+        return new Gson().fromJson((String) response.getBody(), OrderCancellationResponse.class);
+//        return new Gson().fromJson((String) response.getBody(), ErrorOnAborting.class);;
+    }
 
     private HttpHeaders createHeaders (Boolean withContentType) {
         HttpHeaders headers = new HttpHeaders();
@@ -89,5 +99,9 @@ public class SuperFreteService {
         if(!withContentType) return headers;
         headers.setContentType(MediaType.APPLICATION_JSON);
         return headers;
+    }
+    @PostConstruct
+    private void createHeaders(){
+        // implementar
     }
 }
