@@ -29,7 +29,7 @@ public class SuperFreteService {
         String services =  "1,2,17";
         BodyForCalculateShipping body = new BodyForCalculateShipping(new PostalCode("54340070"), new PostalCode(to), services, new PackageDimensions(75, 11, 16, 0.3));
         String jsonBody = new Gson().toJson(body).replace("_dimensions", "");
-        HttpHeaders headers = createHeaders();
+        HttpHeaders headers = createHeaders(true);
         HttpEntity<?> requestEntity = new HttpEntity<>(jsonBody, headers);
 
         String jsonResponseBody = restTemplate.exchange(baseURL + "/calculator", HttpMethod.POST, requestEntity, String.class).getBody();
@@ -42,7 +42,7 @@ public class SuperFreteService {
     }
 
     public ProtocolData sendShippingToSuperFrete(ShippingInfToSendToSuperFreteDTO body) {
-        HttpHeaders headers = createHeaders();
+        HttpHeaders headers = createHeaders(true);
         String json = new Gson().toJson(body);
         HttpEntity<?> requestEntity = new HttpEntity<>(json, headers);
         RestTemplate restTemplate = new RestTemplate();
@@ -51,8 +51,8 @@ public class SuperFreteService {
         return new Gson().fromJson(responseBody, ProtocolData.class);
     }
 
-    public ShippingOfOrderDTO finishOrderAndSendTag(OrdersIDs orders){
-        HttpHeaders headers = createHeaders();
+    public ShippingOfOrderDTO finishOrderAndGenerateTag(OrdersIDs orders){
+        HttpHeaders headers = createHeaders(true);
         String json = new Gson().toJson(orders);
         HttpEntity<?> requestEntity = new HttpEntity<>(json, headers);
         RestTemplate restTemplate = new RestTemplate();
@@ -61,12 +61,25 @@ public class SuperFreteService {
         return new Gson().fromJson(responseBody, ShippingOfOrderDTO.class);
     }
 
-    private HttpHeaders createHeaders () {
+public DeliveryInfoDTO getDeliveryInfo(String orderID){
+    HttpHeaders headers = createHeaders(false);
+
+    HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+    RestTemplate restTemplate = new RestTemplate();
+
+    String responseBody = restTemplate.exchange(baseURL + "/order/info/" + orderID , HttpMethod.GET, requestEntity, String.class).getBody();
+    return new Gson().fromJson(responseBody, DeliveryInfoDTO.class);
+
+//    return responseBody;
+}
+
+    private HttpHeaders createHeaders (Boolean withContentType) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         headers.set("User-Agent", "Lirou Store (liroustore@gmail.com)");
         headers.set("Authorization", "Bearer " + token);
+        if(!withContentType) return headers;
+        headers.setContentType(MediaType.APPLICATION_JSON);
         return headers;
     }
 }

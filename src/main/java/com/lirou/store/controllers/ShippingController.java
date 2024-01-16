@@ -2,10 +2,7 @@ package com.lirou.store.controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import com.lirou.store.DTOs.superfrete.OrdersIDs;
-import com.lirou.store.DTOs.superfrete.ProtocolData;
-import com.lirou.store.DTOs.superfrete.ShippingOfOrderDTO;
-import com.lirou.store.DTOs.superfrete.ShippingPricesDTO;
+import com.lirou.store.DTOs.superfrete.*;
 import com.lirou.store.DTOs.superfrete.bodyForCalculateShipping.CEPToSendToDTO;
 import com.lirou.store.DTOs.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
 import com.lirou.store.services.SuperFreteService;
@@ -39,7 +36,13 @@ public class ShippingController {
 
     @PostMapping("/confirm")
     public ResponseEntity<?> checkout(@RequestBody OrdersIDs body) {
-        ShippingOfOrderDTO response = superFreteService.finishOrderAndSendTag(body);
+        ShippingOfOrderDTO response = superFreteService.finishOrderAndGenerateTag(body);
+        return ResponseEntity.ok(response);
+    }
+    @GetMapping("/info/{orderID}")
+    public ResponseEntity<?> getOrderInfo(@PathVariable("orderID") String orderID) {
+        DeliveryInfoDTO response = superFreteService.getDeliveryInfo(orderID);
+//        String response = superFreteService.getDeliveryInfo(orderID);
         return ResponseEntity.ok(response);
     }
 }

@@ -20,7 +20,7 @@ record Order(
         BigDecimal discount,
         String self_tracking,
         String tracking,
-        Print print
+        PrintInfo print
 ) {}
 
 record Purchase(
@@ -28,5 +28,3 @@ record Purchase(
         String status,
         List<Order> orders
 ) {}
-
-record Print(String url) {}

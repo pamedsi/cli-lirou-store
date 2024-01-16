@@ -7,14 +7,8 @@ public record ShippingInfToSendToSuperFreteDTO(
         AddressDTO from,
         AddressDTO to,
         Number service,
-        List<Product> products,
+        List<ProductInfo> products,
         Volumes volumes
-){}
-
-record Product (
-        String name,
-        String quantity,
-        String unitary_value
 ){}
 
 record Volumes (
