@@ -51,7 +51,7 @@ public class SuperFreteService {
         return new Gson().fromJson(responseBody, ProtocolData.class);
     }
 
-    public ShippingOfOrderDTO finishOrderAndGenerateTag(OrdersIDs orders){
+    public ShippingOfOrderDTO finishOrderAndGeneratePrintableLabel(OrdersIDs orders){
         HttpHeaders headers = createHeaders(true);
         String json = new Gson().toJson(orders);
         HttpEntity<?> requestEntity = new HttpEntity<>(json, headers);
@@ -61,17 +61,25 @@ public class SuperFreteService {
         return new Gson().fromJson(responseBody, ShippingOfOrderDTO.class);
     }
 
-public DeliveryInfoDTO getDeliveryInfo(String orderID){
-    HttpHeaders headers = createHeaders(false);
+    public DeliveryInfoDTO getDeliveryInfo(String orderID){
+        HttpHeaders headers = createHeaders(false);
+        HttpEntity<?> requestEntity = new HttpEntity<>(headers);
+        RestTemplate restTemplate = new RestTemplate();
 
-    HttpEntity<?> requestEntity = new HttpEntity<>(headers);
-    RestTemplate restTemplate = new RestTemplate();
+        String responseBody = restTemplate.exchange(baseURL + "/tag/print/" + orderID , HttpMethod.GET, requestEntity, String.class).getBody();
+        return new Gson().fromJson(responseBody, DeliveryInfoDTO.class);
+    }
 
-    String responseBody = restTemplate.exchange(baseURL + "/order/info/" + orderID , HttpMethod.GET, requestEntity, String.class).getBody();
-    return new Gson().fromJson(responseBody, DeliveryInfoDTO.class);
+    public PrintInfo getPrintableLabel(OrdersIDs ordersIDs){
+        HttpHeaders headers = createHeaders(true);
+        HttpEntity<?> requestEntity = new HttpEntity<>(ordersIDs, headers);
+        RestTemplate restTemplate = new RestTemplate();
 
-//    return responseBody;
-}
+        String responseBody = restTemplate.exchange(baseURL + "/tag/print" , HttpMethod.POST, requestEntity, String.class).getBody();
+        return new Gson().fromJson(responseBody, PrintInfo.class);
+    }
+
+
 
     private HttpHeaders createHeaders (Boolean withContentType) {
         HttpHeaders headers = new HttpHeaders();
