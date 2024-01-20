@@ -13,7 +13,7 @@ import java.util.List;
 
 @Service
 public class GlassesService {
-    private GlassesRepository glassesRepository;
+    private final GlassesRepository glassesRepository;
     public GlassesService(GlassesRepository glassesRepository) {
         this.glassesRepository = glassesRepository;
     }
