@@ -14,7 +14,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.IOException;
 import java.lang.reflect.Type;
 import java.util.List;
 
@@ -24,15 +23,16 @@ public class SuperFreteService {
     @Value("${token}")
     private String token;
     private final String baseURL = "https://sandbox.superfrete.com/api/v0";
+    @Value("${CEP}")
+    private String from;
+    private HttpHeaders headers;
 
-    public List<ShippingPricesDTO> calculateShipping(String to) throws IOException {
+    public List<ShippingPricesDTO> calculateShipping(String to) {
         RestTemplate restTemplate = new RestTemplate();
         String services =  "1,2,17";
-        BodyForCalculateShipping body = new BodyForCalculateShipping(new PostalCode("54340070"), new PostalCode(to), services, new PackageDimensions(75, 11, 16, 0.3));
+        BodyForCalculateShipping body = new BodyForCalculateShipping(new PostalCode(from), new PostalCode(removeNonDigits(to)), services, new PackageDimensions(75, 11, 16, 0.3));
         String jsonBody = new Gson().toJson(body).replace("_dimensions", "");
-        HttpHeaders headers = createHeaders(true);
         HttpEntity<?> requestEntity = new HttpEntity<>(jsonBody, headers);
-
         String jsonResponseBody = restTemplate.exchange(baseURL + "/calculator", HttpMethod.POST, requestEntity, String.class).getBody();
 
         Type pricesList = new TypeToken<List<SuperFretePackageDTO>>(){}.getType();
@@ -43,7 +43,6 @@ public class SuperFreteService {
     }
 
     public ProtocolData sendShippingToSuperFrete(ShippingInfToSendToSuperFreteDTO body) {
-        HttpHeaders headers = createHeaders(true);
         String json = new Gson().toJson(body);
         HttpEntity<?> requestEntity = new HttpEntity<>(json, headers);
         RestTemplate restTemplate = new RestTemplate();
@@ -53,7 +52,6 @@ public class SuperFreteService {
     }
 
     public ShippingOfOrderDTO finishOrderAndGeneratePrintableLabel(OrdersIDs orders){
-        HttpHeaders headers = createHeaders(true);
         String json = new Gson().toJson(orders);
         HttpEntity<?> requestEntity = new HttpEntity<>(json, headers);
         RestTemplate restTemplate = new RestTemplate();
@@ -63,7 +61,7 @@ public class SuperFreteService {
     }
 
     public DeliveryInfoDTO getDeliveryInfo(String orderID){
-        HttpHeaders headers = createHeaders(false);
+        HttpHeaders headers = createHeaders(true);
         HttpEntity<?> requestEntity = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
 
@@ -91,17 +89,23 @@ public class SuperFreteService {
 //        return new Gson().fromJson((String) response.getBody(), ErrorOnAborting.class);;
     }
 
-    private HttpHeaders createHeaders (Boolean withContentType) {
+    private HttpHeaders createHeaders(Boolean locally) {
         HttpHeaders headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         headers.set("User-Agent", "Lirou Store (liroustore@gmail.com)");
         headers.set("Authorization", "Bearer " + token);
-        if(!withContentType) return headers;
-        headers.setContentType(MediaType.APPLICATION_JSON);
         return headers;
     }
     @PostConstruct
     private void createHeaders(){
-        // implementar
+        headers = new HttpHeaders();
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        headers.set("User-Agent", "Lirou Store (liroustore@gmail.com)");
+        headers.set("Authorization", "Bearer " + token);
+        headers.setContentType(MediaType.APPLICATION_JSON);
     }
+    public static String removeNonDigits(String cep) {
+        return cep.replaceAll("[^0-9]", "");
+    }
+
 }

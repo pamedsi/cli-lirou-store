@@ -1,17 +1,16 @@
 package com.lirou.store.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import com.lirou.store.DTOs.superfrete.*;
-import com.lirou.store.DTOs.superfrete.bodyForCalculateShipping.CEPToSendToDTO;
 import com.lirou.store.DTOs.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
+import com.lirou.store.models.Message;
 import com.lirou.store.services.SuperFreteService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
+
+import static com.lirou.store.validation.PostalCodeValidator.isAValidePostalCode;
 
 @RestController
 @RequestMapping("/api/shipping")
@@ -23,13 +22,14 @@ public class SuperFreteController {
         this.superFreteService = superFreteService;
     }
 
-    @GetMapping("/calculate")
-    public ResponseEntity<?> calculateShipping(@RequestBody CEPToSendToDTO postalCodes) throws IOException {
-        List<ShippingPricesDTO> body = superFreteService.calculateShipping(postalCodes.CEP());
+    @GetMapping("/calculate/{CEP}")
+    public ResponseEntity<?> calculateShipping(@PathVariable("CEP") String postalCode) {
+        if (!isAValidePostalCode(postalCode)) return ResponseEntity.badRequest().body((new Message("CEP inválido!")));
+        List<ShippingPricesDTO> body = superFreteService.calculateShipping(postalCode);
         return ResponseEntity.ok(body);
     }
     @PostMapping("/send-to-superfrete")
-    public ResponseEntity<?> sendShippingToSuperFrete(@RequestBody ShippingInfToSendToSuperFreteDTO body) throws JsonProcessingException {
+    public ResponseEntity<?> sendShippingToSuperFrete(@RequestBody ShippingInfToSendToSuperFreteDTO body) {
         ProtocolData response = superFreteService.sendShippingToSuperFrete(body);
         return ResponseEntity.ok(response);
     }
