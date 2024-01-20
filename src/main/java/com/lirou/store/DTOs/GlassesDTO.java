@@ -13,7 +13,8 @@ public record GlassesDTO(
         @NotBlank
         String title,
         String pic,
-        Boolean inStock,
+        Boolean available,
+        int quantityInStock,
         @NotBlank
         String model,
         @NotBlank
@@ -31,7 +32,8 @@ public record GlassesDTO(
                         glassesEntity.getIdentifier(),
                         glassesEntity.getTitle(),
                         glassesEntity.getPic(),
-                        glassesEntity.getInStock(),
+                        glassesEntity.getAvailable(),
+                        glassesEntity.getQuantityInStock(),
                         glassesEntity.getModel(),
                         glassesEntity.getColor(),
                         glassesEntity.getFrame(),

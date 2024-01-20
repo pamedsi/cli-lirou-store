@@ -22,7 +22,7 @@ public class Glasses extends Product {
         setTitle(glassesDTO.title());
         setPrice(glassesDTO.price());
         setPic(glassesDTO.pic());
-        setInStock(glassesDTO.inStock());
+        setAvailable(glassesDTO.available());
         setColor(glassesDTO.color());
         setModel(glassesDTO.model());
         setBrand(glassesDTO.brand());

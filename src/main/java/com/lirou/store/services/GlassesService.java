@@ -54,7 +54,7 @@ public class GlassesService {
     public String changeAvailability(String identifier, Boolean available){
         Glasses glasses = glassesRepository.findByIdentifierAndDeletedFalse(identifier);
         if (glasses == null) throw new NotFoundException("Óculos não encontrado!");
-        glasses.setInStock(available);
+        glasses.setAvailable(available);
         if (available) return "disponibilizado!";
         return "indisponibilizado!";
     }
