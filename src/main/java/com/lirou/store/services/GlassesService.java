@@ -4,7 +4,9 @@ import com.lirou.store.DTOs.GlassesDTO;
 import com.lirou.store.entities.Glasses;
 import com.lirou.store.repository.GlassesRepository;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.ws.rs.NotFoundException;
 import java.util.List;
@@ -58,4 +60,13 @@ public class GlassesService {
         if (available) return "disponibilizado!";
         return "indisponibilizado!";
     }
+
+    public GlassesDTO findGlassesByIdentifier(String glassesIdentifier) {
+        if (glassesIdentifier.length() != 36) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identificador inválido!");
+
+        Glasses glasses = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
+        if (glasses == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Óculos não encontrado!");
+        return new GlassesDTO(glasses);
+    }
+
 }

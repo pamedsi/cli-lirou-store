@@ -28,6 +28,11 @@ public class GlassesController{
         List<GlassesDTO> glassesDTO = glassesService.getAllGlasses();
         return ResponseEntity.ok(glassesDTO);
     }
+    @GetMapping("/{identifier}")
+    public ResponseEntity<?> findSingleGlasses(@PathVariable("identifier") String identifier) {
+        GlassesDTO glassesDTO = glassesService.findGlassesByIdentifier(identifier);
+        return ResponseEntity.ok(glassesDTO);
+    }
     @PostMapping
     public ResponseEntity<?> postGlasses(@RequestBody GlassesDTO glassesDTO) {
         glassesService.saveNewGlasses(glassesDTO);
