@@ -1,11 +1,8 @@
-package com.lirou.store.DTOs.superfrete;
+package com.lirou.store.models.superfrete;
 
-import com.lirou.store.DTOs.superfrete.shippingInfToSendToSuperFrete.AddressDTO;
-import jdk.jfr.Timestamp;
-import org.springframework.data.annotation.CreatedDate;
+import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.AddressDTO;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public record DeliveryInfoDTO(
