@@ -1,7 +1,7 @@
 package com.lirou.store.controllers;
 
-import com.lirou.store.DTOs.superfrete.*;
-import com.lirou.store.DTOs.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
+import com.lirou.store.models.superfrete.*;
+import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
 import com.lirou.store.models.Message;
 import com.lirou.store.services.SuperFreteService;
 

@@ -1,4 +1,4 @@
-package com.lirou.store.DTOs.superfrete;
+package com.lirou.store.models.superfrete;
 
 import java.util.List;
 

@@ -2,12 +2,13 @@ package com.lirou.store.services;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.lirou.store.DTOs.superfrete.*;
-import com.lirou.store.DTOs.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
-import com.lirou.store.DTOs.superfrete.bodyForCalculateShipping.BodyForCalculateShipping;
 
-import com.lirou.store.DTOs.superfrete.bodyForCalculateShipping.PackageDimensions;
-import com.lirou.store.DTOs.superfrete.bodyForCalculateShipping.PostalCode;
+import com.lirou.store.models.superfrete.*;
+import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
+import com.lirou.store.models.superfrete.bodyForCalculateShipping.BodyForCalculateShipping;
+
+import com.lirou.store.models.superfrete.bodyForCalculateShipping.PackageDimensions;
+import com.lirou.store.models.superfrete.bodyForCalculateShipping.PostalCode;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
