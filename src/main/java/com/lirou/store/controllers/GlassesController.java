@@ -7,6 +7,7 @@ import com.lirou.store.models.Message;
 import com.lirou.store.services.GlassesService;
 
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,8 +25,8 @@ public class GlassesController{
 
     // Para a parte admin:
     @GetMapping
-    public ResponseEntity<List<GlassesDTO>> getGlasses() {
-        List<GlassesDTO> glassesDTO = glassesService.getAllGlasses();
+    public ResponseEntity<Page<GlassesDTO>> getGlasses() {
+        Page<GlassesDTO> glassesDTO = glassesService.getAllGlasses();
         return ResponseEntity.ok(glassesDTO);
     }
     @GetMapping("/{identifier}")

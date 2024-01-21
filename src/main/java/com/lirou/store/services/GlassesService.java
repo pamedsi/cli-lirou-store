@@ -4,6 +4,8 @@ import com.lirou.store.DTOs.GlassesDTO;
 import com.lirou.store.entities.Glasses;
 import com.lirou.store.repository.GlassesRepository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import jakarta.ws.rs.BadRequestException;
@@ -19,9 +21,9 @@ public class GlassesService {
         this.glassesRepository = glassesRepository;
     }
     // Admin:
-    public List<GlassesDTO> getAllGlasses() {
-        List<Glasses> glassesAsEntity = glassesRepository.findAllByDeletedFalse();
-        return GlassesDTO.severalToDTO(glassesAsEntity);
+    public Page<GlassesDTO> getAllGlasses() {
+        Page<Glasses> glassesAsEntity = glassesRepository.findAllByDeletedFalse(PageRequest.of(0, 10));
+        return GlassesDTO.toPageDTO(glassesAsEntity);
     }
 
     public void saveNewGlasses(GlassesDTO glassesDTO) {
