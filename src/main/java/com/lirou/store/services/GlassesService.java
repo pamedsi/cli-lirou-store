@@ -8,11 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.NotFoundException;
-import java.util.List;
-
-import static com.lirou.store.validation.IdentifierValidator.validIdentifier;
 
 @Service
 public class GlassesService {
@@ -32,7 +28,6 @@ public class GlassesService {
     }
 
     public void updateGlasses(String glassesIdentifier, GlassesDTO changes) {
-        if (!validIdentifier(glassesIdentifier)) throw new BadRequestException("Identificador inválido!");
         Glasses glassesToEdit = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
         if (glassesToEdit == null) throw new NotFoundException("Óculos não encontrado");
 
@@ -48,7 +43,6 @@ public class GlassesService {
     }
 
     public String removeGlasses(String glassesIdentifier) {
-        if (!validIdentifier(glassesIdentifier)) throw new BadRequestException("Identificador inválido!");
         Glasses glassesToDelete = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
         if (glassesToDelete == null) throw new NotFoundException("Óculos não encontrado");
 
@@ -60,7 +54,6 @@ public class GlassesService {
 
     public String changeAvailability(String glassesIdentifier, Boolean available){
         Glasses glasses = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
-        if (!validIdentifier(glassesIdentifier)) throw new BadRequestException("Identificador inválido!");
 
         glasses.setAvailable(available);
         if (available) return "disponibilizado!";
@@ -68,8 +61,6 @@ public class GlassesService {
     }
 
     public GlassesDTO findGlassesByIdentifier(String glassesIdentifier) {
-        if (!validIdentifier(glassesIdentifier)) throw new BadRequestException("Identificador inválido!");
-
         Glasses glasses = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
         if (glasses == null) throw new NotFoundException("Óculos não encontrado!");
         return new GlassesDTO(glasses);

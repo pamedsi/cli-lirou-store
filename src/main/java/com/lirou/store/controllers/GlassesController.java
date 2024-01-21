@@ -6,12 +6,11 @@ import com.lirou.store.models.GlassesAvailability;
 import com.lirou.store.models.Message;
 import com.lirou.store.services.GlassesService;
 
+import com.lirou.store.validation.identifierValidator.ValidIdentifier;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/glasses")
@@ -30,7 +29,7 @@ public class GlassesController{
         return ResponseEntity.ok(glassesDTO);
     }
     @GetMapping("/{identifier}")
-    public ResponseEntity<GlassesDTO> findSingleGlasses(@PathVariable("identifier") String identifier) {
+    public ResponseEntity<GlassesDTO> findSingleGlasses(@PathVariable("identifier") @ValidIdentifier String identifier) {
         GlassesDTO glassesDTO = glassesService.findGlassesByIdentifier(identifier);
         return ResponseEntity.ok(glassesDTO);
     }
