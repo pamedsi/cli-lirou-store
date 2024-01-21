@@ -24,12 +24,11 @@ public class SuperFreteController {
 
     @GetMapping("/calculate/{CEP}")
     public ResponseEntity<?> calculateShipping(@PathVariable("CEP") String postalCode) {
-        if (!isAValidePostalCode(postalCode)) return ResponseEntity.badRequest().body((new Message("CEP inválido!")));
         List<ShippingPricesDTO> body = superFreteService.calculateShipping(postalCode);
         return ResponseEntity.ok(body);
     }
     @PostMapping("/send-to-superfrete")
-    public ResponseEntity<?> sendShippingToSuperFrete(@RequestBody ShippingInfToSendToSuperFreteDTO body) {
+    public ResponseEntity<ProtocolData> sendShippingToSuperFrete(@RequestBody ShippingInfToSendToSuperFreteDTO body) {
         ProtocolData response = superFreteService.sendShippingToSuperFrete(body);
         return ResponseEntity.ok(response);
     }

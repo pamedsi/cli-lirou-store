@@ -3,6 +3,7 @@ package com.lirou.store.services;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import com.lirou.store.models.Message;
 import com.lirou.store.models.superfrete.*;
 import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
 import com.lirou.store.models.superfrete.bodyForCalculateShipping.BodyForCalculateShipping;
@@ -15,8 +16,11 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import javax.ws.rs.BadRequestException;
 import java.lang.reflect.Type;
 import java.util.List;
+
+import static com.lirou.store.validation.PostalCodeValidator.isAValidePostalCode;
 
 @Service
 public class SuperFreteService {
@@ -29,6 +33,8 @@ public class SuperFreteService {
     private HttpHeaders headers;
 
     public List<ShippingPricesDTO> calculateShipping(String to) {
+        if (!isAValidePostalCode(to)) throw new BadRequestException("CEP inválido!");
+
         RestTemplate restTemplate = new RestTemplate();
         String services =  "1,2,17";
         BodyForCalculateShipping body = new BodyForCalculateShipping(new PostalCode(from), new PostalCode(removeNonDigits(to)), services, new PackageDimensions(75, 11, 16, 0.3));

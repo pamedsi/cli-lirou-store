@@ -24,35 +24,35 @@ public class GlassesController{
 
     // Para a parte admin:
     @GetMapping
-    public ResponseEntity<?> getGlasses() {
+    public ResponseEntity<List<GlassesDTO>> getGlasses() {
         List<GlassesDTO> glassesDTO = glassesService.getAllGlasses();
         return ResponseEntity.ok(glassesDTO);
     }
     @GetMapping("/{identifier}")
-    public ResponseEntity<?> findSingleGlasses(@PathVariable("identifier") String identifier) {
+    public ResponseEntity<GlassesDTO> findSingleGlasses(@PathVariable("identifier") String identifier) {
         GlassesDTO glassesDTO = glassesService.findGlassesByIdentifier(identifier);
         return ResponseEntity.ok(glassesDTO);
     }
     @PostMapping
-    public ResponseEntity<?> postGlasses(@RequestBody GlassesDTO glassesDTO) {
+    public ResponseEntity<Message> postGlasses(@RequestBody GlassesDTO glassesDTO) {
         glassesService.saveNewGlasses(glassesDTO);
         return ResponseEntity.status(201).body(new Message(glassesDTO.title() + " salvo!"));
     }
 
     @PutMapping("/{identifier}")
-    public ResponseEntity<?> putGlasses(@RequestBody @Valid GlassesDTO glassesDTO, @PathVariable("identifier") String glassesIdentifier) {
+    public ResponseEntity<Message> putGlasses(@RequestBody @Valid GlassesDTO glassesDTO, @PathVariable("identifier") String glassesIdentifier) {
         glassesService.updateGlasses(glassesIdentifier, glassesDTO);
         return ResponseEntity.ok(new Message("Atualização feita com sucesso!"));
     }
 
     @DeleteMapping("/{identifier}")
-    public ResponseEntity<?> deleteGlasses(@PathVariable("identifier") String glassesIdentifier) {
+    public ResponseEntity<Message> deleteGlasses(@PathVariable("identifier") String glassesIdentifier) {
         String titleOfDeletedGlasses = glassesService.removeGlasses(glassesIdentifier);
         return ResponseEntity.ok(new Message(titleOfDeletedGlasses + "deletado!"));
     }
   
     @PatchMapping("/set-available/{identifier}")
-    public ResponseEntity<?> changeAvailability(@PathVariable("identifier") String glassesIdentifier, @RequestBody GlassesAvailability availability) {
+    public ResponseEntity<Message> changeAvailability(@PathVariable("identifier") String glassesIdentifier, @RequestBody GlassesAvailability availability) {
         String availableOrNot = glassesService.changeAvailability(glassesIdentifier, availability.available());
         return ResponseEntity.ok(new Message("Óculos " + availableOrNot));
     }
