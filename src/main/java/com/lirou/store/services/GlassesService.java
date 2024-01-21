@@ -4,12 +4,13 @@ import com.lirou.store.DTOs.GlassesDTO;
 import com.lirou.store.entities.Glasses;
 import com.lirou.store.repository.GlassesRepository;
 
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
-import javax.ws.rs.NotFoundException;
+import jakarta.ws.rs.BadRequestException;
+import jakarta.ws.rs.NotFoundException;
 import java.util.List;
+
+import static com.lirou.store.validation.IdentifierValidator.validIdentifier;
 
 @Service
 public class GlassesService {
@@ -29,9 +30,9 @@ public class GlassesService {
     }
 
     public void updateGlasses(String glassesIdentifier, GlassesDTO changes) {
-        if (glassesIdentifier.length() != 36) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identificador inválido!");
+        if (!validIdentifier(glassesIdentifier)) throw new BadRequestException("Identificador inválido!");
         Glasses glassesToEdit = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
-        if (glassesToEdit == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identificador inválido!");
+        if (glassesToEdit == null) throw new NotFoundException("Óculos não encontrado");
 
         glassesToEdit.setTitle(changes.title());
         glassesToEdit.setPic(changes.pic());
@@ -45,9 +46,9 @@ public class GlassesService {
     }
 
     public String removeGlasses(String glassesIdentifier) {
-        if (glassesIdentifier.length() != 36) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identificador inválido!");
+        if (!validIdentifier(glassesIdentifier)) throw new BadRequestException("Identificador inválido!");
         Glasses glassesToDelete = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
-        if (glassesToDelete == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identificador inválido!");
+        if (glassesToDelete == null) throw new NotFoundException("Óculos não encontrado");
 
         glassesToDelete.setDeleted(true);
         glassesRepository.save(glassesToDelete);
@@ -55,19 +56,20 @@ public class GlassesService {
         return glassesToDelete.getTitle();
     }
 
-    public String changeAvailability(String identifier, Boolean available){
-        Glasses glasses = glassesRepository.findByIdentifierAndDeletedFalse(identifier);
-        if (glasses == null) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identificador inválido!");
+    public String changeAvailability(String glassesIdentifier, Boolean available){
+        Glasses glasses = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
+        if (!validIdentifier(glassesIdentifier)) throw new BadRequestException("Identificador inválido!");
+
         glasses.setAvailable(available);
         if (available) return "disponibilizado!";
         return "indisponibilizado!";
     }
 
     public GlassesDTO findGlassesByIdentifier(String glassesIdentifier) {
-        if (glassesIdentifier.length() != 36) throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Identificador inválido!");
+        if (!validIdentifier(glassesIdentifier)) throw new BadRequestException("Identificador inválido!");
 
         Glasses glasses = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
-        if (glasses == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Óculos não encontrado!");
+        if (glasses == null) throw new NotFoundException("Óculos não encontrado!");
         return new GlassesDTO(glasses);
     }
 
