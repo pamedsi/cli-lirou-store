@@ -1,4 +1,4 @@
-package com.lirou.store.DTOs.superfrete.bodyForCalculateShipping;
+package com.lirou.store.models.superfrete.bodyForCalculateShipping;
 
 public record BodyForCalculateShipping(
         PostalCode from,

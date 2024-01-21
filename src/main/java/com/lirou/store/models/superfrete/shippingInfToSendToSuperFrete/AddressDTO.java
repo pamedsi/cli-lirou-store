@@ -1,4 +1,4 @@
-package com.lirou.store.DTOs.superfrete.shippingInfToSendToSuperFrete;
+package com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete;
 
 public record AddressDTO (
             String name,
