@@ -33,22 +33,22 @@ public class SuperFreteController {
         return ResponseEntity.ok(response);
     }
     @PostMapping("/confirm")
-    public ResponseEntity<?> checkout(@RequestBody OrdersIDs body) {
+    public ResponseEntity<ShippingOfOrderDTO> checkout(@RequestBody OrdersIDs body) {
         ShippingOfOrderDTO response = superFreteService.finishOrderAndGeneratePrintableLabel(body);
         return ResponseEntity.ok(response);
     }
     @GetMapping("/info/{orderID}")
-    public ResponseEntity<?> getOrderInfo(@PathVariable("orderID") String orderID) {
+    public ResponseEntity<DeliveryInfoDTO> getOrderInfo(@PathVariable("orderID") String orderID) {
         DeliveryInfoDTO response = superFreteService.getDeliveryInfo(orderID);
         return ResponseEntity.ok(response);
     }
     @GetMapping("/printable-label")
-    public ResponseEntity<?> getPrintableLabel(@RequestBody OrdersIDs orders) {
+    public ResponseEntity<PrintInfo> getPrintableLabel(@RequestBody OrdersIDs orders) {
         PrintInfo response = superFreteService.getPrintableLabel(orders);
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/abort-order")
-    public ResponseEntity<?> cancelOrder(@RequestBody AbortingRequestDTO body) {
+    public ResponseEntity<OrderCancellationResponse> cancelOrder(@RequestBody AbortingRequestDTO body) {
         OrderCancellationResponse response = superFreteService.cancelOrder(body);
         return ResponseEntity.ok(response);
     }
