@@ -1,9 +1,5 @@
 package com.lirou.store.handler;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonSyntaxException;
-import com.google.gson.reflect.TypeToken;
 import com.lirou.store.models.ExceptionDetails;
 
 import jakarta.ws.rs.NotFoundException;
@@ -20,12 +16,8 @@ import jakarta.ws.rs.BadRequestException;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
-import java.lang.reflect.Type;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
-
 
 @RestControllerAdvice
 public class RestExceptionHandler {
@@ -35,7 +27,6 @@ public class RestExceptionHandler {
         return ResponseEntity.badRequest().body(new ExceptionDetails(
                 exception.getMessage(),
                 400,
-                exception.getClass().getName(),
                 LocalDateTime.now()
         ));
     }
@@ -45,7 +36,6 @@ public class RestExceptionHandler {
         return ResponseEntity.badRequest().body(new ExceptionDetails(
                 exception.getMessage(),
                 500,
-                exception.getClass().getName(),
                 LocalDateTime.now()
         ));
     }
@@ -56,7 +46,6 @@ public class RestExceptionHandler {
                 new ExceptionDetails(
                         exception.getMessage(),
                         404,
-                        exception.getClass().getName(),
                         LocalDateTime.now()
                 ));
     }
@@ -69,7 +58,6 @@ public class RestExceptionHandler {
         ExceptionDetails body = new ExceptionDetails(
                 errors.toString(),
                 400,
-                exception.getClass().getName(),
                 LocalDateTime.now()
         );
 
