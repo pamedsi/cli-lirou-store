@@ -28,7 +28,7 @@ jobs:
       url: 'jonnatas56.com'
     needs: test
     steps:
-    - name: Build with Maven
+    - name: dev
       run: echo deploy dev
 
   build-prod:
@@ -38,5 +38,5 @@ jobs:
       url: 'jonnatas56.com'
     needs: dev
     steps:
-    - name: Build with Maven
+    - name: prod
       run: echo deploy prod
