@@ -13,30 +13,30 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
-
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-    - name: test
-      run: echo hello work!
-
   build-dev:
     runs-on: ubuntu-latest
     environment: 
       name: dev
-      url: 'jonnatas56.com'
-    needs: test
+      url: ''
     steps:
+    - uses: actions/checkout@v4
+      with:
+        java-version: '21'
+        cache: maven
     - name: dev
-      run: echo deploy dev
+      run: mvn --batch-mode --update-snapshots verify
 
   build-prod:
     runs-on: ubuntu-latest
     environment: 
       name: prod
-      url: 'jonnatas56.com'
+      url: ''
     needs: build-dev
     steps:
+    - uses: actions/checkout@v4
+      with:
+        java-version: '21'
+        cache: maven
     - name: prod
-      run: echo deploy prod
+      run: mvn clean package -Dmaven.test.skip=true
