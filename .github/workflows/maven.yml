@@ -15,8 +15,28 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
+    - name: test
+      run: echo hello work!
+
+  build-dev:
+    runs-on: ubuntu-latest
+    environment: 
+      name: dev
+      url: 'jonnatas56.com'
+    needs: test
+    steps:
     - name: Build with Maven
-      run: mvn clean install -Dmaven.test.skip=true
+      run: echo deploy dev
+
+  build-prod:
+    runs-on: ubuntu-latest
+    environment: 
+      name: prod
+      url: 'jonnatas56.com'
+    needs: dev
+    steps:
+    - name: Build with Maven
+      run: echo deploy prod
