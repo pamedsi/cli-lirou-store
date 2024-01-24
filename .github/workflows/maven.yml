@@ -21,11 +21,13 @@ jobs:
       url: ''
     steps:
     - uses: actions/checkout@v4
+    - uses: actions/setup-java@v4
       with:
         java-version: '21'
         cache: maven
+        cache-dependency-path: pom.xml
     - name: dev
-      run: mvn --batch-mode --update-snapshots verify
+      run:  mvn clean package -Dmaven.test.skip=true
 
   build-prod:
     runs-on: ubuntu-latest
@@ -39,4 +41,4 @@ jobs:
         java-version: '21'
         cache: maven
     - name: prod
-      run: mvn clean package -Dmaven.test.skip=true
+      run: mvn --batch-mode  verify
