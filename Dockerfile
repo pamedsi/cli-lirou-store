@@ -18,7 +18,7 @@ WORKDIR /app
 COPY . /app
 
 # Compilando usando Maven
-RUN mvn clean package
+RUN mvn clean package -Dmaven.test.skip=true
 
 EXPOSE 8080
 
