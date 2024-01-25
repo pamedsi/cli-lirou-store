@@ -46,3 +46,13 @@ jobs:
           cache-dependency-path: pom.xml
       - name: dev
         run:  mvn clean package -Dmaven.test.skip=true
+
+  build-image:
+    runs-on: ubuntu-latest
+    environment: 
+      name: build-image
+    needs: build-prod
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile --tag v1.0
