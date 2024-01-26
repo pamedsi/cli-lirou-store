@@ -67,6 +67,5 @@ jobs:
       name: deploy-render
       url: 'https://lirou-store.onrender.com/'
     steps:
-      - uses: actions/checkout@v4
       - name: deploy-render
         run: curl --location https://api.render.com/deploy/srv-cmosc6uct0pc73eu6h1g?key=mzYyCO9slO8
