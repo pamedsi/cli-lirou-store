@@ -31,7 +31,7 @@ jobs:
       - name: dev
         run:  mvn clean package -Dmaven.test.skip=true
 
-  deploy:
+  deploy-docker-hub:
     runs-on: ubuntu-latest
     environment: 
       name: Push Docke Hub
@@ -59,3 +59,13 @@ jobs:
           push: true
           tags: ${{steps.meta.outputs.tags}}
           labels: ${{steps.meta.outputs.labels}}
+  
+  deploy-render:
+    runs-on: ubuntu-latest
+    environment: 
+      name: deploy-render
+      url: 'https://lirou-store.onrender.com/'
+    steps:
+      - uses: actions/checkout@v4
+      - name: deploy-render
+        run: curl --location https://api.render.com/deploy/srv-cmosc6uct0pc73eu6h1g?key=mzYyCO9slO8
