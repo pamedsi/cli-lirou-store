@@ -2,6 +2,7 @@ package com.lirou.store.handler;
 
 import com.lirou.store.models.ExceptionDetails;
 
+import com.lirou.store.models.Message;
 import jakarta.ws.rs.NotFoundException;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -66,6 +67,6 @@ public class RestExceptionHandler {
 
     @ExceptionHandler (HttpMessageConversionException.class)
     public ResponseEntity<?> testando(HttpMessageConversionException erro){
-        return ResponseEntity.ok("oi");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message("Requisição sem corpo"));
     }
 }
