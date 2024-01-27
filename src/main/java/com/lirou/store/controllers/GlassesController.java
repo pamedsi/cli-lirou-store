@@ -48,7 +48,7 @@ public class GlassesController{
     @DeleteMapping("/{identifier}")
     public ResponseEntity<Message> deleteGlasses(@PathVariable("identifier") String glassesIdentifier) {
         String titleOfDeletedGlasses = glassesService.removeGlasses(glassesIdentifier);
-        return ResponseEntity.ok(new Message(titleOfDeletedGlasses + "deletado!"));
+        return ResponseEntity.ok(new Message(titleOfDeletedGlasses + " deletado!"));
     }
   
     @PatchMapping("/set-available/{identifier}")
