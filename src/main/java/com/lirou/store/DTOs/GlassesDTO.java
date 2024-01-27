@@ -39,8 +39,8 @@ public record GlassesDTO(
                         glassesEntity.getAvailable(),
                         glassesEntity.getQuantityInStock(),
                         glassesEntity.getModel(),
-                        glassesEntity.getColor(),
                         glassesEntity.getFrame(),
+                        glassesEntity.getColor(),
                         glassesEntity.getBrand(),
                         glassesEntity.getPrice()
                 );
@@ -54,5 +54,4 @@ public record GlassesDTO(
                 List<GlassesDTO> dtoList = severalToDTO(page.getContent());
                 return new PageImpl<>(dtoList, page.getPageable(), page.getTotalElements());
         }
-
 }
