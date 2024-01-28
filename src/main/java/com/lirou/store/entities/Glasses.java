@@ -25,6 +25,7 @@ public class Glasses extends Product {
         setColor(glassesDTO.color());
         setModel(glassesDTO.model());
         setBrand(glassesDTO.brand());
+        setFrame(glassesDTO.frame());
     }
 
     public Glasses() {}

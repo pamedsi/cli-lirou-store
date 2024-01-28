@@ -34,6 +34,9 @@ public class GlassesService {
     }
 
     public void updateGlasses(String glassesIdentifier, GlassesDTO changes) {
+        if (glassesRepository.existsByTitleAndDeletedFalse(changes.title())) {
+            throw new DataIntegrityViolationException("Já existe um óculos com este nome.");
+        }
         Glasses glassesToEdit = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
         if (glassesToEdit == null) throw new NotFoundException("Óculos não encontrado");
 
