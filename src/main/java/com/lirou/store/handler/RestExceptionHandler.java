@@ -5,6 +5,7 @@ import com.lirou.store.models.ExceptionDetails;
 import com.lirou.store.models.Message;
 import jakarta.ws.rs.NotFoundException;
 import org.springframework.context.MessageSourceResolvable;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageConversionException;
@@ -66,7 +67,13 @@ public class RestExceptionHandler {
     }
 
     @ExceptionHandler (HttpMessageConversionException.class)
-    public ResponseEntity<?> testando(HttpMessageConversionException erro){
+    public ResponseEntity<?> noBodyHandler(HttpMessageConversionException erro){
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message("Requisição sem corpo"));
     }
+
+    @ExceptionHandler (DataIntegrityViolationException.class)
+    public ResponseEntity<?> repeatedDataHandler() {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new Message("Já existe um óculos com este nome."));
+    }
+
 }
