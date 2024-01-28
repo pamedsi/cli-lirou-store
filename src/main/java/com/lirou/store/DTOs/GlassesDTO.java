@@ -21,7 +21,6 @@ public record GlassesDTO(
         int quantityInStock,
         @NotBlank
         String model,
-        @NotBlank
         String frame,
         @NotBlank
         String color,

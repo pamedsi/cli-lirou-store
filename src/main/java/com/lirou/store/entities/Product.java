@@ -13,7 +13,7 @@ public abstract class Product {
     private Long id;
     @Column
     private String identifier = UUID.randomUUID().toString();
-    @Column (nullable = false, unique = true)
+    @Column (nullable = false)
     private String title;
     @Column
     private BigDecimal price;

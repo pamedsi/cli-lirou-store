@@ -34,7 +34,7 @@ public class GlassesController{
         return ResponseEntity.ok(glassesDTO);
     }
     @PostMapping
-    public ResponseEntity<Message> postGlasses(@RequestBody GlassesDTO glassesDTO) {
+    public ResponseEntity<Message> postGlasses(@RequestBody @Valid GlassesDTO glassesDTO) {
         glassesService.saveNewGlasses(glassesDTO);
         return ResponseEntity.status(201).body(new Message(glassesDTO.title() + " salvo!"));
     }

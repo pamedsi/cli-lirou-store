@@ -2,13 +2,13 @@ package com.lirou.store.handler;
 
 import com.lirou.store.models.ExceptionDetails;
 
-import com.lirou.store.models.Message;
 import jakarta.ws.rs.NotFoundException;
 import org.springframework.context.MessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageConversionException;
+
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.method.ParameterValidationResult;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -66,14 +66,27 @@ public class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
     }
 
-    @ExceptionHandler (HttpMessageConversionException.class)
-    public ResponseEntity<?> noBodyHandler(HttpMessageConversionException erro){
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Message("Requisição sem corpo"));
-    }
-
     @ExceptionHandler (DataIntegrityViolationException.class)
-    public ResponseEntity<?> repeatedDataHandler() {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(new Message("Já existe um óculos com este nome."));
+    public ResponseEntity<?> repeatedDataHandler(DataIntegrityViolationException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+                new ExceptionDetails(
+                        ex.getMessage(),
+                        409,
+                        LocalDateTime.now()
+                ));
     }
 
+    @ExceptionHandler (HttpMessageNotReadableException.class)
+    public ResponseEntity<?> noBodyHandler(HttpMessageNotReadableException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
+                new ExceptionDetails(
+                        getOnlyMessageValue(ex),
+                        400,
+                        LocalDateTime.now()
+                ));
+    }
+
+    private String getOnlyMessageValue(Exception ex) {
+        return ex.getMessage().split(":")[0];
+    }
 }

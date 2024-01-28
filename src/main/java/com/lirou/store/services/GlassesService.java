@@ -4,11 +4,14 @@ import com.lirou.store.DTOs.GlassesDTO;
 import com.lirou.store.entities.Glasses;
 import com.lirou.store.repository.GlassesRepository;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import jakarta.ws.rs.NotFoundException;
+
+import javax.ws.rs.BadRequestException;
 
 @Service
 public class GlassesService {
@@ -23,6 +26,9 @@ public class GlassesService {
     }
 
     public void saveNewGlasses(GlassesDTO glassesDTO) {
+        if (glassesRepository.existsByTitleAndDeletedFalse(glassesDTO.title())) {
+            throw new DataIntegrityViolationException("Já existe um óculos com este nome.");
+        }
         Glasses newGlasses = new Glasses(glassesDTO);
         glassesRepository.save(newGlasses);
     }
