@@ -4,9 +4,15 @@ import com.lirou.store.DTOs.GlassesDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
+@Setter
+@Getter
 @Entity
 @Table
+@RequiredArgsConstructor
 public class Glasses extends Product {
     @Column
     private String model;
@@ -26,39 +32,5 @@ public class Glasses extends Product {
         setModel(glassesDTO.model());
         setBrand(glassesDTO.brand());
         setFrame(glassesDTO.frame());
-    }
-
-    public Glasses() {}
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
-
-    public String getFrame() {
-        return frame;
-    }
-
-    public void setFrame(String frame) {
-        this.frame = frame;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
     }
 }
