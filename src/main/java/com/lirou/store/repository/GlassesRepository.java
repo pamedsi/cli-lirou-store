@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 public interface GlassesRepository extends JpaRepository<Glasses, Long>, PagingAndSortingRepository<Glasses, Long> {
 
     Page<Glasses> findAllByDeletedFalse(Pageable pageable);
+    Boolean existsByTitleAndIdentifierNotAndDeletedFalse(String title, String identifier);
     Boolean existsByTitleAndDeletedFalse(String title);
     Glasses findByIdentifierAndDeletedFalse(String glassesIdentifier);
 }

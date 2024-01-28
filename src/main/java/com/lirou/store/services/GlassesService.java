@@ -11,8 +11,6 @@ import org.springframework.stereotype.Service;
 
 import jakarta.ws.rs.NotFoundException;
 
-import javax.ws.rs.BadRequestException;
-
 @Service
 public class GlassesService {
     private final GlassesRepository glassesRepository;
@@ -34,9 +32,9 @@ public class GlassesService {
     }
 
     public void updateGlasses(String glassesIdentifier, GlassesDTO changes) {
-        if (glassesRepository.existsByTitleAndDeletedFalse(changes.title())) {
-            throw new DataIntegrityViolationException("Já existe um óculos com este nome.");
-        }
+        Boolean alreadyExists = glassesRepository.existsByTitleAndIdentifierNotAndDeletedFalse(changes.title(), glassesIdentifier);
+        if (alreadyExists) throw new DataIntegrityViolationException("Já existe um óculos com este nome.");
+
         Glasses glassesToEdit = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
         if (glassesToEdit == null) throw new NotFoundException("Óculos não encontrado");
 
