@@ -27,7 +27,8 @@ public class SuperFreteService {
 
     @Value("${token}")
     private String token;
-    private final String baseURL = "https://sandbox.superfrete.com/api/v0";
+    @Value("${SUPER_FRETE_URL}")
+    private String baseURL;
     @Value("${CEP}")
     private String from;
     private HttpHeaders headers;
@@ -40,7 +41,7 @@ public class SuperFreteService {
         BodyForCalculateShipping body = new BodyForCalculateShipping(new PostalCode(from), new PostalCode(removeNonDigits(to)), services, new PackageDimensions(75, 11, 16, 0.3));
         String jsonBody = new Gson().toJson(body).replace("_dimensions", "");
         HttpEntity<?> requestEntity = new HttpEntity<>(jsonBody, headers);
-        String jsonResponseBody = restTemplate.exchange(baseURL + "/calculator", HttpMethod.POST, requestEntity, String.class).getBody();
+        String jsonResponseBody = restTemplate.exchange(baseURL + "/api/v0/calculator", HttpMethod.POST, requestEntity, String.class).getBody();
 
         Type pricesList = new TypeToken<List<SuperFretePackageDTO>>(){}.getType();
         List<SuperFretePackageDTO> responseBody = new Gson().fromJson(jsonResponseBody, pricesList);
@@ -54,7 +55,7 @@ public class SuperFreteService {
         HttpEntity<?> requestEntity = new HttpEntity<>(json, headers);
         RestTemplate restTemplate = new RestTemplate();
 
-        String responseBody = restTemplate.exchange(baseURL + "/cart" , HttpMethod.POST, requestEntity, String.class).getBody();
+        String responseBody = restTemplate.exchange(baseURL + "/api/v0/cart" , HttpMethod.POST, requestEntity, String.class).getBody();
         return new Gson().fromJson(responseBody, ProtocolData.class);
     }
 
@@ -63,7 +64,7 @@ public class SuperFreteService {
         HttpEntity<?> requestEntity = new HttpEntity<>(json, headers);
         RestTemplate restTemplate = new RestTemplate();
 
-        String responseBody = restTemplate.exchange(baseURL + "/checkout" , HttpMethod.POST, requestEntity, String.class).getBody();
+        String responseBody = restTemplate.exchange(baseURL + "/api/v0/checkout" , HttpMethod.POST, requestEntity, String.class).getBody();
         return new Gson().fromJson(responseBody, ShippingOfOrderDTO.class);
     }
 
@@ -72,7 +73,7 @@ public class SuperFreteService {
         HttpEntity<?> requestEntity = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
 
-        String responseBody = restTemplate.exchange(baseURL + "/order/info/" + orderID , HttpMethod.GET, requestEntity, String.class).getBody();
+        String responseBody = restTemplate.exchange(baseURL + "/api/v0/order/info/" + orderID , HttpMethod.GET, requestEntity, String.class).getBody();
         return new Gson().fromJson(responseBody, DeliveryInfoDTO.class);
     }
 
@@ -81,7 +82,7 @@ public class SuperFreteService {
         HttpEntity<?> requestEntity = new HttpEntity<>(ordersIDs, headers);
         RestTemplate restTemplate = new RestTemplate();
 
-        String responseBody = restTemplate.exchange(baseURL + "/tag/print" , HttpMethod.POST, requestEntity, String.class).getBody();
+        String responseBody = restTemplate.exchange(baseURL + "/api/v0/tag/print" , HttpMethod.POST, requestEntity, String.class).getBody();
         return new Gson().fromJson(responseBody, PrintInfo.class);
     }
 
@@ -90,7 +91,7 @@ public class SuperFreteService {
         HttpEntity<?> requestEntity = new HttpEntity<>(requestBody, headers);
         RestTemplate restTemplate = new RestTemplate();
 
-        ResponseEntity<?> response = restTemplate.exchange(baseURL + "/order/cancel" , HttpMethod.POST, requestEntity, String.class);
+        ResponseEntity<?> response = restTemplate.exchange(baseURL + "/api/v0/order/cancel" , HttpMethod.POST, requestEntity, String.class);
 
         return new Gson().fromJson((String) response.getBody(), OrderCancellationResponse.class);
 //        return new Gson().fromJson((String) response.getBody(), ErrorOnAborting.class);;
