@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/api/glasses")
@@ -25,7 +27,7 @@ public class GlassesController{
 
     // Para a parte admin:
     @GetMapping
-    public ResponseEntity<Page<GlassesDTO>> getGlasses(@RequestParam int page) {
+    public ResponseEntity<Page<GlassesDTO>> getGlasses(@RequestParam Optional<Integer> page) {
         Page<GlassesDTO> glassesDTO = glassesService.getAllGlasses(page);
         return ResponseEntity.ok(glassesDTO);
     }

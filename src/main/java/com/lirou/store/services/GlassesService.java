@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 
 import jakarta.ws.rs.NotFoundException;
 
+import java.util.Optional;
+
 @Service
 public class GlassesService {
     private final GlassesRepository glassesRepository;
@@ -19,8 +21,8 @@ public class GlassesService {
         this.glassesRepository = glassesRepository;
     }
     // Admin:
-    public Page<GlassesDTO> getAllGlasses(int page) {
-        Pageable pageable = PageRequest.of(page, 24);
+    public Page<GlassesDTO> getAllGlasses(Optional<Integer> page) {
+        Pageable pageable = PageRequest.of(page.orElse(0), 24);
         Page<Glasses> glassesAsEntity = glassesRepository.findAllByDeletedFalse(pageable);
         return GlassesDTO.toPageDTO(glassesAsEntity);
     }
