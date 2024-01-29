@@ -25,8 +25,8 @@ public class GlassesController{
 
     // Para a parte admin:
     @GetMapping
-    public ResponseEntity<Page<GlassesDTO>> getGlasses() {
-        Page<GlassesDTO> glassesDTO = glassesService.getAllGlasses();
+    public ResponseEntity<Page<GlassesDTO>> getGlasses(@RequestParam int page) {
+        Page<GlassesDTO> glassesDTO = glassesService.getAllGlasses(page);
         return ResponseEntity.ok(glassesDTO);
     }
     @GetMapping("/{identifier}")

@@ -7,6 +7,7 @@ import com.lirou.store.repository.GlassesRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.ws.rs.NotFoundException;
@@ -18,8 +19,9 @@ public class GlassesService {
         this.glassesRepository = glassesRepository;
     }
     // Admin:
-    public Page<GlassesDTO> getAllGlasses() {
-        Page<Glasses> glassesAsEntity = glassesRepository.findAllByDeletedFalse(PageRequest.of(0, 10));
+    public Page<GlassesDTO> getAllGlasses(int page) {
+        Pageable pageable = PageRequest.of(page, 24);
+        Page<Glasses> glassesAsEntity = glassesRepository.findAllByDeletedFalse(pageable);
         return GlassesDTO.toPageDTO(glassesAsEntity);
     }
 
