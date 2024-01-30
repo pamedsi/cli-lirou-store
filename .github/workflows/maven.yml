@@ -29,7 +29,7 @@ jobs:
           cache: maven
           cache-dependency-path: pom.xml
       - name: dev
-        run:  mvn clean package -Dmaven.test.skip=true
+        run:  mvn clean package
 
   deploy-docker-hub:
     runs-on: ubuntu-latest
