@@ -1,7 +1,7 @@
 package com.lirou.store.controllers;
 
 import com.lirou.store.DTOs.GlassesDTO;
-
+import com.lirou.store.exceptions.NotFoundException;
 import com.lirou.store.models.GlassesAvailability;
 import com.lirou.store.models.Message;
 import com.lirou.store.services.GlassesService;
@@ -35,19 +35,19 @@ public class GlassesController{
     }
 
     @PutMapping("/{identifier}")
-    public ResponseEntity<?> putGlasses(@RequestBody @Valid GlassesDTO glassesDTO, @PathVariable("identifier") String glassesIdentifier) {
+    public ResponseEntity<?> putGlasses(@RequestBody @Valid GlassesDTO glassesDTO, @PathVariable("identifier") String glassesIdentifier) throws NotFoundException {
         glassesService.updateGlasses(glassesIdentifier, glassesDTO);
         return ResponseEntity.ok(new Message("Atualização feita com sucesso!"));
     }
 
     @DeleteMapping("/{identifier}")
-    public ResponseEntity<?> deleteGlasses(@PathVariable("identifier") String glassesIdentifier) {
+    public ResponseEntity<?> deleteGlasses(@PathVariable("identifier") String glassesIdentifier) throws NotFoundException {
         String titleOfDeletedGlasses = glassesService.removeGlasses(glassesIdentifier);
         return ResponseEntity.ok(new Message(titleOfDeletedGlasses + "deletado!"));
     }
   
     @PatchMapping("/{identifier}")
-    public ResponseEntity<?> changeAvailability(@PathVariable("identifier") String glassesIdentifier, @RequestBody GlassesAvailability availability) {
+    public ResponseEntity<?> changeAvailability(@PathVariable("identifier") String glassesIdentifier, @RequestBody GlassesAvailability availability) throws NotFoundException {
         String availableOrNot = glassesService.changeAvailability(glassesIdentifier, availability.available());
         return ResponseEntity.ok(new Message("Óculos " + availableOrNot));
     }
