@@ -1,0 +1,70 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Prod
+
+on:
+  push:
+    branches: [ "main" ]
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    environment: 
+      name: build
+      url: ''
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: pom.xml
+      - name: dev
+        run:  mvn clean package
+
+  deploy-docker-hub:
+    runs-on: ubuntu-latest
+    environment: 
+      name: Push Docke Hub
+    needs: build
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{secrets.DOCKER_USERNAME}}
+          password: ${{secrets.DOCKER_PASSWORD}}
+      
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@9ec57ed1fcdbf14dcef7dfbe97b2010124a938b7
+        with:
+          images: jonnatas57/lirou-store
+      
+      - name: Build and push Docker image
+        uses: docker/build-push-action@3b5e8027fcad23fda98b2e3ac259d8d67585f671
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{steps.meta.outputs.tags}}
+          labels: ${{steps.meta.outputs.labels}}
+  
+  deploy-render:
+    runs-on: ubuntu-latest
+    needs: deploy-docker-hub
+    environment: 
+      name: deploy-render
+      url: 'https://lirou-store.onrender.com/'
+    steps:
+      - name: deploy-render
+        run: curl --location ${{secrets.URL_RENDER}}
+

@@ -1,0 +1,22 @@
+name: check-pull-request
+
+on:
+  pull_request:
+    branches: [ "main" ]
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    environment: 
+      name: build
+      url: ''
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: '21'
+          cache: maven
+          cache-dependency-path: pom.xml
+      - name: dev
+        run:  mvn clean package
