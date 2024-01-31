@@ -23,7 +23,7 @@ public class GlassesService {
     // Admin:
     public Page<GlassesDTO> getAllGlasses(Optional<Integer> page) {
         Pageable pageable = PageRequest.of(page.orElse(0), 24);
-        Page<Glasses> glassesAsEntity = glassesRepository.findAllByDeletedFalse(pageable);
+        Page<com.lirou.store.entities.Glasses> glassesAsEntity = glassesRepository.findAllByDeletedFalse(pageable);
         return GlassesDTO.toPageDTO(glassesAsEntity);
     }
 
@@ -31,7 +31,7 @@ public class GlassesService {
         if (glassesRepository.existsByTitleAndDeletedFalse(glassesDTO.title())) {
             throw new DataIntegrityViolationException("Já existe um óculos com este nome.");
         }
-        Glasses newGlasses = new Glasses(glassesDTO);
+        com.lirou.store.entities.Glasses newGlasses = new com.lirou.store.entities.Glasses(glassesDTO);
         glassesRepository.save(newGlasses);
     }
 
@@ -54,7 +54,7 @@ public class GlassesService {
     }
 
     public String removeGlasses(String glassesIdentifier) {
-        Glasses glassesToDelete = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
+        com.lirou.store.entities.Glasses glassesToDelete = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
         if (glassesToDelete == null) throw new NotFoundException("Óculos não encontrado");
 
         glassesToDelete.setDeleted(true);
@@ -64,7 +64,7 @@ public class GlassesService {
     }
 
     public String changeAvailability(String glassesIdentifier, Boolean available){
-        Glasses glasses = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
+        com.lirou.store.entities.Glasses glasses = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
 
         glasses.setAvailable(available);
         if (available) return "disponibilizado!";
@@ -72,7 +72,7 @@ public class GlassesService {
     }
 
     public GlassesDTO findGlassesByIdentifier(String glassesIdentifier) {
-        Glasses glasses = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
+        com.lirou.store.entities.Glasses glasses = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
         if (glasses == null) throw new NotFoundException("Óculos não encontrado!");
         return new GlassesDTO(glasses);
     }
