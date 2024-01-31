@@ -2,15 +2,12 @@ package com.lirou.store.controllers;
 
 import com.lirou.store.models.superfrete.*;
 import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
-import com.lirou.store.models.Message;
 import com.lirou.store.services.SuperFreteService;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
-import static com.lirou.store.validation.PostalCodeValidator.isAValidePostalCode;
 
 @RestController
 @RequestMapping("/api/shipping")
