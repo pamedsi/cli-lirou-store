@@ -6,13 +6,10 @@ import com.lirou.store.repository.GlassesRepository;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import jakarta.ws.rs.NotFoundException;
-
-import java.util.Optional;
 
 @Service
 public class GlassesService {
@@ -21,9 +18,8 @@ public class GlassesService {
         this.glassesRepository = glassesRepository;
     }
     // Admin:
-    public Page<GlassesDTO> getAllGlasses(Optional<Integer> page) {
-        Pageable pageable = PageRequest.of(page.orElse(0), 24);
-        Page<com.lirou.store.entities.Glasses> glassesAsEntity = glassesRepository.findAllByDeletedFalse(pageable);
+    public Page<GlassesDTO> getAllGlasses(Pageable pageable) {
+        Page<Glasses> glassesAsEntity = glassesRepository.findAllByDeletedFalse(pageable);
         return GlassesDTO.toPageDTO(glassesAsEntity);
     }
 
@@ -31,7 +27,7 @@ public class GlassesService {
         if (glassesRepository.existsByTitleAndDeletedFalse(glassesDTO.title())) {
             throw new DataIntegrityViolationException("Já existe um óculos com este nome.");
         }
-        com.lirou.store.entities.Glasses newGlasses = new com.lirou.store.entities.Glasses(glassesDTO);
+        Glasses newGlasses = new Glasses(glassesDTO);
         glassesRepository.save(newGlasses);
     }
 
@@ -54,7 +50,7 @@ public class GlassesService {
     }
 
     public String removeGlasses(String glassesIdentifier) {
-        com.lirou.store.entities.Glasses glassesToDelete = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
+        Glasses glassesToDelete = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
         if (glassesToDelete == null) throw new NotFoundException("Óculos não encontrado");
 
         glassesToDelete.setDeleted(true);
@@ -64,7 +60,7 @@ public class GlassesService {
     }
 
     public String changeAvailability(String glassesIdentifier, Boolean available){
-        com.lirou.store.entities.Glasses glasses = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
+        Glasses glasses = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
 
         glasses.setAvailable(available);
         if (available) return "disponibilizado!";
@@ -72,7 +68,7 @@ public class GlassesService {
     }
 
     public GlassesDTO findGlassesByIdentifier(String glassesIdentifier) {
-        com.lirou.store.entities.Glasses glasses = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
+        Glasses glasses = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier);
         if (glasses == null) throw new NotFoundException("Óculos não encontrado!");
         return new GlassesDTO(glasses);
     }

@@ -9,6 +9,9 @@ import com.lirou.store.validation.identifierValidator.ValidIdentifier;
 import jakarta.validation.Valid;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +30,8 @@ public class GlassesController{
 
     // Para a parte admin:
     @GetMapping
-    public ResponseEntity<Page<GlassesDTO>> getGlasses(@RequestParam Optional<Integer> page) {
-        Page<GlassesDTO> glassesDTO = glassesService.getAllGlasses(page);
+    public ResponseEntity<Page<GlassesDTO>> getGlasses(@PageableDefault(page = 0, size = 24, direction = Sort.Direction.ASC, sort = { "title" }) Pageable pageable) {
+        Page<GlassesDTO> glassesDTO = glassesService.getAllGlasses(pageable);
         return ResponseEntity.ok(glassesDTO);
     }
     @GetMapping("/{identifier}")
