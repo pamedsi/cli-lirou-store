@@ -1,4 +1,4 @@
-package com.lirou.store.models;
+package com.lirou.store.entities;
 
 import jakarta.persistence.*;
 
@@ -13,14 +13,16 @@ public abstract class Product {
     private Long id;
     @Column
     private String identifier = UUID.randomUUID().toString();
-    @Column (nullable = false, unique = true)
+    @Column (nullable = false)
     private String title;
     @Column
     private BigDecimal price;
     @Column (length = 2000)
     private String pic;
     @Column
-    private Boolean inStock;
+    private Boolean available;
+    @Column
+    private int quantityInStock;
     @Column
     private Boolean deleted = false;
     @Column
@@ -42,8 +44,8 @@ public abstract class Product {
         return pic;
     }
 
-    public Boolean getInStock() {
-        return inStock;
+    public Boolean getAvailable() {
+        return available;
     }
 
     public Boolean getDeleted() {
@@ -53,6 +55,7 @@ public abstract class Product {
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
+    public int getQuantityInStock() { return this.quantityInStock; }
 
     public void setTitle(String title) {
         this.title = title;
@@ -66,11 +69,13 @@ public abstract class Product {
         this.pic = pic;
     }
 
-    public void setInStock(Boolean inStock) {
-        this.inStock = inStock;
+    public void setAvailable(Boolean inStock) {
+        this.available = inStock;
     }
 
     public void setDeleted(Boolean deleted) {
         this.deleted = deleted;
     }
+    public void setQuantityInStock(int quantity) { this.quantityInStock = quantity; }
+    public void decrementQuantity() { this.quantityInStock--; }
 }

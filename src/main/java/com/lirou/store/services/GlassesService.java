@@ -1,7 +1,8 @@
 package com.lirou.store.services;
 
-import java.util.List;
-
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.lirou.store.DTOs.GlassesDTO;
@@ -11,17 +12,20 @@ import com.lirou.store.repository.GlassesRepository;
 
 @Service
 public class GlassesService {
-    private GlassesRepository glassesRepository;
+    private final GlassesRepository glassesRepository;
     public GlassesService(GlassesRepository glassesRepository) {
         this.glassesRepository = glassesRepository;
     }
     // Admin:
-    public List<GlassesDTO> getAllGlasses() {
-        List<Glasses> glassesAsEntity = glassesRepository.findAllByDeletedFalse();
-        return GlassesDTO.severalToDTO(glassesAsEntity);
+    public Page<GlassesDTO> getAllGlasses(Pageable pageable) {
+        Page<Glasses> glassesAsEntity = glassesRepository.findAllByDeletedFalse(pageable);
+        return GlassesDTO.toPageDTO(glassesAsEntity);
     }
 
     public void saveNewGlasses(GlassesDTO glassesDTO) {
+        if (glassesRepository.existsByTitleAndDeletedFalse(glassesDTO.title())) {
+            throw new DataIntegrityViolationException("Já existe um óculos com este nome.");
+        }
         Glasses newGlasses = new Glasses(glassesDTO);
         glassesRepository.save(newGlasses);
     }
@@ -52,8 +56,15 @@ public class GlassesService {
     public String changeAvailability(String identifier, Boolean available) throws NotFoundException{
         Glasses glasses = glassesRepository.findByIdentifierAndDeletedFalse(identifier)
         		.orElseThrow(() -> new NotFoundException("Óculos não encontrado!"));
-        glasses.setInStock(available);
+        glasses.setAvailable(available);
         if (available) return "disponibilizado!";
         return "indisponibilizado!";
     }
+
+    public GlassesDTO findGlassesByIdentifier(String glassesIdentifier) throws NotFoundException {
+        Glasses glasses = glassesRepository.findByIdentifierAndDeletedFalse(glassesIdentifier)
+        		.orElseThrow(() -> new NotFoundException("Óculos não encontrado!"));
+        return new GlassesDTO(glasses);
+    }
+
 }
