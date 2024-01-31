@@ -38,8 +38,17 @@ public class GlassesServiceTest {
 	}
 	
 	@Test()
+	@DisplayName("deveria retornar que o produto está indisponivel")
+	void conferirSeEstaIndisponivel() throws NotFoundException {
+		BDDMockito.given(glassesRepository.findByIdentifierAndDeletedFalse("123")).willReturn(Optional.of(glasses));
+		
+		//Assert && Act
+		Assertions.assertEquals("indisponibilizado!", glassesService.changeAvailability("123", false));
+	}
+	
+	@Test()
 	@DisplayName("deveria retornar que o produto está indisponivel e estourar uma exception")
-	void conferirSeEstaIndisponivel() {
+	void conferirSeEstaRetornaNotfoundException() {
 		BDDMockito.given(glassesRepository.findByIdentifierAndDeletedFalse("123")).willReturn(Optional.empty());
 		
 		//Assert && Act
