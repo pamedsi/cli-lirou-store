@@ -3,7 +3,6 @@ package com.lirou.store.services;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import com.lirou.store.models.Message;
 import com.lirou.store.models.superfrete.*;
 import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
 import com.lirou.store.models.superfrete.bodyForCalculateShipping.BodyForCalculateShipping;
