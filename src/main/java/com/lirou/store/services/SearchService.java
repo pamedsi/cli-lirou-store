@@ -19,7 +19,6 @@ public class SearchService {
 
     private final SearchRepository searchRepository;
 
-
     public List<Glasses> searchGlassesWithQuery(String query, Optional<Integer> page) {
 //        return searchRepository.searchGlasses(query, PageRequest.of(page.orElse(0), 24));
           return searchRepository.searchGlasses(query);
