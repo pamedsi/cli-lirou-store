@@ -1,13 +1,11 @@
 package com.lirou.store.repository;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.lirou.store.domain.entities.Glasses;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
@@ -28,18 +26,23 @@ public class SearchRepository {
                 "frame ILIKE '%" + term +"%' OR " +
                 "color ILIKE '%" + term +"%' OR " +
                 "brand ILIKE '%" + term +"%') AND " +
-                "deleted = false;";
+                "deleted = false " +
+                "ORDER BY title " +
+                "LIMIT " + pageable.getPageSize() + " OFFSET " + pageable.getOffset() + ";";
 
         Query jpaQuery = entityManager.createNativeQuery(query, Glasses.class);
-        List<Glasses> glassesInList = jpaQuery.getResultList();
 
+        List<Glasses> glassesList = jpaQuery.getResultList();
 
-        int start = (int) pageable.getOffset();
-        int end = Math.min((start + pageable.getPageSize()), glassesInList.size());
+        String countQuery = "SELECT COUNT(*) FROM " + schema + ".glasses WHERE " +
+                "(title ILIKE '%" + term +"%' OR " +
+                "frame ILIKE '%" + term +"%' OR " +
+                "color ILIKE '%" + term +"%' OR " +
+                "brand ILIKE '%" + term +"%') AND " +
+                "deleted = false;";
+        Query countJpaQuery = entityManager.createNativeQuery(countQuery);
+        long totalCount = ((Number) countJpaQuery.getSingleResult()).longValue();
 
-        List<Glasses> pageContent = glassesInList.subList(start, end);
-
-        return new PageImpl<>(pageContent, pageable, glassesInList.size());
+        return new PageImpl<>(glassesList, pageable, totalCount);
     }
-
 }
