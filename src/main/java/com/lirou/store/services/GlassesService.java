@@ -5,8 +5,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.lirou.store.DTOs.GlassesDTO;
-import com.lirou.store.entities.Glasses;
+import com.lirou.store.domain.DTOs.GlassesDTO;
+import com.lirou.store.domain.entities.Glasses;
+
 import com.lirou.store.exceptions.NotFoundException;
 import com.lirou.store.repository.GlassesRepository;
 

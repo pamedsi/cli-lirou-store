@@ -1,6 +1,6 @@
 package com.lirou.store.services;
 
-import com.lirou.store.entities.Glasses;
+import com.lirou.store.domain.entities.Glasses;
 import com.lirou.store.repository.SearchRepository;
 import lombok.RequiredArgsConstructor;
 

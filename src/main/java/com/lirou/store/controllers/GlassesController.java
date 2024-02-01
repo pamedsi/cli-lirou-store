@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lirou.store.DTOs.GlassesDTO;
+import com.lirou.store.domain.DTOs.GlassesDTO;
 import com.lirou.store.exceptions.NotFoundException;
 import com.lirou.store.models.GlassesAvailability;
 import com.lirou.store.models.Message;

@@ -2,10 +2,9 @@ package com.lirou.store.repository;
 
 import java.util.List;
 
+import com.lirou.store.domain.entities.Glasses;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import com.lirou.store.entities.Glasses;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.Query;
