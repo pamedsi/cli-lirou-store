@@ -1,16 +1,18 @@
 package com.lirou.store.services;
 
-import lombok.extern.log4j.Log4j2;
-import org.springframework.dao.DataIntegrityViolationException;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.lirou.store.domain.DTOs.GlassesDTO;
 import com.lirou.store.domain.entities.Glasses;
-
+import com.lirou.store.exceptions.NameExisteInDatabaseException;
 import com.lirou.store.exceptions.NotFoundException;
 import com.lirou.store.repository.GlassesRepository;
+
+import lombok.extern.log4j.Log4j2;
+
 
 @Service
 @Log4j2
@@ -27,10 +29,10 @@ public class GlassesService {
         return GlassesDTO.toPageDTO(glassesAsEntity);
     }
 
-    public void saveNewGlasses(GlassesDTO glassesDTO) {
+    public void saveNewGlasses(GlassesDTO glassesDTO) throws NameExisteInDatabaseException {
         log.info("[Inicia] GlassesRepository - existsByTitleAndDeletedFalse()");
         if (glassesRepository.existsByTitleAndDeletedFalse(glassesDTO.title())) {
-            throw new DataIntegrityViolationException("Já existe um óculos com este nome.");
+            throw new NameExisteInDatabaseException("Já existe um óculos com este nome.");
         }
         log.info("[Finaliza] GlassesRepository - existsByTitleAndDeletedFalse()");
         Glasses newGlasses = new Glasses(glassesDTO);

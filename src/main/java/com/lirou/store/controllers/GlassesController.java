@@ -1,6 +1,6 @@
 package com.lirou.store.controllers;
 
-import lombok.extern.log4j.Log4j2;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.lirou.store.domain.DTOs.GlassesDTO;
+import com.lirou.store.exceptions.NameExisteInDatabaseException;
 import com.lirou.store.exceptions.NotFoundException;
 import com.lirou.store.models.GlassesAvailability;
 import com.lirou.store.models.Message;
@@ -24,6 +25,7 @@ import com.lirou.store.services.GlassesService;
 import com.lirou.store.validation.identifierValidator.ValidIdentifier;
 
 import jakarta.validation.Valid;
+import lombok.extern.log4j.Log4j2;
 
 
 @RestController
@@ -53,7 +55,7 @@ public class GlassesController{
         return ResponseEntity.ok(glassesDTO);
     }
     @PostMapping
-    public ResponseEntity<Message> postGlasses(@RequestBody @Valid GlassesDTO glassesDTO) {
+    public ResponseEntity<Message> postGlasses(@RequestBody @Valid GlassesDTO glassesDTO) throws NameExisteInDatabaseException {
         log.info("[Inicia] GlassesService - saveNewGlasses()");
         glassesService.saveNewGlasses(glassesDTO);
         log.info("[Finaliza] GlassesService - saveNewGlasses()");
