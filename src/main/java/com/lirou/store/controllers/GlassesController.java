@@ -79,7 +79,7 @@ public class GlassesController{
     }
   
     @PatchMapping("/{identifier}")
-    public ResponseEntity<?> changeAvailability(@PathVariable("identifier") String glassesIdentifier, @RequestBody GlassesAvailability availability) throws NotFoundException {
+    public ResponseEntity<?> changeAvailability(@PathVariable("identifier") String glassesIdentifier, @RequestBody @Valid GlassesAvailability availability) throws NotFoundException {
         log.info("[Inicia] GlassesService - changeAvailability()");
         String availableOrNot = glassesService.changeAvailability(glassesIdentifier, availability.available());
         log.info("[Finaliza] GlassesService - changeAvailability()");
