@@ -1,5 +1,6 @@
 package com.lirou.store.domain.entities;
 
+import com.lirou.store.models.UserRole;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -29,8 +30,12 @@ public class UserEntity {
     @Column
     @Setter(AccessLevel.NONE)
     private String CPF;
+    @Column
+    @Setter
+    private UserRole role;
 
     public long getAge() {
+        role = UserRole.CLIENT;
         return ChronoUnit.DAYS.between(this.birthDate, LocalDate.now());
     }
 }
