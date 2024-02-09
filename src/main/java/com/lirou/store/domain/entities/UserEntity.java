@@ -35,7 +35,6 @@ public class UserEntity {
     private UserRole role;
 
     public long getAge() {
-        role = UserRole.CLIENT;
         return ChronoUnit.DAYS.between(this.birthDate, LocalDate.now());
     }
 }
