@@ -4,8 +4,8 @@ import java.util.List;
 
 public record ShippingInfToSendToSuperFreteDTO(
         String platform,
-        AddressDTO from,
-        AddressDTO to,
+        SuperFreteAddress from,
+        SuperFreteAddress to,
         Number service,
         List<ProductInfo> products,
         Volumes volumes

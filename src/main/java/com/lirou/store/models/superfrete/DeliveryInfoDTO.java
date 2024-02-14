@@ -1,6 +1,6 @@
 package com.lirou.store.models.superfrete;
 
-import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.AddressDTO;
+import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.SuperFreteAddress;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.List;
@@ -17,8 +17,8 @@ public record DeliveryInfoDTO(
         String width,
         String length,
         String weight,
-        AddressDTO from,
-        AddressDTO to,
+        SuperFreteAddress from,
+        SuperFreteAddress to,
         Object invoice,
         Boolean own_hand,
         Boolean receipt,
