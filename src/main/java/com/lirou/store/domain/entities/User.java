@@ -12,12 +12,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-@Table
+@Table (name = "user_entity")
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class UserEntity {
+public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter(AccessLevel.NONE)
@@ -39,7 +39,7 @@ public class UserEntity {
     @Setter(AccessLevel.NONE)
     private LocalDateTime userSince;
 
-    public UserEntity(UserDTO userDTO) {
+    public User(UserDTO userDTO) {
         this.name = userDTO.name();
         this.email = userDTO.email();
         this.birthDate = userDTO.birthDate();

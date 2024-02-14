@@ -9,7 +9,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.UUID;
 
 @Entity
-@Table
+@Table (name = "address")
 @RequiredArgsConstructor
 @Getter
 public class AddressEntity {
@@ -20,7 +20,7 @@ public class AddressEntity {
     @Column
     private String identifier = UUID.randomUUID().toString();
     @ManyToOne
-    private UserEntity owner;
+    private User owner;
 
     @Column(nullable = false)
     private String street;

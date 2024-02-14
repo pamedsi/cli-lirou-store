@@ -2,7 +2,7 @@ package com.lirou.store.services;
 
 import com.lirou.store.domain.DTOs.UserAddressDTO;
 import com.lirou.store.domain.entities.AddressEntity;
-import com.lirou.store.domain.entities.UserEntity;
+import com.lirou.store.domain.entities.User;
 import com.lirou.store.exceptions.NotFoundException;
 import com.lirou.store.repository.AddressRepository;
 import com.lirou.store.repository.UserRepository;
@@ -17,7 +17,7 @@ public class AddressService {
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
     public List<UserAddressDTO> getAllAddresses(String email) throws NotFoundException {
-        UserEntity user = userRepository.findByEmail(email).orElseThrow(
+        User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new NotFoundException("Usuário não encontrado!")
         );
         List<AddressEntity> addresses = addressRepository.findAllByOwner(user);
