@@ -1,6 +1,6 @@
 package com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete;
 
-public record AddressDTO (
+public record SuperFreteAddress(
             String name,
             String address,
             String complement,

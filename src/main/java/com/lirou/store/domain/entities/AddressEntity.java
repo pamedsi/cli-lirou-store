@@ -1,7 +1,9 @@
 package com.lirou.store.domain.entities;
 
-import com.lirou.store.models.State;
+import com.lirou.store.Enums.State;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.UUID;
@@ -9,9 +11,11 @@ import java.util.UUID;
 @Entity
 @Table
 @RequiredArgsConstructor
-public class Address {
+@Getter
+public class AddressEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter(AccessLevel.NONE)
     private Long id;
     @Column
     private String identifier = UUID.randomUUID().toString();
@@ -25,10 +29,10 @@ public class Address {
     private String number;
 
     @Column
-    private String complemento;
+    private String complement;
 
     @Column
-    private String bairro;
+    private String neighborhood;
 
     @Column
     private String city;
