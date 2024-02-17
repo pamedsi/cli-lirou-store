@@ -32,10 +32,10 @@ public class AddressController {
         return ResponseEntity.ok(addresses);
     }
     @PostMapping
-    public ResponseEntity<List<UserAddressDTO>> addNewAddress(@HeaderParam("Authorization") String token, UserAddressDTO addressDTO) throws NotFoundException {
-        log.info("[Inicia] AddressService - getAllAddresses()");
+    public ResponseEntity<?> addNewAddress(@HeaderParam("Authorization") String token, UserAddressDTO addressDTO) throws NotFoundException {
+        log.info("[Inicia] AddressService - addNewAddress()");
         addressService.addNewAddress(token, addressDTO);
-        log.info("[Finaliza] GlassesService - getAllGlasses()");
-        return ResponseEntity.status(HttpStatus.CREATED).body(addresses);
+        log.info("[Finaliza] GlassesService - addNewAddress()");
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }
