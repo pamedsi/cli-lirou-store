@@ -21,7 +21,14 @@ public class AddressService {
                 () -> new NotFoundException("Usuário não encontrado!")
         );
         List<AddressEntity> addresses = addressRepository.findAllByOwner(user);
-
         return UserAddressDTO.severalToDTO(addresses);
+    }
+
+    public void addNewAddress(String token, UserAddressDTO addressDTO) throws NotFoundException {
+        User user = userRepository.findByEmail(token).orElseThrow(
+                () -> new NotFoundException("Usuário não encontrado!")
+        );
+        AddressEntity newAddress = new AddressEntity(addressDTO, user);
+        addressRepository.save(newAddress);
     }
 }

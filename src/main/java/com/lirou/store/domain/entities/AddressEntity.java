@@ -1,6 +1,7 @@
 package com.lirou.store.domain.entities;
 
 import com.lirou.store.Enums.State;
+import com.lirou.store.domain.DTOs.UserAddressDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -46,4 +47,16 @@ public class AddressEntity {
 
     @Column
     private String obs;
+
+    public AddressEntity(UserAddressDTO addressDTO, User user){
+        this.owner = user;
+        this.street = addressDTO.street();
+        this.number = addressDTO.number();
+        this.complement = addressDTO.complement();
+        this.neighborhood = addressDTO.neighborhood();
+        this.city = addressDTO.city();
+        this.state = addressDTO.state();
+        this.postalCode = addressDTO.postalCode();
+        this.obs = addressDTO.obs();
+    }
 }
