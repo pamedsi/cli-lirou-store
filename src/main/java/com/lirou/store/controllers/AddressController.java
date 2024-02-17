@@ -10,7 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.ws.rs.HeaderParam;
 import java.util.List;
 
 @RestController
@@ -33,6 +32,13 @@ public class AddressController {
         log.info("[Inicia] AddressService - addNewAddress()");
         addressService.addNewAddress(token, addressDTO);
         log.info("[Finaliza] GlassesService - addNewAddress()");
+        return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+    @PostMapping("/{identifier}")
+    public ResponseEntity<?> editAddress(@RequestHeader("Authorization") String token, @RequestBody UserAddressDTO addressDTO, @PathVariable("identifier") String addressIdentifier) throws NotFoundException {
+        log.info("[Inicia] AddressService - editAddress()");
+        addressService.editAddress(token, addressDTO, addressIdentifier);
+        log.info("[Finaliza] GlassesService - editAddress()");
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 }

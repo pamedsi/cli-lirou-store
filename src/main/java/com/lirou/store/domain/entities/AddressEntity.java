@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import java.util.UUID;
 
@@ -13,14 +14,18 @@ import java.util.UUID;
 @Table (name = "address")
 @RequiredArgsConstructor
 @Getter
+@Setter
 public class AddressEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Getter(AccessLevel.NONE)
+    @Setter(AccessLevel.NONE)
     private Long id;
     @Column
+    @Setter(AccessLevel.NONE)
     private String identifier;
     @ManyToOne
+    @Setter(AccessLevel.NONE)
     private User owner;
 
     @Column(nullable = false)
@@ -59,5 +64,9 @@ public class AddressEntity {
         this.state = State.fromAcronym(addressDTO.state());
         this.postalCode = addressDTO.postalCode();
         this.obs = addressDTO.obs();
+    }
+
+    public void setState(String state) {
+        this.state = State.fromAcronym(state);
     }
 }
