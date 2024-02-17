@@ -12,6 +12,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
+import static com.lirou.store.security.PasswordHashing.hash;
+
 @Table (name = "user_entity")
 @Entity
 @Getter
@@ -38,10 +40,13 @@ public class User {
     @Column
     @Setter(AccessLevel.NONE)
     private LocalDateTime userSince;
+    @Column
+    private String passwordHash;
 
     public User(UserDTO userDTO) {
         this.name = userDTO.name();
         this.email = userDTO.email();
+        this.passwordHash = hash(userDTO.password());
         this.birthDate = userDTO.birthDate();
         this.CPF = userDTO.CPF().orElse(null);
         this.role = UserRole.CLIENT;

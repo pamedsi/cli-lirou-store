@@ -8,6 +8,7 @@ import java.util.Optional;
 public record UserDTO(
         String name,
         String email,
+        String password,
         LocalDate birthDate,
         Optional<String> CPF,
         UserRole role
