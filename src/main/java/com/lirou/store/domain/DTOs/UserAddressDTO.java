@@ -13,7 +13,7 @@ public record UserAddressDTO(
         String postalCode,
         String neighborhood,
         String city,
-        State state,
+        String state,
         String obs
 ) {
     public UserAddressDTO(AddressEntity address){
@@ -25,7 +25,7 @@ public record UserAddressDTO(
                 address.getPostalCode(),
                 address.getNeighborhood(),
                 address.getCity(),
-                address.getState(),
+                address.getState().getAcronym(),
                 address.getObs()
         );
     }

@@ -6,6 +6,7 @@ import com.lirou.store.domain.entities.User;
 import com.lirou.store.exceptions.NotFoundException;
 import com.lirou.store.repository.AddressRepository;
 import com.lirou.store.repository.UserRepository;
+import com.lirou.store.security.TokenService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +17,10 @@ import java.util.List;
 public class AddressService {
     private final UserRepository userRepository;
     private final AddressRepository addressRepository;
-    public List<UserAddressDTO> getAllAddresses(String email) throws NotFoundException {
+    private final TokenService tokenService;
+    public List<UserAddressDTO> getAllAddresses(String token) throws NotFoundException {
+        String email = tokenService.decode(token);
+
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new NotFoundException("Usuário não encontrado!")
         );
@@ -25,7 +29,8 @@ public class AddressService {
     }
 
     public void addNewAddress(String token, UserAddressDTO addressDTO) throws NotFoundException {
-        User user = userRepository.findByEmail(token).orElseThrow(
+        String email = tokenService.decode(token);
+        User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new NotFoundException("Usuário não encontrado!")
         );
         AddressEntity newAddress = new AddressEntity(addressDTO, user);

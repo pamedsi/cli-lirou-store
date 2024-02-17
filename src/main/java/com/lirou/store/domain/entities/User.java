@@ -3,10 +3,7 @@ package com.lirou.store.domain.entities;
 import com.lirou.store.Enums.UserRole;
 import com.lirou.store.domain.DTOs.UserDTO;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -18,7 +15,7 @@ import static com.lirou.store.security.PasswordHashing.hash;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
+@RequiredArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

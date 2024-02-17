@@ -40,13 +40,22 @@ public enum State {
         return fullName;
     }
 
-    public String getSigla() {
+    public String getAcronym() {
         return this.name();
     }
 
-    public static State fromAcronym(String sigla) {
+    public static State fromAcronym(String acronym) {
         for (State estado : State.values()) {
-            if (estado.getSigla().equals(sigla)) {
+            if (estado.getAcronym().equals(acronym)) {
+                return estado;
+            }
+        }
+        return null;
+    }
+
+    public static State fromFullName(String fullName) {
+        for (State estado : State.values()) {
+            if (estado.getFullName().equalsIgnoreCase(fullName)) {
                 return estado;
             }
         }

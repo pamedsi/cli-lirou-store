@@ -19,7 +19,7 @@ public class AddressEntity {
     @Getter(AccessLevel.NONE)
     private Long id;
     @Column
-    private String identifier = UUID.randomUUID().toString();
+    private String identifier;
     @ManyToOne
     private User owner;
 
@@ -39,23 +39,24 @@ public class AddressEntity {
     private String city;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 2)
+    @Column(nullable = false)
     private State state;
 
-    @Column(nullable = false, length = 8)
+    @Column(nullable = false)
     private String postalCode;
 
     @Column
     private String obs;
 
     public AddressEntity(UserAddressDTO addressDTO, User user){
+        this.identifier = UUID.randomUUID().toString();
         this.owner = user;
         this.street = addressDTO.street();
         this.number = addressDTO.number();
         this.complement = addressDTO.complement();
         this.neighborhood = addressDTO.neighborhood();
         this.city = addressDTO.city();
-        this.state = addressDTO.state();
+        this.state = State.fromAcronym(addressDTO.state());
         this.postalCode = addressDTO.postalCode();
         this.obs = addressDTO.obs();
     }
