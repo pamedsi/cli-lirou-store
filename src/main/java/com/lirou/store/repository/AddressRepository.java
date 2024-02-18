@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface AddressRepository extends JpaRepository <AddressEntity, Long> {
-    List<AddressEntity> findAllByOwner(User owner);
+    List<AddressEntity> findAllByOwnerAndDeletedFalse(User owner);
 
     Optional<AddressEntity> findByIdentifier(String identifier);
 }

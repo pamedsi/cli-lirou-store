@@ -24,7 +24,7 @@ public class AddressService {
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new NotFoundException("Usuário não encontrado!")
         );
-        List<AddressEntity> addresses = addressRepository.findAllByOwner(user);
+        List<AddressEntity> addresses = addressRepository.findAllByOwnerAndDeletedFalse(user);
         return UserAddressDTO.severalToDTO(addresses);
     }
 
