@@ -1,4 +1,4 @@
-package com.lirou.store.models;
+package com.lirou.store.Enums;
 
 public enum UserRole {
     ADMIN,
