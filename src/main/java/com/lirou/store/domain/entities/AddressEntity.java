@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
@@ -52,6 +53,10 @@ public class AddressEntity {
 
     @Column
     private String obs;
+    @Column
+    private Boolean deleted;
+    @Column
+    private LocalDateTime createdAt;
 
     public AddressEntity(UserAddressDTO addressDTO, User user){
         this.identifier = UUID.randomUUID().toString();
@@ -64,6 +69,8 @@ public class AddressEntity {
         this.state = State.fromAcronym(addressDTO.state());
         this.postalCode = addressDTO.postalCode();
         this.obs = addressDTO.obs();
+        this.deleted = false;
+        this.createdAt = LocalDateTime.now();
     }
 
     public void setState(String state) {

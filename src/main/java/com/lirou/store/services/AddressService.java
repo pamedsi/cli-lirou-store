@@ -58,4 +58,18 @@ public class AddressService {
         addressRepository.save(updatedAddress);
 
     }
+
+    public void deleteAddress(String token, String addressIdentifier) throws NotFoundException {
+        String email = tokenService.decode(token);
+        User user = userRepository.findByEmail(email).orElseThrow(
+                () -> new NotFoundException("Usuário não encontrado!")
+        );
+        AddressEntity addressToDelete = addressRepository.findByIdentifier(addressIdentifier).orElseThrow(
+                () -> new NotFoundException("Endereço não encontrado!")
+        );;
+
+        addressToDelete.setDeleted(true);
+        addressRepository.save(addressToDelete);
+
+    }
 }

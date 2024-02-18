@@ -24,21 +24,28 @@ public class AddressController {
     public ResponseEntity<List<UserAddressDTO>> getAddresses(@RequestHeader("Authorization") String token) throws NotFoundException {
         log.info("[Inicia] AddressService - getAllAddresses()");
         List<UserAddressDTO> addresses = addressService.getAllAddresses(token);
-        log.info("[Finaliza] GlassesService - getAllGlasses()");
+        log.info("[Finaliza] AddressService - getAllGlasses()");
         return ResponseEntity.ok(addresses);
     }
     @PostMapping
     public ResponseEntity<?> addNewAddress(@RequestHeader("Authorization") String token, @RequestBody UserAddressDTO addressDTO) throws NotFoundException {
         log.info("[Inicia] AddressService - addNewAddress()");
         addressService.addNewAddress(token, addressDTO);
-        log.info("[Finaliza] GlassesService - addNewAddress()");
+        log.info("[Finaliza] AddressService - addNewAddress()");
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
     @PostMapping("/{identifier}")
     public ResponseEntity<?> editAddress(@RequestHeader("Authorization") String token, @RequestBody UserAddressDTO addressDTO, @PathVariable("identifier") String addressIdentifier) throws NotFoundException {
         log.info("[Inicia] AddressService - editAddress()");
         addressService.editAddress(token, addressDTO, addressIdentifier);
-        log.info("[Finaliza] GlassesService - editAddress()");
+        log.info("[Finaliza] AddressService - editAddress()");
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+    @DeleteMapping("/{identifier}")
+    public ResponseEntity<?> deleteAddress(@RequestHeader("Authorization") String token, @PathVariable("identifier") String addressIdentifier) throws NotFoundException {
+        log.info("[Inicia] AddressService - deleteAddress()");
+        addressService.deleteAddress(token, addressIdentifier);
+        log.info("[Finaliza] AddressService - deleteAddress()");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
