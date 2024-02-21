@@ -4,10 +4,10 @@ on:
   pull_request:
     branches: [ "main" ]
 jobs:
-  envi:
+  env:
     runs-on: ubuntu-latest
     env: 
-      CEP: ${{ env.CEP }}
+      CEP: ${{ CEP }}
       DATABASE_PASSWORD: ${{ env.DATABASE_PASSWORD }}
       DATABASE_SCHEMA: ${{ env.DATABASE_SCHEMA }}
       DATABASE_URL: ${{ env.DATABASE_URL }}
