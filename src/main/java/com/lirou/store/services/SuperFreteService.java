@@ -3,7 +3,6 @@ package com.lirou.store.services;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import com.lirou.store.models.Message;
 import com.lirou.store.models.superfrete.*;
 import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
 import com.lirou.store.models.superfrete.bodyForCalculateShipping.BodyForCalculateShipping;
@@ -94,7 +93,6 @@ public class SuperFreteService {
         ResponseEntity<?> response = restTemplate.exchange(baseURL + "/api/v0/order/cancel" , HttpMethod.POST, requestEntity, String.class);
 
         return new Gson().fromJson((String) response.getBody(), OrderCancellationResponse.class);
-//        return new Gson().fromJson((String) response.getBody(), ErrorOnAborting.class);;
     }
 
     private HttpHeaders createHeaders(Boolean locally) {
