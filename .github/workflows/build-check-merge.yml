@@ -4,11 +4,9 @@ on:
   pull_request:
     branches: [ "main" ]
 jobs:
-
-  build:
+  env:
     runs-on: ubuntu-latest
     env: 
-      name: env
       CEP: ${{env.CEP}}
       DATABASE_PASSWORD: ${{env.DATABASE_PASSWORD}}
       DATABASE_SCHEMA: ${{env.DATABASE_SCHEMA}}
