@@ -1,6 +1,6 @@
-package com.lirou.store.domain.DTOs;
+package com.lirou.store.DTOs;
 
-import com.lirou.store.domain.entities.Glasses;
+import com.lirou.store.entities.Glasses;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
