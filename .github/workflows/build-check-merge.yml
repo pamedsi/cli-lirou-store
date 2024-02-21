@@ -6,7 +6,7 @@ on:
 jobs:
   envi:
     runs-on: ubuntu-latest
-    envi: 
+    env: 
       CEP: ${{ env.CEP }}
       DATABASE_PASSWORD: ${{ env.DATABASE_PASSWORD }}
       DATABASE_SCHEMA: ${{ env.DATABASE_SCHEMA }}
