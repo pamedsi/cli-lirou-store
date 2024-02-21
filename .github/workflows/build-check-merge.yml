@@ -6,8 +6,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    environment: 
-      name: env
+    environment: env
       CEP: ${{env.CEP}}
       DATABASE_PASSWORD: ${{DATABASE_PASSWORD}}
       DATABASE_SCHEMA: ${{ vars.DATABASE_SCHEMA }}
