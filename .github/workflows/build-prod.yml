@@ -16,13 +16,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     environment: 
-      name: env
-      DATABASE_URL: ${{env.DATABASE_URL}}
-      CEP:  ${{env.CEP}}
-      DATABASE_SCHEMA:  ${{env.DATABASE_SCHEMA}}
-      DATABASE_USERNAME:  ${{env.DATABASE_USERNAME}}
-      SUPER_FRETE_URL: ${{env.SUPER_FRETE_URL}}
-      token:  ${{env.TOKEN}}
+      name: build
+      url: ''
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4

@@ -1,7 +1,6 @@
-package com.lirou.store.domain.entities;
+package com.lirou.store.entities;
 
-import com.lirou.store.domain.DTOs.GlassesDTO;
-import com.lirou.store.domain.Product;
+import com.lirou.store.DTOs.GlassesDTO;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

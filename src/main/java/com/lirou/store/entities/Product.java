@@ -1,4 +1,4 @@
-package com.lirou.store.domain;
+package com.lirou.store.entities;
 
 import jakarta.persistence.*;
 
