@@ -5,10 +5,9 @@ on:
     branches: [ "main" ]
 jobs:
 
-  env:
+  build:
     runs-on: ubuntu-latest
-    environment: 
-      env: 
+    env: 
       name: env
       CEP: ${{env.CEP}}
       DATABASE_PASSWORD: ${{env.DATABASE_PASSWORD}}
