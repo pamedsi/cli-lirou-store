@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: [ "main" ]
 jobs:
-  env:
+  build:
     runs-on: ubuntu-latest
     env: 
       CEP: ${{vars.CEP}}
