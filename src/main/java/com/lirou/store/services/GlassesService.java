@@ -1,12 +1,12 @@
 package com.lirou.store.services;
 
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.lirou.store.DTOs.GlassesDTO;
 import com.lirou.store.entities.Glasses;
+import com.lirou.store.exceptions.NameExisteInDatabaseException;
 import com.lirou.store.exceptions.NotFoundException;
 import com.lirou.store.repository.GlassesRepository;
 
@@ -22,9 +22,9 @@ public class GlassesService {
         return GlassesDTO.toPageDTO(glassesAsEntity);
     }
 
-    public void saveNewGlasses(GlassesDTO glassesDTO) {
+    public void saveNewGlasses(GlassesDTO glassesDTO) throws NameExisteInDatabaseException {
         if (glassesRepository.existsByTitleAndDeletedFalse(glassesDTO.title())) {
-            throw new DataIntegrityViolationException("Já existe um óculos com este nome.");
+            throw new NameExisteInDatabaseException("Já existe um óculos com este nome.");
         }
         Glasses newGlasses = new Glasses(glassesDTO);
         glassesRepository.save(newGlasses);

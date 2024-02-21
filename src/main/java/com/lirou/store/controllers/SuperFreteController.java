@@ -4,6 +4,8 @@ import com.lirou.store.models.superfrete.*;
 import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
 import com.lirou.store.services.SuperFreteService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +27,7 @@ public class SuperFreteController {
         return ResponseEntity.ok(body);
     }
     @PostMapping("/send-to-superfrete")
-    public ResponseEntity<ProtocolData> sendShippingToSuperFrete(@RequestBody ShippingInfToSendToSuperFreteDTO body) {
+    public ResponseEntity<ProtocolData> sendShippingToSuperFrete(@RequestBody @Valid ShippingInfToSendToSuperFreteDTO body) {
         ProtocolData response = superFreteService.sendShippingToSuperFrete(body);
         return ResponseEntity.ok(response);
     }
