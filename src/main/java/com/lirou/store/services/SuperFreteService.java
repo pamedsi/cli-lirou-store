@@ -49,12 +49,12 @@ public class SuperFreteService {
                     addressProps[0],
                     addressProps[1],
                     Optional.empty(),
-                    Optional.empty(),
-                    addressProps[2],
+                    Optional.of(addressProps[2]),
                     addressProps[3],
                     addressProps[4],
                     addressProps[5],
-                    Optional.ofNullable(addressProps[6])
+                    addressProps[6],
+                    Optional.ofNullable(addressProps[7])
             );
         }
         catch (Exception ex) {
