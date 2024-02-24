@@ -1,6 +1,6 @@
 package com.lirou.store.models.superfrete;
 
-public record AbortingRequestDTO(
+public record AbortingRequest(
     order order
 ) {}
 
