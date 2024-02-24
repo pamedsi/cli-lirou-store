@@ -1,56 +1,136 @@
 package com.lirou.store.services;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
-import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.util.ReflectionTestUtils;
 
-import jakarta.ws.rs.BadRequestException;
+import com.lirou.store.exceptions.BadRequestException;
+import com.lirou.store.models.superfrete.AbortingRequestDTO;
+import com.lirou.store.models.superfrete.OrderService;
+import com.lirou.store.models.superfrete.OrdersIDs;
+import com.lirou.store.models.superfrete.ProtocolData;
+import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.AddressDTO;
+import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ProductInfo;
+import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
+import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.Volumes;
+
 
 
 @ExtendWith(MockitoExtension.class)
 @AutoConfigureMockMvc
 @SpringBootTest
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class SuperFreteServiceTest {
 
-	@InjectMocks
+	@Autowired
 	private SuperFreteService superFreteService;
 	
+	@Value("${CEP}")
+	private String from;
+	
+	private static AbortingRequestDTO abortingRequestDTO;
+	
+	//**************metodo calcular frete
 	@Test
-	@DisplayName("temporario")
-	void test() throws Exception {
+	@DisplayName("deveria calcular frete")
+	void deveriaCalcularFrete() throws Exception {
 		
+		//arrange
+		ReflectionTestUtils.setField(superFreteService, "from", from);
+		
+		//assert
+		Assertions.assertEquals(2, superFreteService.calculateShipping(from).size());
+	}
+	
+	@Test
+	@DisplayName("deveria estourar exception")
+	void naoDeveriaCalcularFrete() throws Exception {
+		//arange
+		String cep = null;
+		
+		//assert
+		Assertions.assertThrows(BadRequestException.class,() -> superFreteService.calculateShipping(cep));
+	}
+	
+	//******************
+//	@Test
+//	@DisplayName("deveria enviar produto")
+//	void deveriaEnviarProduto() throws Exception {
+//		//arange
+//		AddressDTO de  = new AddressDTO("jow do parque", 
+//				"rua bom pastor", "", "24", "jardim prazeres","","Jaboatão dos guararapes", "PE", from, "", "", "jow@teste.com");
+//		AddressDTO para = new AddressDTO("jow do parque", 
+//			"Rua da Varzea", "", "240", "jardim prazeres","","Jaboatão dos guararapes","SP" ,"01140080", "", "", "jow@teste.com");
+//		List<ProductInfo> products = new ArrayList<>();
+//		ProductInfo productInfo = new ProductInfo("oculos","1","40.50");
+//		products.add(productInfo);
+//		ShippingInfToSendToSuperFreteDTO infoShipping = new ShippingInfToSendToSuperFreteDTO("SEDEX", de, para,1,products, new Volumes(1,1,1,1));
+//		ProtocolData sendShippingToSuperFrete = superFreteService.sendShippingToSuperFrete(infoShipping);
+//		//assert
+//		Assertions.assertEquals("pending", sendShippingToSuperFrete.status());
+//	}
+	
+	@Test
+	@DisplayName("deveria enviar produto e entiquetar")
+	@Order(1)
+	void deveriaEnviarProdutoEentiquetar() throws Exception {
+		//arange
+		AddressDTO de  = new AddressDTO("jow do parque", 
+				"rua bom pastor", "", "24", "jardim prazeres","","Jaboatão dos guararapes", "PE", from, "", "", "jow@teste.com");
+		AddressDTO para = new AddressDTO("jow do parque", 
+			"Rua da Varzea", "", "240", "jardim prazeres","","Jaboatão dos guararapes","SP" ,"01140080", "", "", "jow@teste.com");
+		List<ProductInfo> products = new ArrayList<>();
+		ProductInfo productInfo = new ProductInfo("oculos","1","40.50");
+		products.add(productInfo);
+		ShippingInfToSendToSuperFreteDTO infoShipping = new ShippingInfToSendToSuperFreteDTO("SEDEX", de, para,1,products, new Volumes(1,1,1,1));
+		ProtocolData sendShippingToSuperFrete = superFreteService.sendShippingToSuperFrete(infoShipping);
+		List<String> orders = new ArrayList<>();
+		orders.add(sendShippingToSuperFrete.id());
+		OrdersIDs ordersIDs = new OrdersIDs(orders);
+		OrderService orderAborting = new OrderService(orders.get(0), "não queremos mais");
+		abortingRequestDTO = new AbortingRequestDTO(orderAborting);
+		
+		//assert
+		Assertions.assertEquals(true, superFreteService.finishOrderAndGeneratePrintableLabel(ordersIDs).success());
+	}
+	
+	@Test
+	@DisplayName("deveria monitorar produto")
+	@Order(2)
+	void deveriaMonitorarEnvio() throws Exception {
+		//arange
+		
+		//assert
+		Assertions.assertEquals("released", superFreteService.getDeliveryInfo(abortingRequestDTO.order().id()).status());
+	}
+	
+	@Test
+	@DisplayName("deveria cancelar envio do produto")
+	@Order(3)
+	void deveriaCancelarEnvio() throws Exception {
+		//arange
+		
+		
+		//assert
+		Assertions.assertEquals(true, 
+				superFreteService
+				.cancelOrder(abortingRequestDTO)
+				.orderCancellations().get(abortingRequestDTO.order().id()).canceled());
 	}
 	
 	
-//	@Test
-//	@DisplayName("deveria calcular frete")
-//	void deveriaCalcularFrete() throws Exception {
-//		
-//		//arrange
-//		String id = "12121221";
-//		BDDMockito.given(superFreteService.calculateShipping(id)).willReturn(new ArrayList<>());
-//		
-//		//assert
-//		Assertions.assertEquals( new ArrayList<>(), superFreteService.calculateShipping("123"));
-//	}
-//	
-//	@Test
-//	@DisplayName("deveria estourar exception")
-//	void nãoDeveriaCalcularFrete() throws Exception {
-//		//arrange
-//		String id = null;
-//		BDDMockito.given(superFreteService.calculateShipping(id)).willThrow(BadRequestException.class);
-//		
-//		//assert
-//		Assertions.assertThrows( BadRequestException.class,() -> superFreteService.calculateShipping("123"));
-//	}
-
+	
 }

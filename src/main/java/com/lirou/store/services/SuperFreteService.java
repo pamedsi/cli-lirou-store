@@ -1,26 +1,37 @@
 package com.lirou.store.services;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import static com.lirou.store.validation.PostalCodeValidator.isAValidePostalCode;
 
-import com.lirou.store.models.Message;
-import com.lirou.store.models.superfrete.*;
-import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
-import com.lirou.store.models.superfrete.bodyForCalculateShipping.BodyForCalculateShipping;
-
-import com.lirou.store.models.superfrete.bodyForCalculateShipping.PackageDimensions;
-import com.lirou.store.models.superfrete.bodyForCalculateShipping.PostalCode;
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
-import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import javax.ws.rs.BadRequestException;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import static com.lirou.store.validation.PostalCodeValidator.isAValidePostalCode;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.lirou.store.exceptions.BadRequestException;
+import com.lirou.store.models.superfrete.AbortingRequestDTO;
+import com.lirou.store.models.superfrete.DeliveryInfoDTO;
+import com.lirou.store.models.superfrete.OrderCancellationResponse;
+import com.lirou.store.models.superfrete.OrdersIDs;
+import com.lirou.store.models.superfrete.PrintInfo;
+import com.lirou.store.models.superfrete.ProtocolData;
+import com.lirou.store.models.superfrete.ShippingOfOrderDTO;
+import com.lirou.store.models.superfrete.ShippingPricesDTO;
+import com.lirou.store.models.superfrete.SuperFretePackageDTO;
+import com.lirou.store.models.superfrete.bodyForCalculateShipping.BodyForCalculateShipping;
+import com.lirou.store.models.superfrete.bodyForCalculateShipping.PackageDimensions;
+import com.lirou.store.models.superfrete.bodyForCalculateShipping.PostalCode;
+import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
+
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class SuperFreteService {
@@ -33,7 +44,7 @@ public class SuperFreteService {
     private String from;
     private HttpHeaders headers;
 
-    public List<ShippingPricesDTO> calculateShipping(String to) {
+	public List<ShippingPricesDTO> calculateShipping(String to)throws BadRequestException {
         if (!isAValidePostalCode(to)) throw new BadRequestException("CEP inválido!");
 
         RestTemplate restTemplate = new RestTemplate();
@@ -56,6 +67,7 @@ public class SuperFreteService {
         RestTemplate restTemplate = new RestTemplate();
 
         String responseBody = restTemplate.exchange(baseURL + "/api/v0/cart" , HttpMethod.POST, requestEntity, String.class).getBody();
+       
         return new Gson().fromJson(responseBody, ProtocolData.class);
     }
 

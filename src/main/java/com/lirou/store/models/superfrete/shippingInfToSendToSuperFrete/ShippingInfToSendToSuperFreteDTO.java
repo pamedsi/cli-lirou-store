@@ -8,8 +8,8 @@ import jakarta.validation.constraints.NotNull;
 
 public record ShippingInfToSendToSuperFreteDTO(
         @NotBlank
-	String platform,
-	@NotNull
+		String platform,
+		@NotNull
         AddressDTO from,
         @NotNull
         AddressDTO to,
@@ -18,11 +18,4 @@ public record ShippingInfToSendToSuperFreteDTO(
         @NotEmpty
         List<ProductInfo> products,
         Volumes volumes
-){}
-
-record Volumes (
-        Number height,
-        Number width,
-        Number length,
-        Number weight
 ){}

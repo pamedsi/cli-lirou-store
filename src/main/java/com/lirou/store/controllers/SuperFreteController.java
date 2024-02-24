@@ -1,5 +1,6 @@
 package com.lirou.store.controllers;
 
+import com.lirou.store.exceptions.BadRequestException;
 import com.lirou.store.models.superfrete.*;
 import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
 import com.lirou.store.services.SuperFreteService;
@@ -22,7 +23,7 @@ public class SuperFreteController {
     }
 
     @GetMapping("/calculate/{CEP}")
-    public ResponseEntity<?> calculateShipping(@PathVariable("CEP") String postalCode) {
+    public ResponseEntity<?> calculateShipping(@PathVariable("CEP") String postalCode) throws BadRequestException {
         List<ShippingPricesDTO> body = superFreteService.calculateShipping(postalCode);
         return ResponseEntity.ok(body);
     }

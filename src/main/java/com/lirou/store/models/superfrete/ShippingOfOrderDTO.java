@@ -26,5 +26,5 @@ record Order(
 record Purchase(
         String id,
         String status,
-        List<Order> orders
+        List<OrderService> orders
 ) {}
