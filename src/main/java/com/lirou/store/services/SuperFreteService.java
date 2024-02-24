@@ -39,6 +39,7 @@ public class SuperFreteService {
     @Value("${address}")
     private String address;
     private SuperFreteAddress from;
+    private PackageDimensions volumes;
     private HttpHeaders headers;
 
     @PostConstruct
@@ -62,6 +63,8 @@ public class SuperFreteService {
             System.out.println(ex.getMessage());
         }
 
+        volumes = new PackageDimensions(75, 11, 16, 0.3);
+
         headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         headers.set("User-Agent", "Lirou Store " + from.email());
@@ -69,50 +72,55 @@ public class SuperFreteService {
         headers.setContentType(MediaType.APPLICATION_JSON);
     }
 
-    public List<ShippingPricesDTO> calculateShipping(String to) {
+    public List<ShippingPrices> calculateShipping(String to) {
         if (!isAValidePostalCode(to)) throw new BadRequestException("CEP inválido!");
 
         RestTemplate restTemplate = new RestTemplate();
         String services =  "1,2,17";
-        BodyForCalculateShipping body = new BodyForCalculateShipping(new PostalCode(from.postal_code()), new PostalCode(removeNonDigits(to)), services, new PackageDimensions(75, 11, 16, 0.3));
+        BodyForCalculateShipping body = new BodyForCalculateShipping(new PostalCode(from.postal_code()), new PostalCode(removeNonDigits(to)), services, volumes);
         String jsonBody = new Gson().toJson(body).replace("_dimensions", "");
         HttpEntity<?> requestEntity = new HttpEntity<>(jsonBody, headers);
         String jsonResponseBody = restTemplate.exchange(baseURL + "/api/v0/calculator", HttpMethod.POST, requestEntity, String.class).getBody();
 
-        Type pricesList = new TypeToken<List<SuperFretePackageDTO>>(){}.getType();
-        List<SuperFretePackageDTO> responseBody = new Gson().fromJson(jsonResponseBody, pricesList);
+        Type pricesList = new TypeToken<List<SuperFretePackage>>(){}.getType();
+        List<SuperFretePackage> responseBody = new Gson().fromJson(jsonResponseBody, pricesList);
 
         assert responseBody != null;
-        return ShippingPricesDTO.severalToDTO(responseBody);
+
+        return ShippingPrices.severalToDTO(responseBody);
     }
 
-    public ProtocolData sendShippingToSuperFrete(ShippingInfToSendToSuperFreteDTO body) {
-
-
+    public ShippingOfOrderDTO sendShippingToSuperFrete(OrderInfoFromCustomer orderInfo) {
+        ShippingInfToSendToSuperFreteDTO body = new ShippingInfToSendToSuperFreteDTO(
+                "Lirou Store",
+                from,
+                orderInfo.customerAddress(),
+                orderInfo.service(),
+                orderInfo.products(),
+                volumes
+        );
 
         String json = new Gson().toJson(body);
-        HttpEntity<?> requestEntity = new HttpEntity<>(json, headers);
+        HttpEntity<?> requestEntityToSuperFrete = new HttpEntity<>(json, headers);
         RestTemplate restTemplate = new RestTemplate();
+        String responseBodyJson = restTemplate.exchange(baseURL + "/api/v0/cart" , HttpMethod.POST, requestEntityToSuperFrete, String.class).getBody();
+        ProtocolData response = new Gson().fromJson(responseBodyJson, ProtocolData.class);
+        // Persistir a response
+        // ...
+        // Pagando o frete e emitindo etiqueta:
+        String ordersIDs = new Gson().toJson(List.of(response.id()));
+        HttpEntity<?> requestEntityToPayShipping = new HttpEntity<>(ordersIDs, headers);
+        String responseBody = restTemplate.exchange(baseURL + "/api/v0/checkout" , HttpMethod.POST, requestEntityToPayShipping, String.class).getBody();
 
-        String responseBody = restTemplate.exchange(baseURL + "/api/v0/cart" , HttpMethod.POST, requestEntity, String.class).getBody();
-        return new Gson().fromJson(responseBody, ProtocolData.class);
-    }
-
-    public ShippingOfOrderDTO finishOrderAndGeneratePrintableLabel(OrdersIDs orders){
-        String json = new Gson().toJson(orders);
-        HttpEntity<?> requestEntity = new HttpEntity<>(json, headers);
-        RestTemplate restTemplate = new RestTemplate();
-
-        String responseBody = restTemplate.exchange(baseURL + "/api/v0/checkout" , HttpMethod.POST, requestEntity, String.class).getBody();
         return new Gson().fromJson(responseBody, ShippingOfOrderDTO.class);
     }
 
-    public DeliveryInfoDTO getDeliveryInfo(String orderID){
+    public DeliveryInfo getDeliveryInfo(String orderID){
         HttpEntity<?> requestEntity = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
 
         String responseBody = restTemplate.exchange(baseURL + "/api/v0/order/info/" + orderID , HttpMethod.GET, requestEntity, String.class).getBody();
-        return new Gson().fromJson(responseBody, DeliveryInfoDTO.class);
+        return new Gson().fromJson(responseBody, DeliveryInfo.class);
     }
 
     public PrintInfo getPrintableLabel(OrdersIDs ordersIDs){
@@ -123,7 +131,7 @@ public class SuperFreteService {
         return new Gson().fromJson(responseBody, PrintInfo.class);
     }
 
-    public OrderCancellationResponse cancelOrder(AbortingRequestDTO requestBody){
+    public OrderCancellationResponse cancelOrder(AbortingRequest requestBody){
         HttpEntity<?> requestEntity = new HttpEntity<>(requestBody, headers);
         RestTemplate restTemplate = new RestTemplate();
 

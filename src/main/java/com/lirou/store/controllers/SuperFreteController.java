@@ -1,7 +1,6 @@
 package com.lirou.store.controllers;
 
 import com.lirou.store.models.superfrete.*;
-import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
 import com.lirou.store.services.SuperFreteService;
 
 import lombok.extern.log4j.Log4j2;
@@ -24,29 +23,21 @@ public class SuperFreteController {
     @GetMapping("/calculate/{CEP}")
     public ResponseEntity<?> calculateShipping(@PathVariable("CEP") String postalCode) {
         log.info("[Inicia] SuperFreteService - calculateShipping()");
-        List<ShippingPricesDTO> body = superFreteService.calculateShipping(postalCode);
+        List<ShippingPrices> body = superFreteService.calculateShipping(postalCode);
         log.info("[Finaliza] SuperFreteService - calculateShipping()");
         return ResponseEntity.ok(body);
     }
-    @PostMapping("/send-to-superfrete")
-    public ResponseEntity<ProtocolData> sendShippingToSuperFrete(@RequestBody ShippingInfToSendToSuperFreteDTO body) {
+    @PostMapping("/pay")
+    public ResponseEntity<ShippingOfOrderDTO> sendShippingToSuperFrete(@RequestBody OrderInfoFromCustomer orderInfo) {
         log.info("[Inicia] SuperFreteService - sendShippingToSuperFrete()");
-        ProtocolData response = superFreteService.sendShippingToSuperFrete(body);
+        ShippingOfOrderDTO response = superFreteService.sendShippingToSuperFrete(orderInfo);
         log.info("[Finaliza] SuperFreteService - sendShippingToSuperFrete()");
         return ResponseEntity.ok(response);
     }
-
-    @PostMapping("/confirm")
-    public ResponseEntity<ShippingOfOrderDTO> checkout(@RequestBody OrdersIDs body) {
-        log.info("[Inicia] SuperFreteService - finishOrderAndGeneratePrintableLabel()");
-        ShippingOfOrderDTO response = superFreteService.finishOrderAndGeneratePrintableLabel(body);
-        log.info("[Finaliza] SuperFreteService - finishOrderAndGeneratePrintableLabel()");
-        return ResponseEntity.ok(response);
-    }
     @GetMapping("/info/{orderID}")
-    public ResponseEntity<DeliveryInfoDTO> getOrderInfo(@PathVariable("orderID") String orderID) {
+    public ResponseEntity<DeliveryInfo> getOrderInfo(@PathVariable("orderID") String orderID) {
         log.info("[Inicia] SuperFreteService - getDeliveryInfo()");
-        DeliveryInfoDTO response = superFreteService.getDeliveryInfo(orderID);
+        DeliveryInfo response = superFreteService.getDeliveryInfo(orderID);
         log.info("[Finaliza] SuperFreteService - getDeliveryInfo()");
         return ResponseEntity.ok(response);
     }
@@ -58,7 +49,7 @@ public class SuperFreteController {
         return ResponseEntity.ok(response);
     }
     @DeleteMapping("/abort-order")
-    public ResponseEntity<OrderCancellationResponse> cancelOrder(@RequestBody AbortingRequestDTO body) {
+    public ResponseEntity<OrderCancellationResponse> cancelOrder(@RequestBody AbortingRequest body) {
         log.info("[Inicia] SuperFreteService - cancelOrder()");
         OrderCancellationResponse response = superFreteService.cancelOrder(body);
         log.info("[Finaliza] SuperFreteService - cancelOrder()");

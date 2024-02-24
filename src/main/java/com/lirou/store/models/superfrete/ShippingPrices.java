@@ -5,7 +5,7 @@ import org.springframework.format.annotation.NumberFormat;
 import java.math.BigDecimal;
 import java.util.List;
 
-public record ShippingPricesDTO(
+public record ShippingPrices(
         Number id,
         String name,
         Number delivery_time,
@@ -14,7 +14,7 @@ public record ShippingPricesDTO(
         CompanyInfo company
 
 ) {
-        public ShippingPricesDTO(SuperFretePackageDTO responseBody) {
+        public ShippingPrices(SuperFretePackage responseBody) {
                 this(
                         responseBody.id(),
                         responseBody.name(),
@@ -24,7 +24,7 @@ public record ShippingPricesDTO(
                 );
         }
 
-        public static List<ShippingPricesDTO> severalToDTO (List<SuperFretePackageDTO> responseBody){
-                return responseBody.stream().map(ShippingPricesDTO::new).toList();
+        public static List<ShippingPrices> severalToDTO (List<SuperFretePackage> responseBody){
+                return responseBody.stream().map(ShippingPrices::new).toList();
         }
 }

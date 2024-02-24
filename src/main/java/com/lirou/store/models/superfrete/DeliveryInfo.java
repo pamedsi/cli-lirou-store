@@ -5,7 +5,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.List;
 
-public record DeliveryInfoDTO(
+public record DeliveryInfo(
         String id,
         String protocol,
         String format,

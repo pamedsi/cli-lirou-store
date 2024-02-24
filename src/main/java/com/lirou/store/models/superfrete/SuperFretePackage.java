@@ -3,7 +3,7 @@ package com.lirou.store.models.superfrete;
 import java.math.BigDecimal;
 import java.util.List;
 
-public record SuperFretePackageDTO(
+public record SuperFretePackage(
         Integer id,
         String name,
         BigDecimal price,

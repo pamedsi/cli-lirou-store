@@ -9,6 +9,6 @@ public record ProtocolData(
         @NumberFormat
         BigDecimal price,
         String protocol,
-        String selfTracking,
+        String self_tracking,
         String status
 ) {}

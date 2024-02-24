@@ -12,4 +12,4 @@ public record SuperFreteAddress(
         String state_abbr,
         String postal_code,
         Optional<String> email
-){}
+) {}
