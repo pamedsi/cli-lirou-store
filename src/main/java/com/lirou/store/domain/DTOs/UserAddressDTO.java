@@ -1,6 +1,5 @@
 package com.lirou.store.domain.DTOs;
 
-import com.lirou.store.Enums.State;
 import com.lirou.store.domain.entities.AddressEntity;
 
 import java.util.List;
@@ -11,7 +10,7 @@ public record UserAddressDTO(
         String number,
         String complement,
         String postalCode,
-        String neighborhood,
+        String district,
         String city,
         String state,
         String obs
@@ -23,7 +22,7 @@ public record UserAddressDTO(
                 address.getNumber(),
                 address.getComplement(),
                 address.getPostalCode(),
-                address.getNeighborhood(),
+                address.getDistrict(),
                 address.getCity(),
                 address.getState().getAcronym(),
                 address.getObs()

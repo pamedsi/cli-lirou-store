@@ -39,7 +39,7 @@ public class AddressEntity {
     private String complement;
 
     @Column
-    private String neighborhood;
+    private String district;
 
     @Column
     private String city;
@@ -64,7 +64,7 @@ public class AddressEntity {
         this.street = addressDTO.street();
         this.number = addressDTO.number();
         this.complement = addressDTO.complement();
-        this.neighborhood = addressDTO.neighborhood();
+        this.district = addressDTO.district();
         this.city = addressDTO.city();
         this.state = State.fromAcronym(addressDTO.state());
         this.postalCode = addressDTO.postalCode();

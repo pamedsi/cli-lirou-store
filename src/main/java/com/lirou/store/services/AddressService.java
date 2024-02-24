@@ -7,6 +7,7 @@ import com.lirou.store.exceptions.NotFoundException;
 import com.lirou.store.repository.AddressRepository;
 import com.lirou.store.repository.UserRepository;
 import com.lirou.store.security.TokenService;
+import jakarta.ws.rs.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -44,14 +45,16 @@ public class AddressService {
         );
         AddressEntity updatedAddress = addressRepository.findByIdentifier(identifier).orElseThrow(
                 () -> new NotFoundException("Endereço não encontrado!")
-        );;
+        );
+
+        if (!updatedAddress.getOwner().equals(user)) throw new BadRequestException("Usuário não é dono do endereço que está tentando alterar");
 
         updatedAddress.setCity(addressDTO.city());
         updatedAddress.setObs(addressDTO.obs());
         updatedAddress.setComplement(addressDTO.complement());
         updatedAddress.setNumber(addressDTO.number());
         updatedAddress.setState(addressDTO.state());
-        updatedAddress.setNeighborhood(addressDTO.neighborhood());
+        updatedAddress.setDistrict(addressDTO.district());
         updatedAddress.setStreet(addressDTO.street());
         updatedAddress.setPostalCode(addressDTO.postalCode());
 
@@ -66,7 +69,9 @@ public class AddressService {
         );
         AddressEntity addressToDelete = addressRepository.findByIdentifier(addressIdentifier).orElseThrow(
                 () -> new NotFoundException("Endereço não encontrado!")
-        );;
+        );
+
+        if (!addressToDelete.getOwner().equals(user)) throw new BadRequestException("Usuário não é dono do endereço que está tentando alterar");
 
         addressToDelete.setDeleted(true);
         addressRepository.save(addressToDelete);

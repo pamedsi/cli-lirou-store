@@ -1,16 +1,15 @@
 package com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete;
 
+import java.util.Optional;
+
 public record SuperFreteAddress(
-            String name,
-            String address,
-            String complement,
-            String number,
-            String district,
-            String document,
-            String city,
-            String state_abbr,
-            String postal_code,
-            String location_number,
-            String country_id,
-            String email
+        String name,
+        String address,
+        Optional<String> complement,
+        Optional<String> number,
+        String district,
+        String city,
+        String state_abbr,
+        String postal_code,
+        Optional<String> email
 ){}
