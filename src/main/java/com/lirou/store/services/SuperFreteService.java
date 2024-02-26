@@ -91,7 +91,7 @@ public class SuperFreteService {
     }
 
     public ShippingOfOrderDTO generatePrintableLabel(OrderInfoFromCustomer orderInfo) {
-        // Gerando a etiqueta:
+        // Gerando a etiqueta (criar pedido):
         ShippingInfToSendToSuperFreteDTO body = new ShippingInfToSendToSuperFreteDTO(
                 "Lirou Store",
                 from,
@@ -109,7 +109,7 @@ public class SuperFreteService {
         ProtocolData response = new Gson().fromJson(responseBodyJson, ProtocolData.class);
         // Persistir a response
         // ...
-        // Pagando a etiqueta e gerando o PDF:
+        // Pagando a etiqueta e gerando o PDF (confirmar pedido):
         String ordersIDs = new Gson().toJson(new OrdersIDs(List.of(response.id())));
         HttpEntity<?> requestEntityToPayShipping = new HttpEntity<>(ordersIDs, headers);
         log.info("Pagando frete...");
