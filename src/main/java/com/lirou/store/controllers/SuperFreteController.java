@@ -30,7 +30,7 @@ public class SuperFreteController {
     @PostMapping("/pay")
     public ResponseEntity<ShippingOfOrderDTO> sendShippingToSuperFrete(@RequestBody OrderInfoFromCustomer orderInfo) {
         log.info("[Inicia] SuperFreteService - sendShippingToSuperFrete()");
-        ShippingOfOrderDTO response = superFreteService.sendShippingToSuperFrete(orderInfo);
+        ShippingOfOrderDTO response = superFreteService.generatePrintableLabel(orderInfo);
         log.info("[Finaliza] SuperFreteService - sendShippingToSuperFrete()");
         return ResponseEntity.ok(response);
     }

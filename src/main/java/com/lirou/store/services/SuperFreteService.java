@@ -24,7 +24,6 @@ import javax.ws.rs.BadRequestException;
 import java.lang.reflect.Type;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.lirou.store.validation.PostalCodeValidator.isAValidePostalCode;
 
@@ -49,13 +48,13 @@ public class SuperFreteService {
             from = new SuperFreteAddress(
                     addressProps[0],
                     addressProps[1],
-                    Optional.empty(),
-                    Optional.of(addressProps[2]),
+                    null,
+                    addressProps[2],
                     addressProps[3],
                     addressProps[4],
                     addressProps[5],
                     addressProps[6],
-                    Optional.ofNullable(addressProps[7])
+                    addressProps[7]
             );
         }
         catch (Exception ex) {
@@ -90,7 +89,7 @@ public class SuperFreteService {
         return ShippingPrices.severalToDTO(responseBody);
     }
 
-    public ShippingOfOrderDTO sendShippingToSuperFrete(OrderInfoFromCustomer orderInfo) {
+    public ShippingOfOrderDTO generatePrintableLabel(OrderInfoFromCustomer orderInfo) {
         ShippingInfToSendToSuperFreteDTO body = new ShippingInfToSendToSuperFreteDTO(
                 "Lirou Store",
                 from,
@@ -99,8 +98,7 @@ public class SuperFreteService {
                 orderInfo.products(),
                 volumes
         );
-
-        String json = new Gson().toJson(body);
+        String json = new Gson().toJson(body, ShippingInfToSendToSuperFreteDTO.class);
         HttpEntity<?> requestEntityToSuperFrete = new HttpEntity<>(json, headers);
         RestTemplate restTemplate = new RestTemplate();
         String responseBodyJson = restTemplate.exchange(baseURL + "/api/v0/cart" , HttpMethod.POST, requestEntityToSuperFrete, String.class).getBody();
@@ -108,7 +106,7 @@ public class SuperFreteService {
         // Persistir a response
         // ...
         // Pagando o frete e emitindo etiqueta:
-        String ordersIDs = new Gson().toJson(List.of(response.id()));
+        String ordersIDs = new Gson().toJson(new OrdersIDs(List.of(response.id())));
         HttpEntity<?> requestEntityToPayShipping = new HttpEntity<>(ordersIDs, headers);
         String responseBody = restTemplate.exchange(baseURL + "/api/v0/checkout" , HttpMethod.POST, requestEntityToPayShipping, String.class).getBody();
 
