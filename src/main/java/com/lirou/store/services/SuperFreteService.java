@@ -61,9 +61,7 @@ public class SuperFreteService {
             System.out.println("Erro ao extrair endereço da variável de ambiente!");
             System.out.println(ex.getMessage());
         }
-
         volumes = new PackageDimensions(75, 11, 16, 0.3);
-
         headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         headers.set("User-Agent", "Lirou Store " + from.email());
@@ -76,20 +74,24 @@ public class SuperFreteService {
 
         RestTemplate restTemplate = new RestTemplate();
         String services =  "1,2,17";
-        BodyForCalculateShipping body = new BodyForCalculateShipping(new PostalCode(from.postal_code()), new PostalCode(removeNonDigits(to)), services, volumes);
+        BodyForCalculateShipping body = new BodyForCalculateShipping(
+                new PostalCode(from.postal_code()),
+                new PostalCode(removeNonDigits(to)),
+                services, volumes
+        );
         String jsonBody = new Gson().toJson(body).replace("_dimensions", "");
         HttpEntity<?> requestEntity = new HttpEntity<>(jsonBody, headers);
+        log.info("Calculando frete...");
         String jsonResponseBody = restTemplate.exchange(baseURL + "/api/v0/calculator", HttpMethod.POST, requestEntity, String.class).getBody();
-
+        log.info("Frete calculado.");
         Type pricesList = new TypeToken<List<SuperFretePackage>>(){}.getType();
         List<SuperFretePackage> responseBody = new Gson().fromJson(jsonResponseBody, pricesList);
-
         assert responseBody != null;
-
         return ShippingPrices.severalToDTO(responseBody);
     }
 
     public ShippingOfOrderDTO generatePrintableLabel(OrderInfoFromCustomer orderInfo) {
+        // Gerando a etiqueta:
         ShippingInfToSendToSuperFreteDTO body = new ShippingInfToSendToSuperFreteDTO(
                 "Lirou Store",
                 from,
@@ -101,22 +103,24 @@ public class SuperFreteService {
         String json = new Gson().toJson(body, ShippingInfToSendToSuperFreteDTO.class);
         HttpEntity<?> requestEntityToSuperFrete = new HttpEntity<>(json, headers);
         RestTemplate restTemplate = new RestTemplate();
+        log.info("Gerando etiqueta...");
         String responseBodyJson = restTemplate.exchange(baseURL + "/api/v0/cart" , HttpMethod.POST, requestEntityToSuperFrete, String.class).getBody();
+        log.info("Etiqueta gerada.");
         ProtocolData response = new Gson().fromJson(responseBodyJson, ProtocolData.class);
         // Persistir a response
         // ...
-        // Pagando o frete e emitindo etiqueta:
+        // Pagando a etiqueta e gerando o PDF:
         String ordersIDs = new Gson().toJson(new OrdersIDs(List.of(response.id())));
         HttpEntity<?> requestEntityToPayShipping = new HttpEntity<>(ordersIDs, headers);
+        log.info("Pagando frete...");
         String responseBody = restTemplate.exchange(baseURL + "/api/v0/checkout" , HttpMethod.POST, requestEntityToPayShipping, String.class).getBody();
-
+        log.info("Frete pago.");
         return new Gson().fromJson(responseBody, ShippingOfOrderDTO.class);
     }
 
     public DeliveryInfo getDeliveryInfo(String orderID){
         HttpEntity<?> requestEntity = new HttpEntity<>(headers);
         RestTemplate restTemplate = new RestTemplate();
-
         String responseBody = restTemplate.exchange(baseURL + "/api/v0/order/info/" + orderID , HttpMethod.GET, requestEntity, String.class).getBody();
         return new Gson().fromJson(responseBody, DeliveryInfo.class);
     }
@@ -124,7 +128,6 @@ public class SuperFreteService {
     public PrintInfo getPrintableLabel(OrdersIDs ordersIDs){
         HttpEntity<?> requestEntity = new HttpEntity<>(ordersIDs, headers);
         RestTemplate restTemplate = new RestTemplate();
-
         String responseBody = restTemplate.exchange(baseURL + "/api/v0/tag/print" , HttpMethod.POST, requestEntity, String.class).getBody();
         return new Gson().fromJson(responseBody, PrintInfo.class);
     }
@@ -132,9 +135,7 @@ public class SuperFreteService {
     public OrderCancellationResponse cancelOrder(AbortingRequest requestBody){
         HttpEntity<?> requestEntity = new HttpEntity<>(requestBody, headers);
         RestTemplate restTemplate = new RestTemplate();
-
         ResponseEntity<?> response = restTemplate.exchange(baseURL + "/api/v0/order/cancel" , HttpMethod.POST, requestEntity, String.class);
-
         return new Gson().fromJson((String) response.getBody(), OrderCancellationResponse.class);
     }
 
