@@ -8,10 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 
 @RestController
 @RequestMapping("/api/search")
@@ -21,8 +19,8 @@ public class SearchController {
 
     private final SearchService searchService;
 
-    @GetMapping("/{query}")
-    public ResponseEntity<?> searchProduct(@PathVariable String query, @PageableDefault(page = 0, size = 24) Pageable pageable){
+    @GetMapping
+    public ResponseEntity<?> searchProduct(@RequestParam(value = "query", required = false, defaultValue = "") String query, @PageableDefault(page = 0, size = 24) Pageable pageable){
         log.info("[Inicia] SearchService - searchGlassesWithQuery()");
         Page<GlassesDTO> result = searchService.searchGlassesWithQuery(query, pageable);
         log.info("[Finaliza] SearchService - searchGlassesWithQuery()");
