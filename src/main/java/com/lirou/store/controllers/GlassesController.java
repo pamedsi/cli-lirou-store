@@ -38,7 +38,7 @@ public class GlassesController{
 
     // Para a parte admin:
     @GetMapping
-    public ResponseEntity<Page<GlassesDTO>> getGlasses(@PageableDefault(page = 0, size = 24, direction = Sort.Direction.ASC, sort = { "title" }) Pageable pageable) {
+    public ResponseEntity<Page<GlassesDTO>> getGlasses(@PageableDefault(size = 24, direction = Sort.Direction.ASC, sort = { "title" }) Pageable pageable) {
         Page<GlassesDTO> glassesDTO = glassesService.getAllGlasses(pageable);
         return ResponseEntity.ok(glassesDTO);
     }
