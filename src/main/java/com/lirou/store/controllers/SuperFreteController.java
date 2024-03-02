@@ -27,11 +27,11 @@ public class SuperFreteController {
         log.info("[Finaliza] SuperFreteService - calculateShipping()");
         return ResponseEntity.ok(body);
     }
-    @PostMapping("/pay")
+    @PostMapping
     public ResponseEntity<ShippingOfOrder> sendShippingToSuperFrete(@RequestBody OrderInfoFromCustomer orderInfo) {
-        log.info("[Inicia] SuperFreteService - sendShippingToSuperFrete()");
+        log.info("[Inicia] SuperFreteService - getPrintableLabel()");
         ShippingOfOrder response = superFreteService.getPrintableLabel(orderInfo);
-        log.info("[Finaliza] SuperFreteService - sendShippingToSuperFrete()");
+        log.info("[Finaliza] SuperFreteService - getPrintableLabel()");
         return ResponseEntity.ok(response);
     }
     @GetMapping("/info/{orderID}")
