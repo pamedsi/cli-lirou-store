@@ -18,9 +18,10 @@ public class SearchService {
 
     private final GlassesSearchRepository searchRepository;
 
-    public Page<GlassesDTO> searchGlassesWithQuery(String query, Pageable pageable) {
+    public Page<GlassesDTO> searchProductWithQuery(String query, Pageable pageable) {
         log.info("[Inicia] SearchRepository - searchGlasses()");
         Page<Glasses> glassesList = searchRepository.searchGlasses(query, pageable);
+        // Implementar buscas a outros tipos de produtos aqui também.
         log.info("[Finaliza] SearchRepository - searchGlasses()");
         return GlassesDTO.toPageDTO(glassesList);
     }

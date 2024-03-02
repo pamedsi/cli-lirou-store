@@ -20,10 +20,10 @@ public class SearchController {
     private final SearchService searchService;
 
     @GetMapping
-    public ResponseEntity<?> searchProduct(@RequestParam(value = "query", required = false, defaultValue = "") String query, @PageableDefault(page = 0, size = 24) Pageable pageable){
-        log.info("[Inicia] SearchService - searchGlassesWithQuery()");
-        Page<GlassesDTO> result = searchService.searchGlassesWithQuery(query, pageable);
-        log.info("[Finaliza] SearchService - searchGlassesWithQuery()");
+    public ResponseEntity<?> searchProduct(@RequestParam(value = "query", required = false, defaultValue = "") String query, @PageableDefault(size = 24) Pageable pageable){
+        log.info("[Inicia] SearchService - searchProductWithQuery()");
+        Page<GlassesDTO> result = searchService.searchProductWithQuery(query, pageable);
+        log.info("[Finaliza] SearchService - searchProductWithQuery()");
         return ResponseEntity.ok(result);
     }
 }
