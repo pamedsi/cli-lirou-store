@@ -17,5 +17,4 @@ public interface GlassesRepository extends JpaRepository<Glasses, Long>, PagingA
     Boolean existsByTitleAndIdentifierNotAndDeletedFalse(String title, String identifier);
     Boolean existsByTitleAndDeletedFalse(String title);
     Optional<Glasses> findByIdentifierAndDeletedFalse(String glassesIdentifier);
-    Page<Glasses> findAllByDeletedTrue(Pageable pageable);
 }

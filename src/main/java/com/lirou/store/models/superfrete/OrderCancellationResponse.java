@@ -9,4 +9,3 @@ public record OrderCancellationResponse (
         String error
 ) {}
 
-record CancelResponse(boolean canceled) {}

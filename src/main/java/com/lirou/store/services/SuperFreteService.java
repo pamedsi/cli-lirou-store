@@ -90,8 +90,7 @@ public class SuperFreteService {
         return ShippingPrices.severalToDTO(responseBody);
     }
 
-    public ShippingOfOrderDTO generatePrintableLabel(OrderInfoFromCustomer orderInfo) {
-        // Gerando a etiqueta (criar pedido):
+    public ProtocolData createShippingOrder(OrderInfoFromCustomer orderInfo){
         ShippingInfToSendToSuperFreteDTO body = new ShippingInfToSendToSuperFreteDTO(
                 "Lirou Store",
                 from,
@@ -106,16 +105,19 @@ public class SuperFreteService {
         log.info("Gerando etiqueta...");
         String responseBodyJson = restTemplate.exchange(baseURL + "/api/v0/cart" , HttpMethod.POST, requestEntityToSuperFrete, String.class).getBody();
         log.info("Etiqueta gerada.");
-        ProtocolData response = new Gson().fromJson(responseBodyJson, ProtocolData.class);
+        return new Gson().fromJson(responseBodyJson, ProtocolData.class);
+    }
+    // Pagando a etiqueta e gerando o PDF (confirmar pedido):
+    public ShippingOfOrder payShipping(ProtocolData response) {
         // Persistir a response
         // ...
-        // Pagando a etiqueta e gerando o PDF (confirmar pedido):
         String ordersIDs = new Gson().toJson(new OrdersIDs(List.of(response.id())));
         HttpEntity<?> requestEntityToPayShipping = new HttpEntity<>(ordersIDs, headers);
+        RestTemplate restTemplate = new RestTemplate();
         log.info("Pagando frete...");
         String responseBody = restTemplate.exchange(baseURL + "/api/v0/checkout" , HttpMethod.POST, requestEntityToPayShipping, String.class).getBody();
         log.info("Frete pago.");
-        return new Gson().fromJson(responseBody, ShippingOfOrderDTO.class);
+        return new Gson().fromJson(responseBody, ShippingOfOrder.class);
     }
 
     public DeliveryInfo getDeliveryInfo(String orderID){
@@ -124,14 +126,16 @@ public class SuperFreteService {
         String responseBody = restTemplate.exchange(baseURL + "/api/v0/order/info/" + orderID , HttpMethod.GET, requestEntity, String.class).getBody();
         return new Gson().fromJson(responseBody, DeliveryInfo.class);
     }
-
     public PrintInfo getPrintableLabel(OrdersIDs ordersIDs){
         HttpEntity<?> requestEntity = new HttpEntity<>(ordersIDs, headers);
         RestTemplate restTemplate = new RestTemplate();
         String responseBody = restTemplate.exchange(baseURL + "/api/v0/tag/print" , HttpMethod.POST, requestEntity, String.class).getBody();
         return new Gson().fromJson(responseBody, PrintInfo.class);
     }
-
+    public ShippingOfOrder getPrintableLabel(OrderInfoFromCustomer orderInfo){
+        ProtocolData protocolData = createShippingOrder(orderInfo);
+        return payShipping(protocolData);
+    }
     public OrderCancellationResponse cancelOrder(AbortingRequest requestBody){
         HttpEntity<?> requestEntity = new HttpEntity<>(requestBody, headers);
         RestTemplate restTemplate = new RestTemplate();
@@ -142,5 +146,7 @@ public class SuperFreteService {
     public static String removeNonDigits(String cep) {
         return cep.replaceAll("[^0-9]", "");
     }
+
+
 
 }

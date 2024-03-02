@@ -1,6 +1,6 @@
 package com.lirou.store.domain.DTOs;
 
-import com.lirou.store.Enums.UserRole;
+import com.lirou.store.enums.UserRole;
 
 import java.time.LocalDate;
 import java.util.Optional;
