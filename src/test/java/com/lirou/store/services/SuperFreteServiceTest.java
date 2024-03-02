@@ -4,7 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.lirou.store.models.superfrete.*;
+import com.lirou.store.models.superfrete.bodyForCalculateShipping.PackageDimensions;
 import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.SuperFreteAddress;
+import org.glassfish.jaxb.runtime.v2.runtime.reflect.Lister;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -111,9 +113,16 @@ class SuperFreteServiceTest {
 		List<ProductInfo> products = new ArrayList<>();
 		ProductInfo productInfo = new ProductInfo("oculos","1","40.50");
 		products.add(productInfo);
-		OrderInfoFromCustomer infoShipping = new ShippingInfToSendToSuperFreteDTO("SEDEX", de, para,1,products, new Volumes(1,1,1,1));
-		ProtocolData shippingOrder = superFreteService.createShippingOrder(infoShipping);
-		ShippingOfOrder orderInfo = superFreteService.payShipping(shippingOrder);
+		ShippingInfToSendToSuperFreteDTO infoShipping = new ShippingInfToSendToSuperFreteDTO(
+				"SEDEX",
+				de,
+				para,
+				1,
+				products,
+				new PackageDimensions(1,1,1,1)
+		);
+//		ProtocolData shippingOrder = superFreteService.createShippingOrder(infoShipping);
+//		ShippingOfOrder orderInfo = superFreteService.payShipping(shippingOrder);
 		// Parei aqui
 
 
