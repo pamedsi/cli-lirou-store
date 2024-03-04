@@ -3,10 +3,6 @@ package com.lirou.store.services;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.lirou.store.models.superfrete.*;
-import com.lirou.store.models.superfrete.bodyForCalculateShipping.PackageDimensions;
-import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.SuperFreteAddress;
-import org.glassfish.jaxb.runtime.v2.runtime.reflect.Lister;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -22,10 +18,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import com.lirou.store.exceptions.BadRequestException;
-
+import com.lirou.store.models.superfrete.AbortingRequest;
+import com.lirou.store.models.superfrete.OrderInfoFromCustomer;
+import com.lirou.store.models.superfrete.OrderService;
+import com.lirou.store.models.superfrete.ProtocolData;
 import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ProductInfo;
-import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
-import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.Volumes;
+import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.SuperFreteAddress;
 
 
 
@@ -65,40 +63,11 @@ class SuperFreteServiceTest {
 		Assertions.assertThrows(BadRequestException.class,() -> superFreteService.calculateShipping(cep));
 	}
 	
-	//******************
-//	@Test
-//	@DisplayName("deveria enviar produto")
-//	void deveriaEnviarProduto() throws Exception {
-//		//arange
-//		SuperFreteAddress de  = new SuperFreteAddress("jow do parque", 
-//				"rua bom pastor", "", "24", "jardim prazeres","","Jaboatão dos guararapes", "PE", from, "", "", "jow@teste.com");
-//		SuperFreteAddress para = new SuperFreteAddress("jow do parque", 
-//			"Rua da Varzea", "", "240", "jardim prazeres","","Jaboatão dos guararapes","SP" ,"01140080", "", "", "jow@teste.com");
-//		List<ProductInfo> products = new ArrayList<>();
-//		ProductInfo productInfo = new ProductInfo("oculos","1","40.50");
-//		products.add(productInfo);
-//		ShippingInfToSendToSuperFreteDTO infoShipping = new ShippingInfToSendToSuperFreteDTO("SEDEX", de, para,1,products, new Volumes(1,1,1,1));
-//		ProtocolData sendShippingToSuperFrete = superFreteService.sendShippingToSuperFrete(infoShipping);
-//		//assert
-//		Assertions.assertEquals("pending", sendShippingToSuperFrete.status());
-//	}
-	
 	@Test
 	@DisplayName("deveria enviar produto e entiquetar")
 	@Order(1)
 	void deveriaEnviarProdutoEentiquetar() throws Exception {
 		//arange
-		SuperFreteAddress de  = new SuperFreteAddress(
-				"jow do parque",
-				"rua bom pastor",
-				"",
-				"24",
-				"jardim prazeres",
-				"Jaboatão dos guararapes",
-				"PE",
-				from,
-				"jow@teste.com"
-		);
 		SuperFreteAddress para = new SuperFreteAddress(
 				"jow do parque",
 				"Rua da Varzea",
@@ -113,34 +82,22 @@ class SuperFreteServiceTest {
 		List<ProductInfo> products = new ArrayList<>();
 		ProductInfo productInfo = new ProductInfo("oculos","1","40.50");
 		products.add(productInfo);
-		ShippingInfToSendToSuperFreteDTO infoShipping = new ShippingInfToSendToSuperFreteDTO(
-				"SEDEX",
-				de,
-				para,
-				1,
-				products,
-				new PackageDimensions(1,1,1,1)
-		);
-//		ProtocolData shippingOrder = superFreteService.createShippingOrder(infoShipping);
-//		ShippingOfOrder orderInfo = superFreteService.payShipping(shippingOrder);
-		// Parei aqui
+		OrderInfoFromCustomer infoShipping = new OrderInfoFromCustomer(para,products,1);
+		ProtocolData shippingOrder = superFreteService.createShippingOrder(infoShipping);
 
+		List<String> orders = new ArrayList<>();
+		orders.add(shippingOrder.id());
+		OrderService orderAborting = new OrderService(orders.get(0), "não queremos mais");
+		abortingRequestDTO = new AbortingRequest(orderAborting);
 
-//		List<String> orders = new ArrayList<>();
-//		orders.add(sendShippingToSuperFrete.id());
-//		OrdersIDs ordersIDs = new OrdersIDs(orders);
-//		OrderService orderAborting = new OrderService(orders.get(0), "não queremos mais");
-//		abortingRequestDTO = new AbortingRequestDTO(orderAborting);
-//
-//		//assert
-//		Assertions.assertEquals(true, superFreteService.finishOrderAndGeneratePrintableLabel(ordersIDs).success());
+		//assert
+		Assertions.assertEquals(true, superFreteService.payShipping(shippingOrder).success());
 	}
 	
 	@Test
 	@DisplayName("deveria monitorar produto")
 	@Order(2)
 	void deveriaMonitorarEnvio() throws Exception {
-		//arange
 		
 		//assert
 		Assertions.assertEquals("released", superFreteService.getDeliveryInfo(abortingRequestDTO.order().id()).status());
@@ -150,9 +107,6 @@ class SuperFreteServiceTest {
 	@DisplayName("deveria cancelar envio do produto")
 	@Order(3)
 	void deveriaCancelarEnvio() throws Exception {
-		//arange
-		
-		
 		//assert
 		Assertions.assertEquals(true, 
 				superFreteService
