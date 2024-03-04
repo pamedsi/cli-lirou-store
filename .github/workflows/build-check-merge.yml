@@ -9,8 +9,9 @@ jobs:
     environment: 
       name: build
     env:
-      CEP: ${{secrets.CEP}}
-      DATABASE_PASSWORD: ${{secrets.DATABASE_PASSWORD}}
+      CEP: ${{ secrets.CEP }}
+      address: ${{ secret.ADDRESS }}
+      DATABASE_PASSWORD: ${{ secrets.DATABASE_PASSWORD }}
       DATABASE_SCHEMA: ${{ secrets.DATABASE_SCHEMA }}
       DATABASE_URL: ${{ secrets.DATABASE_URL }}
       DATABASE_USERNAME: ${{ secrets.DATABASE_USERNAME }}
