@@ -1,11 +1,10 @@
 package com.lirou.store.exceptions;
 
-public class BadRequestException extends Exception{
-
+public class BadRequestExceptions extends Exception{
 
 	private static final long serialVersionUID = 3493924982910908850L;
 
-	public BadRequestException(String message) {
+	public BadRequestExceptions(String message) {
 		super(message);
 	}
 

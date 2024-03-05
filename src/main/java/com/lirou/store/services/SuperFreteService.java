@@ -1,31 +1,41 @@
 package com.lirou.store.services;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
+import static com.lirou.store.validation.PostalCodeValidator.isAValidePostalCode;
 
-import com.lirou.store.models.superfrete.*;
+import java.lang.reflect.Type;
+import java.util.List;
 
-import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
-import com.lirou.store.models.superfrete.bodyForCalculateShipping.BodyForCalculateShipping;
-
-import com.lirou.store.models.superfrete.bodyForCalculateShipping.PackageDimensions;
-import com.lirou.store.models.superfrete.bodyForCalculateShipping.PostalCode;
-import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.SuperFreteAddress;
-import jakarta.annotation.PostConstruct;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import javax.ws.rs.BadRequestException;
-import java.lang.reflect.Type;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.lirou.store.exceptions.BadRequestExceptions;
+import com.lirou.store.models.superfrete.AbortingRequest;
+import com.lirou.store.models.superfrete.DeliveryInfo;
+import com.lirou.store.models.superfrete.OrderCancellationResponse;
+import com.lirou.store.models.superfrete.OrderInfoFromCustomer;
+import com.lirou.store.models.superfrete.OrdersIDs;
+import com.lirou.store.models.superfrete.PrintInfo;
+import com.lirou.store.models.superfrete.ProtocolData;
+import com.lirou.store.models.superfrete.ShippingOfOrder;
+import com.lirou.store.models.superfrete.ShippingPrices;
+import com.lirou.store.models.superfrete.SuperFretePackage;
+import com.lirou.store.models.superfrete.bodyForCalculateShipping.BodyForCalculateShipping;
+import com.lirou.store.models.superfrete.bodyForCalculateShipping.PackageDimensions;
+import com.lirou.store.models.superfrete.bodyForCalculateShipping.PostalCode;
+import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
+import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.SuperFreteAddress;
 
-import java.util.List;
-
-import static com.lirou.store.validation.PostalCodeValidator.isAValidePostalCode;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 @Service
 @Log4j2
@@ -69,8 +79,8 @@ public class SuperFreteService {
         headers.setContentType(MediaType.APPLICATION_JSON);
     }
 
-    public List<ShippingPrices> calculateShipping(String to) {
-        if (!isAValidePostalCode(to)) throw new BadRequestException("CEP inválido!");
+    public List<ShippingPrices> calculateShipping(String to) throws BadRequestExceptions {
+        if (!isAValidePostalCode(to)) throw new BadRequestExceptions("CEP inválido!");
 
         RestTemplate restTemplate = new RestTemplate();
         String services =  "1,2,17";
