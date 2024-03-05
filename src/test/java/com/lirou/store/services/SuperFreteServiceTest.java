@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import com.lirou.store.exceptions.BadRequestException;
 import com.lirou.store.models.superfrete.AbortingRequest;
@@ -47,10 +46,10 @@ class SuperFreteServiceTest {
 	void deveriaCalcularFrete() throws Exception {
 		
 		//arrange
-		ReflectionTestUtils.setField(superFreteService, "from", from);
+		//ReflectionTestUtils.setField(superFreteService, "from", from);
 		
 		//assert
-		Assertions.assertEquals(2, superFreteService.calculateShipping(from).size());
+		Assertions.assertEquals(2, superFreteService.calculateShipping("01140080").size());
 	}
 	
 	@Test
@@ -100,7 +99,7 @@ class SuperFreteServiceTest {
 	void deveriaMonitorarEnvio() throws Exception {
 		
 		//assert
-		Assertions.assertEquals("released", superFreteService.getDeliveryInfo(abortingRequestDTO.order().id()).status());
+		Assertions.assertEquals("released", superFreteService.getDeliveryInfo("REVYLcN31yp9u2kPiPlc").status());
 	}
 	
 	@Test
@@ -108,10 +107,9 @@ class SuperFreteServiceTest {
 	@Order(3)
 	void deveriaCancelarEnvio() throws Exception {
 		//assert
-		Assertions.assertEquals(true, 
+		Assertions.assertEquals(200, 
 				superFreteService
-				.cancelOrder(abortingRequestDTO)
-				.orderCancellations().get(abortingRequestDTO.order().id()).canceled());
+				.cancelOrder(abortingRequestDTO));
 	}
 	
 	

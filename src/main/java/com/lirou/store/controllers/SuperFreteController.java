@@ -1,13 +1,28 @@
 package com.lirou.store.controllers;
 
-import com.lirou.store.models.superfrete.*;
+import java.util.List;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.lirou.store.models.superfrete.AbortingRequest;
+import com.lirou.store.models.superfrete.DeliveryInfo;
+import com.lirou.store.models.superfrete.OrderCancellationResponse;
+import com.lirou.store.models.superfrete.OrderInfoFromCustomer;
+import com.lirou.store.models.superfrete.OrdersIDs;
+import com.lirou.store.models.superfrete.PrintInfo;
+import com.lirou.store.models.superfrete.ShippingOfOrder;
+import com.lirou.store.models.superfrete.ShippingPrices;
 import com.lirou.store.services.SuperFreteService;
 
+import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/shipping")
@@ -28,7 +43,7 @@ public class SuperFreteController {
         return ResponseEntity.ok(body);
     }
     @PostMapping
-    public ResponseEntity<ShippingOfOrder> sendShippingToSuperFrete(@RequestBody OrderInfoFromCustomer orderInfo) {
+    public ResponseEntity<ShippingOfOrder> sendShippingToSuperFrete(@RequestBody @Valid OrderInfoFromCustomer orderInfo) {
         log.info("[Inicia] SuperFreteService - getPrintableLabel()");
         ShippingOfOrder response = superFreteService.getPrintableLabel(orderInfo);
         log.info("[Finaliza] SuperFreteService - getPrintableLabel()");

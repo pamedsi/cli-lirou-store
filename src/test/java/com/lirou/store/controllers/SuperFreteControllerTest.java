@@ -3,7 +3,6 @@ package com.lirou.store.controllers;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Assertions;
@@ -19,9 +18,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.google.gson.Gson;
-import com.lirou.store.models.superfrete.ProtocolData;
-import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
 import com.lirou.store.services.SuperFreteService;
 
 import jakarta.ws.rs.BadRequestException;
@@ -78,17 +74,14 @@ class SuperFreteControllerTest {
 		//arrange
 		String body ="""
 				{
-				  "platform": "SEDEX",
-				  "from": {"name":"teste"},
-				  "to": {"name":"teste"},
+				  "customerAddress": {"name":"teste","complement":"perto","number":"24","email":"jow@teste.com"},
 				  "service": 1,
-				  "products": [{"name":"teste"}],
-				  "volumes":{"height":1.5}
+				  "products": [{"name":"teste"}]
 				}
 				""";
 
 		//act
-		 MockHttpServletResponse response = mvc.perform(post("/api/shipping/send-to-superfrete")
+		 MockHttpServletResponse response = mvc.perform(post("/api/shipping")
 					.contentType(MediaType.APPLICATION_JSON)
 					.content(body)
 					).andReturn().getResponse();
@@ -106,7 +99,7 @@ class SuperFreteControllerTest {
 				{}
 				""";
 		//act
-		 MockHttpServletResponse response = mvc.perform(post("/api/shipping/send-to-superfrete")
+		 MockHttpServletResponse response = mvc.perform(post("/api/shipping")
 					.contentType(MediaType.APPLICATION_JSON)
 					.content(body)
 					).andReturn().getResponse();
