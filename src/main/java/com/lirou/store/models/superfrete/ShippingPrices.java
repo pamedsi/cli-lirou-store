@@ -18,7 +18,7 @@ public record ShippingPrices(
                 this(
                         responseBody.id(),
                         responseBody.name(),
-                        responseBody.deliveryTime(),
+                        responseBody.delivery_time(),
                         responseBody.packages().getFirst().price(),
                         responseBody.company()
                 );
