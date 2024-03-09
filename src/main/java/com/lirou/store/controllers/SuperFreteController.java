@@ -2,6 +2,7 @@ package com.lirou.store.controllers;
 
 import java.util.List;
 
+import com.lirou.store.exceptions.BadRequestExceptions;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +37,7 @@ public class SuperFreteController {
     }
 
     @GetMapping("/calculate/{CEP}")
-    public ResponseEntity<?> calculateShipping(@PathVariable("CEP") String postalCode) {
+    public ResponseEntity<?> calculateShipping(@PathVariable("CEP") String postalCode) throws BadRequestExceptions {
         log.info("[Inicia] SuperFreteService - calculateShipping()");
         List<ShippingPrices> body = superFreteService.calculateShipping(postalCode);
         log.info("[Finaliza] SuperFreteService - calculateShipping()");
