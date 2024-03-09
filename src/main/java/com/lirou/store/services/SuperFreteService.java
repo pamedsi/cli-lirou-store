@@ -33,26 +33,24 @@ import com.lirou.store.models.superfrete.bodyForCalculateShipping.PostalCode;
 import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.ShippingInfToSendToSuperFreteDTO;
 import com.lirou.store.models.superfrete.shippingInfToSendToSuperFrete.SuperFreteAddress;
 
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 @Service
 @Log4j2
-@RequiredArgsConstructor
 public class SuperFreteService {
-    @Value("${token}")
-    private String token;
-    @Value("${SUPER_FRETE_URL}")
-    private String baseURL;
-    @Value("${address}")
-    private String address;
+    private final String baseURL;
     private SuperFreteAddress from;
     private PackageDimensions volumes;
     private HttpHeaders headers;
 
-    @PostConstruct
-    public void getStoreInfo() {
+    public SuperFreteService(@Value("${token}") String token, @Value("${SUPER_FRETE_URL}") String baseURL, @Value("${address}") String address) {
+        createFrom(address);
+        createVolumes();
+        createHeaders(token);
+        this.baseURL = baseURL;
+    }
+
+    private void createFrom(String address){
         try {
             String[] addressProps = address.split("\\|");
             from = new SuperFreteAddress(
@@ -71,7 +69,11 @@ public class SuperFreteService {
             System.out.println("Erro ao extrair endereço da variável de ambiente!");
             System.out.println(ex.getMessage());
         }
-        volumes = new PackageDimensions(75, 11, 16, 0.3);
+    }
+    private void createVolumes(){
+        volumes = new PackageDimensions(20, 11, 16, 0.3);
+    }
+    private void createHeaders(String token){
         headers = new HttpHeaders();
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         headers.set("User-Agent", "Lirou Store " + from.email());
