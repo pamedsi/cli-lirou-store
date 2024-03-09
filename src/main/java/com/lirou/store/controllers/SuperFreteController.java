@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lirou.store.exceptions.BadRequestExceptions;
 import com.lirou.store.models.superfrete.AbortingRequest;
 import com.lirou.store.models.superfrete.DeliveryInfo;
 import com.lirou.store.models.superfrete.OrderCancellationResponse;
@@ -36,7 +37,7 @@ public class SuperFreteController {
     }
 
     @GetMapping("/calculate/{CEP}")
-    public ResponseEntity<?> calculateShipping(@PathVariable("CEP") String postalCode) {
+    public ResponseEntity<?> calculateShipping(@PathVariable("CEP") String postalCode) throws BadRequestExceptions {
         log.info("[Inicia] SuperFreteService - calculateShipping()");
         List<ShippingPrices> body = superFreteService.calculateShipping(postalCode);
         log.info("[Finaliza] SuperFreteService - calculateShipping()");
