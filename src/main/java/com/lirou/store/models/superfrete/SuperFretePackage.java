@@ -9,12 +9,12 @@ public record SuperFretePackage(
         BigDecimal price,
         String discount,
         String currency,
-        Integer deliveryTime,
-        DeliveryRange deliveryRange,
+        Integer delivery_time,
+        DeliveryRange delivery_range,
         List<PackageData> packages,
-        AdditionalServices additionalServices,
+        AdditionalServices additional_services,
         CompanyInfo company,
-        Boolean hasError
+        Boolean has_error
 ) {}
 
 record AdditionalServices(
