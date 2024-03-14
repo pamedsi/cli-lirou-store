@@ -15,7 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lirou.store.DTOs.GlassesDTO;
+import com.lirou.store.domain.DTOs.GlassesDTO;
+import com.lirou.store.exceptions.NameExisteInDatabaseException;
 import com.lirou.store.exceptions.NotFoundException;
 import com.lirou.store.models.GlassesAvailability;
 import com.lirou.store.models.Message;
@@ -37,7 +38,7 @@ public class GlassesController{
 
     // Para a parte admin:
     @GetMapping
-    public ResponseEntity<Page<GlassesDTO>> getGlasses(@PageableDefault(page = 0, size = 24, direction = Sort.Direction.ASC, sort = { "title" }) Pageable pageable) {
+    public ResponseEntity<Page<GlassesDTO>> getGlasses(@PageableDefault(size = 24, direction = Sort.Direction.ASC, sort = { "title" }) Pageable pageable) {
         Page<GlassesDTO> glassesDTO = glassesService.getAllGlasses(pageable);
         return ResponseEntity.ok(glassesDTO);
     }
@@ -47,7 +48,7 @@ public class GlassesController{
         return ResponseEntity.ok(glassesDTO);
     }
     @PostMapping
-    public ResponseEntity<Message> postGlasses(@RequestBody @Valid GlassesDTO glassesDTO) {
+    public ResponseEntity<Message> postGlasses(@RequestBody @Valid GlassesDTO glassesDTO) throws NameExisteInDatabaseException {
         glassesService.saveNewGlasses(glassesDTO);
         return ResponseEntity.status(201).body(new Message(glassesDTO.title() + " salvo!"));
     }
@@ -65,7 +66,7 @@ public class GlassesController{
     }
   
     @PatchMapping("/{identifier}")
-    public ResponseEntity<?> changeAvailability(@PathVariable("identifier") String glassesIdentifier, @RequestBody GlassesAvailability availability) throws NotFoundException {
+    public ResponseEntity<?> changeAvailability(@PathVariable("identifier") String glassesIdentifier, @RequestBody @Valid GlassesAvailability availability) throws NotFoundException {
         String availableOrNot = glassesService.changeAvailability(glassesIdentifier, availability.available());
         return ResponseEntity.ok(new Message("Óculos " + availableOrNot));
     }

@@ -3,18 +3,18 @@ package com.lirou.store.models.superfrete;
 import java.math.BigDecimal;
 import java.util.List;
 
-public record SuperFretePackageDTO(
+public record SuperFretePackage(
         Integer id,
         String name,
         BigDecimal price,
         String discount,
         String currency,
-        Integer deliveryTime,
-        DeliveryRange deliveryRange,
+        Integer delivery_time,
+        DeliveryRange delivery_range,
         List<PackageData> packages,
-        AdditionalServices additionalServices,
+        AdditionalServices additional_services,
         CompanyInfo company,
-        Boolean hasError
+        Boolean has_error
 ) {}
 
 record AdditionalServices(
