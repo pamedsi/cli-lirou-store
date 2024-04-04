@@ -9,11 +9,12 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Setter
 @Getter
 @Entity
 @Table
-@RequiredArgsConstructor
 public class Glasses extends Product {
     @Column
     private String model;
@@ -25,13 +26,14 @@ public class Glasses extends Product {
     private String brand;
 
     public Glasses(GlassesDTO glassesDTO) {
-        setTitle(glassesDTO.title());
-        setPrice(glassesDTO.price());
-        setPic(glassesDTO.pic());
-        setAvailable(glassesDTO.available());
-        setColor(glassesDTO.color());
-        setModel(glassesDTO.model());
-        setBrand(glassesDTO.brand());
-        setFrame(glassesDTO.frame());
+        super(glassesDTO.title(), glassesDTO.price(), glassesDTO.pic(), glassesDTO.available());
+        this.model = glassesDTO.model();
+        this.frame = glassesDTO.frame();
+        this.color = glassesDTO.color();
+        this.brand = glassesDTO.brand();
+    }
+
+    public Glasses() {
+        super(null, null, null, null);
     }
 }

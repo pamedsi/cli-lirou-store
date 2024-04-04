@@ -1,17 +1,25 @@
 package com.lirou.store.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
 @MappedSuperclass
+@Data
 public abstract class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Setter(AccessLevel.NONE)
+    @Getter(AccessLevel.NONE)
     private Long id;
     @Column
+    @Setter(AccessLevel.NONE)
     private String identifier = UUID.randomUUID().toString();
     @Column (nullable = false)
     private String title;
@@ -26,56 +34,14 @@ public abstract class Product {
     @Column
     private Boolean deleted = false;
     @Column
+    @Setter (AccessLevel.NONE)
     private LocalDateTime createdAt = LocalDateTime.now();
-
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public BigDecimal getPrice() {
-        return price;
-    }
-
-    public String getPic() {
-        return pic;
-    }
-
-    public Boolean getAvailable() {
-        return available;
-    }
-
-    public Boolean getDeleted() {
-        return deleted;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-    public int getQuantityInStock() { return this.quantityInStock; }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public void setPrice(BigDecimal price) {
-        this.price = price;
-    }
-
-    public void setPic(String pic) {
-        this.pic = pic;
-    }
-
-    public void setAvailable(Boolean inStock) {
-        this.available = inStock;
-    }
-
-    public void setDeleted(Boolean deleted) {
-        this.deleted = deleted;
-    }
-    public void setQuantityInStock(int quantity) { this.quantityInStock = quantity; }
     public void decrementQuantity() { this.quantityInStock--; }
+
+    public Product(String title, BigDecimal price, String pic, Boolean available) {
+        this.title = title;
+        this.price = price;
+        this.pic = pic;
+        this.available = available;
+    }
 }
