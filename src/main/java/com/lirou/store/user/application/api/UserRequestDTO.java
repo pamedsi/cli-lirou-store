@@ -5,7 +5,7 @@ import com.lirou.store.user.domain.UserRole;
 import java.time.LocalDate;
 import java.util.Optional;
 
-public record NewUserRequestDTO(
+public record UserRequestDTO(
         String name,
         String email,
         String password,

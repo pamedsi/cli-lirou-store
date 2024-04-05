@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 public interface UserAPI {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<?> createUser(@RequestBody NewUserRequestDTO newUserRequestDTO);
+    ResponseEntity<?> createUser(@RequestBody UserRequestDTO userRequestDTO);
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -22,4 +22,8 @@ public interface UserAPI {
     @GetMapping("/{identifier}")
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<UserDetailsDTO> getUser(@RequestHeader("Authorization") String token, @PathVariable("identifier") String userIdentifier);
+
+    @PutMapping
+    @ResponseStatus(HttpStatus.OK)
+    ResponseEntity<?> editUser(@RequestHeader("Authorization") String token, @RequestBody UserRequestDTO userDTO);
 }

@@ -1,6 +1,6 @@
 package com.lirou.store.user.domain;
 
-import com.lirou.store.user.application.api.NewUserRequestDTO;
+import com.lirou.store.user.application.api.UserRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +22,7 @@ public class User {
     @Setter(AccessLevel.NONE)
     private Long id;
     @Column
+    @Setter(AccessLevel.NONE)
     private String identifier;
     @Column
     private String name;
@@ -40,23 +41,28 @@ public class User {
     @Setter(AccessLevel.NONE)
     private LocalDateTime userSince;
     @Column
+    @Setter(AccessLevel.NONE)
     private String passwordHash;
     @Column
     private Boolean deletedAccount;
 
-    public User(NewUserRequestDTO newUserRequestDTO) {
+    public User(UserRequestDTO userRequestDTO) {
         this.identifier = UUID.randomUUID().toString();
-        this.name = newUserRequestDTO.name();
-        this.email = newUserRequestDTO.email();
-        this.passwordHash = hash(newUserRequestDTO.password());
-        this.birthDate = newUserRequestDTO.birthDate();
-        this.CPF = newUserRequestDTO.CPF().orElse(null);
-        this.phoneNumber = newUserRequestDTO.phoneNumber().orElse(null);
+        this.name = userRequestDTO.name();
+        this.email = userRequestDTO.email();
+        this.passwordHash = hash(userRequestDTO.password());
+        this.birthDate = userRequestDTO.birthDate();
+        this.CPF = userRequestDTO.CPF().orElse(null);
+        this.phoneNumber = userRequestDTO.phoneNumber().orElse(null);
         this.role = UserRole.CLIENT;
         this.deletedAccount = false;
     }
 
     public long getAge() {
         return ChronoUnit.YEARS.between(this.birthDate, LocalDate.now());
+    }
+
+    public void updatePassword(String newPassword) {
+        this.passwordHash = hash(newPassword);
     }
 }

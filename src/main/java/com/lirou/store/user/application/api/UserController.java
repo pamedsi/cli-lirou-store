@@ -16,9 +16,9 @@ public class UserController implements UserAPI {
     private final UserApplicationService userApplicationService;
 
     @Override
-    public ResponseEntity<?> createUser(NewUserRequestDTO newUserRequestDTO) {
+    public ResponseEntity<?> createUser(UserRequestDTO userRequestDTO) {
         log.info("[starts] UserController -> createUser()");
-        userApplicationService.createUser(newUserRequestDTO);
+        userApplicationService.createUser(userRequestDTO);
         log.info("[ends] UserController -> createUser()");
         return ResponseEntity.status(201).body(new Message("Usuário criado com sucesso!"));
     }
@@ -37,5 +37,13 @@ public class UserController implements UserAPI {
         UserDetailsDTO user = userApplicationService.getUser(userIdentifier);
         log.info("[ends] UserController -> getUser()");
         return ResponseEntity.ok(user);
+    }
+
+    @Override
+    public ResponseEntity<?> editUser(String token, UserRequestDTO userDTO) {
+        log.info("[starts] UserController -> editUser()");
+        userApplicationService.editUser(token, userDTO);
+        log.info("[ends] UserController -> editUser()");
+        return ResponseEntity.accepted().build();
     }
 }
