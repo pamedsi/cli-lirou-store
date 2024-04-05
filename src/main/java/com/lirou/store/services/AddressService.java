@@ -1,7 +1,7 @@
 package com.lirou.store.services;
 
 import com.lirou.store.domain.DTOs.UserAddressDTO;
-import com.lirou.store.domain.entities.AddressEntity;
+import com.lirou.store.domain.entities.UserAddress;
 import com.lirou.store.domain.entities.User;
 import com.lirou.store.exceptions.NotFoundException;
 import com.lirou.store.repository.AddressRepository;
@@ -25,7 +25,7 @@ public class AddressService {
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new NotFoundException("Usuário não encontrado!")
         );
-        List<AddressEntity> addresses = addressRepository.findAllByOwnerAndDeletedFalse(user);
+        List<UserAddress> addresses = addressRepository.findAllByOwnerAndDeletedFalse(user);
         return UserAddressDTO.severalToDTO(addresses);
     }
 
@@ -34,47 +34,49 @@ public class AddressService {
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new NotFoundException("Usuário não encontrado!")
         );
-        AddressEntity newAddress = new AddressEntity(addressDTO, user);
+        UserAddress newAddress = new UserAddress(addressDTO, user);
         addressRepository.save(newAddress);
     }
 
     public void editAddress(String token, UserAddressDTO addressDTO, String identifier) throws NotFoundException {
+        UserAndAddress userAndAddress = checkIfUserOwnsTheAddress(token, identifier);
+        UserAddress addressToUpdate = userAndAddress.userAddress();
+        updateAddressFromDTO(addressToUpdate, addressDTO);
+        addressRepository.save(addressToUpdate);
+    }
+
+    private UserAndAddress checkIfUserOwnsTheAddress(String token, String identifier) throws NotFoundException {
         String email = tokenService.decode(token);
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new NotFoundException("Usuário não encontrado!")
         );
-        AddressEntity updatedAddress = addressRepository.findByIdentifier(identifier).orElseThrow(
+        UserAddress address = addressRepository.findByIdentifier(identifier).orElseThrow(
                 () -> new NotFoundException("Endereço não encontrado!")
         );
+        if (!address.getOwner().equals(user)) throw new BadRequestException("Usuário não é dono do endereço que está tentando alterar");
+        return new UserAndAddress(user, address);
+    }
 
-        if (!updatedAddress.getOwner().equals(user)) throw new BadRequestException("Usuário não é dono do endereço que está tentando alterar");
-
-        updatedAddress.setCity(addressDTO.city());
-        updatedAddress.setObs(addressDTO.obs());
-        updatedAddress.setComplement(addressDTO.complement());
-        updatedAddress.setNumber(addressDTO.number());
-        updatedAddress.setState(addressDTO.state());
-        updatedAddress.setDistrict(addressDTO.district());
-        updatedAddress.setStreet(addressDTO.street());
-        updatedAddress.setPostalCode(addressDTO.postalCode());
-
-        addressRepository.save(updatedAddress);
-
+    private void updateAddressFromDTO(UserAddress addressToBeUpdated, UserAddressDTO addressDTO){
+        addressToBeUpdated.setCity(addressDTO.city());
+        addressToBeUpdated.setObs(addressDTO.obs());
+        addressToBeUpdated.setComplement(addressDTO.complement());
+        addressToBeUpdated.setNumber(addressDTO.number());
+        addressToBeUpdated.setState(addressDTO.state());
+        addressToBeUpdated.setDistrict(addressDTO.district());
+        addressToBeUpdated.setStreet(addressDTO.street());
+        addressToBeUpdated.setPostalCode(addressDTO.postalCode());
     }
 
     public void deleteAddress(String token, String addressIdentifier) throws NotFoundException {
-        String email = tokenService.decode(token);
-        User user = userRepository.findByEmail(email).orElseThrow(
-                () -> new NotFoundException("Usuário não encontrado!")
-        );
-        AddressEntity addressToDelete = addressRepository.findByIdentifier(addressIdentifier).orElseThrow(
-                () -> new NotFoundException("Endereço não encontrado!")
-        );
-
-        if (!addressToDelete.getOwner().equals(user)) throw new BadRequestException("Usuário não é dono do endereço que está tentando alterar");
-
+        UserAndAddress userAndAddress = checkIfUserOwnsTheAddress(token, addressIdentifier);
+        UserAddress addressToDelete = userAndAddress.userAddress();
         addressToDelete.setDeleted(true);
         addressRepository.save(addressToDelete);
-
     }
 }
+
+record UserAndAddress(
+        User user,
+        UserAddress userAddress
+){}

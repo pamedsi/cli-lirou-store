@@ -1,6 +1,6 @@
 package com.lirou.store.domain.DTOs;
 
-import com.lirou.store.domain.entities.AddressEntity;
+import com.lirou.store.domain.entities.UserAddress;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ public record UserAddressDTO(
         String state,
         String obs
 ) {
-    public UserAddressDTO(AddressEntity address){
+    public UserAddressDTO(UserAddress address){
         this(
                 address.getIdentifier(),
                 address.getStreet(),
@@ -29,7 +29,7 @@ public record UserAddressDTO(
         );
     }
 
-    public static List<UserAddressDTO> severalToDTO(List<AddressEntity> addresses){
+    public static List<UserAddressDTO> severalToDTO(List<UserAddress> addresses){
         return addresses.stream().map(UserAddressDTO::new).toList();
     }
 }
