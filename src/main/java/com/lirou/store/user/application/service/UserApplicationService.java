@@ -14,9 +14,9 @@ public class UserApplicationService implements UserService{
     private final UserInfraRepository userInfraRepository;
 
     public void createUser(UserDTO userDTO) {
-        log.info("[starts] UserService -> createUser()");
+        log.info("[starts] UserApplicationService -> createUser()");
         User newUser = new User(userDTO);
         userInfraRepository.saveUser(newUser);
-        log.info("[ends UserService -> createUser()");
+        log.info("[ends UserApplicationService -> createUser()");
     }
 }

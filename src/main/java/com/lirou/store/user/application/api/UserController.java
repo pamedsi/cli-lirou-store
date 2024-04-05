@@ -5,22 +5,17 @@ import com.lirou.store.user.application.service.UserApplicationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
-@RestController
 @Log4j2
 @RequiredArgsConstructor
-public class UserController {
+public class UserController implements UserAPI{
     private final UserApplicationService userApplicationService;
 
-    @PostMapping("/api/user")
-    public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO){
-        log.info("[inicia] UserService -> createUser()");
+    @Override
+    public ResponseEntity<?> createUser(UserDTO userDTO) {
+        log.info("[inicia] UserController -> createUser()");
         userApplicationService.createUser(userDTO);
-        log.info("[finaliza] UserService -> createUser()");
+        log.info("[finaliza] UserController -> createUser()");
         return ResponseEntity.status(201).body(new Message("Usuário criado com sucesso!"));
     }
-
 }
