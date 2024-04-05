@@ -6,6 +6,8 @@ import com.lirou.store.user.domain.User;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -20,6 +22,14 @@ public class UserInfraRepository implements UserRepository {
         User user = userJPARepository.findByEmail(email).orElseThrow(() -> new NotFoundException("Usuário não encontrado!"));
         log.info("[ends] UserInfraRepository - getUserWithEmail()");
         return user;
+    }
+
+    @Override
+    public Page<User> getAllUsers(Pageable pageable) {
+        log.info("[starts] UserInfraRepository - getUserWithEmail()");
+        Page<User> users = userJPARepository.findAllByDeletedAccountFalse(pageable);
+        log.info("[ends] UserInfraRepository - getUserWithEmail()");
+        return users;
     }
 
     @Override

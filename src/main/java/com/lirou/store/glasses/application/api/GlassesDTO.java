@@ -1,5 +1,6 @@
 package com.lirou.store.glasses.application.api;
 
+import com.lirou.store.glasses.domain.Glasses;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -29,7 +30,7 @@ public record GlassesDTO(
         @NumberFormat
         BigDecimal price
 ) {
-        public GlassesDTO(com.lirou.store.glasses.domain.Glasses glassesEntity) {
+        public GlassesDTO(Glasses glassesEntity) {
                 this(
                         glassesEntity.getIdentifier(),
                         glassesEntity.getTitle(),
@@ -44,11 +45,11 @@ public record GlassesDTO(
                 );
         }
 
-        public static List<GlassesDTO> severalToDTO(List<com.lirou.store.glasses.domain.Glasses> glassesEntities) {
+        public static List<GlassesDTO> severalToDTO(List<Glasses> glassesEntities) {
                 return glassesEntities.stream().map(GlassesDTO::new).collect(Collectors.toList());
         }
 
-        public static Page<GlassesDTO> toPageDTO(Page<com.lirou.store.glasses.domain.Glasses> page) {
+        public static Page<GlassesDTO> toPageDTO(Page<Glasses> page) {
                 List<GlassesDTO> dtoList = severalToDTO(page.getContent());
                 return new PageImpl<>(dtoList, page.getPageable(), page.getTotalElements());
         }

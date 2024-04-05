@@ -1,6 +1,6 @@
 package com.lirou.store.user.domain;
 
-import com.lirou.store.user.application.api.UserDTO;
+import com.lirou.store.user.application.api.NewUserRequestDTO;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -41,18 +41,22 @@ public class User {
     private LocalDateTime userSince;
     @Column
     private String passwordHash;
+    @Column
+    private Boolean deletedAccount;
 
-    public User(UserDTO userDTO) {
+    public User(NewUserRequestDTO newUserRequestDTO) {
         this.identifier = UUID.randomUUID().toString();
-        this.name = userDTO.name();
-        this.email = userDTO.email();
-        this.passwordHash = hash(userDTO.password());
-        this.birthDate = userDTO.birthDate();
-        this.CPF = userDTO.CPF().orElse(null);
+        this.name = newUserRequestDTO.name();
+        this.email = newUserRequestDTO.email();
+        this.passwordHash = hash(newUserRequestDTO.password());
+        this.birthDate = newUserRequestDTO.birthDate();
+        this.CPF = newUserRequestDTO.CPF().orElse(null);
+        this.phoneNumber = newUserRequestDTO.phoneNumber().orElse(null);
         this.role = UserRole.CLIENT;
+        this.deletedAccount = false;
     }
 
     public long getAge() {
-        return ChronoUnit.DAYS.between(this.birthDate, LocalDate.now());
+        return ChronoUnit.YEARS.between(this.birthDate, LocalDate.now());
     }
 }
