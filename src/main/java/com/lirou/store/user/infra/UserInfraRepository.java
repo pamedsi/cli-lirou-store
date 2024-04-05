@@ -33,6 +33,14 @@ public class UserInfraRepository implements UserRepository {
     }
 
     @Override
+    public User getUserWithIdentifier(String userIdentifier) {
+        log.info("[starts] UserInfraRepository - getUserWithIdentifier()");
+        User user = userJPARepository.findByIdentifierAndDeletedAccountFalse(userIdentifier).orElseThrow(() -> new NotFoundException("Usuário não encontrado!"));
+        log.info("[ends] UserInfraRepository - getUserWithIdentifier()");
+        return user;
+    }
+
+    @Override
     public void saveUser(User user) {
         log.info("[starts] UserInfraRepository - saveUser()");
         userJPARepository.save(user);

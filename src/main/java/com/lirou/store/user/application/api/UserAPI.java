@@ -21,5 +21,5 @@ public interface UserAPI {
 
     @GetMapping("/{identifier}")
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<NewUserRequestDTO> getUser(@RequestHeader("Authorization") String token, @PathVariable("identifier") String userIdentifier);
+    ResponseEntity<UserDetailsDTO> getUser(@RequestHeader("Authorization") String token, @PathVariable("identifier") String userIdentifier);
 }

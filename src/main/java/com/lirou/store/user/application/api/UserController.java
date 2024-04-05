@@ -32,7 +32,10 @@ public class UserController implements UserAPI {
     }
 
     @Override
-    public ResponseEntity<NewUserRequestDTO> getUser(String token, String userIdentifier) {
-        return null;
+    public ResponseEntity<UserDetailsDTO> getUser(String token, String userIdentifier) {
+        log.info("[starts] UserController -> getUser()");
+        UserDetailsDTO user = userApplicationService.getUser(userIdentifier);
+        log.info("[ends] UserController -> getUser()");
+        return ResponseEntity.ok(user);
     }
 }

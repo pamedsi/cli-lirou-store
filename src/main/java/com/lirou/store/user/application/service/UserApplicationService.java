@@ -31,4 +31,13 @@ public class UserApplicationService implements UserService {
         log.info("[ends] UserApplicationService -> getUsers()");
         return usersDTO;
     }
+
+    @Override
+    public UserDetailsDTO getUser(String userIdentifier) {
+        log.info("[starts] UserApplicationService -> getUser()");
+        User user = userInfraRepository.getUserWithIdentifier(userIdentifier);
+        UserDetailsDTO userDTO = new UserDetailsDTO(user);
+        log.info("[ends] UserApplicationService -> getUser()");
+        return userDTO;
+    }
 }
