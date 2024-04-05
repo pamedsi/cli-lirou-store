@@ -1,6 +1,6 @@
 package com.lirou.store.services;
 
-import com.lirou.store.superfrete.application.service.SuperFreteService;
+import com.lirou.store.superfrete.application.service.SuperFreteApplicationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -22,10 +22,10 @@ import com.lirou.store.superfrete.application.api.models.AbortingRequest;
 @AutoConfigureMockMvc
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-class SuperFreteServiceTest {
+class SuperFreteApplicationServiceTest {
 
 	@Autowired
-	private SuperFreteService superFreteService;
+	private SuperFreteApplicationService superFreteApplicationService;
 	
 	@Value("${CEP}")
 	private String from;
@@ -41,7 +41,7 @@ class SuperFreteServiceTest {
 		//ReflectionTestUtils.setField(superFreteService, "from", from);
 		
 		//assert
-		Assertions.assertEquals(2, superFreteService.calculateShipping("01140080").size());
+		Assertions.assertEquals(2, superFreteApplicationService.calculateShipping("01140080").size());
 	}
 	
 	@Test
@@ -51,7 +51,7 @@ class SuperFreteServiceTest {
 		String cep = null;
 		
 		//assert
-		Assertions.assertThrows(BadRequestExceptions.class,() -> superFreteService.calculateShipping(cep));
+		Assertions.assertThrows(BadRequestExceptions.class,() -> superFreteApplicationService.calculateShipping(cep));
 	}
 	
 //	@Test

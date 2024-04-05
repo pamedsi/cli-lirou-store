@@ -18,7 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.lirou.store.superfrete.application.service.SuperFreteService;
+import com.lirou.store.superfrete.application.service.SuperFreteApplicationService;
 
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.core.MediaType;
@@ -32,7 +32,7 @@ class SuperFreteControllerTest {
 	private MockMvc mvc;
 	
 	@MockBean
-	private SuperFreteService superFreteService;
+	private SuperFreteApplicationService superFreteApplicationService;
 	
 	
 	//****************************************** calcular frete
@@ -41,7 +41,7 @@ class SuperFreteControllerTest {
 		
 		//arrange
 		String id = "12121221";
-		BDDMockito.given(superFreteService.calculateShipping(id)).willReturn(new ArrayList<>());
+		BDDMockito.given(superFreteApplicationService.calculateShipping(id)).willReturn(new ArrayList<>());
 		//act
 		 MockHttpServletResponse response = mvc.perform(get("/api/shipping/calculate/{identifier}", id)
 					.contentType(MediaType.APPLICATION_JSON)
@@ -57,7 +57,7 @@ class SuperFreteControllerTest {
 		
 		//arrange
 		String id = "12121221";
-		BDDMockito.given(superFreteService.calculateShipping(id)).willThrow(BadRequestException.class);
+		BDDMockito.given(superFreteApplicationService.calculateShipping(id)).willThrow(BadRequestException.class);
 		//act
 		 MockHttpServletResponse response = mvc.perform(get("/api/shipping/calculate/{identifier}", id)
 					.contentType(MediaType.APPLICATION_JSON)

@@ -14,47 +14,47 @@ import com.lirou.store.superfrete.application.api.models.OrdersIDs;
 import com.lirou.store.superfrete.application.api.models.PrintInfo;
 import com.lirou.store.superfrete.application.api.models.ShippingOfOrder;
 import com.lirou.store.superfrete.application.api.models.ShippingPrices;
-import com.lirou.store.superfrete.application.service.SuperFreteService;
+import com.lirou.store.superfrete.application.service.SuperFreteApplicationService;
 
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 @RequiredArgsConstructor
 public class SuperFreteController implements SuperFreteAPI {
-    private final SuperFreteService superFreteService;
+    private final SuperFreteApplicationService superFreteApplicationService;
 
     @Override
     public ResponseEntity<?> calculateShipping(String postalCode) throws BadRequestExceptions {
         log.info("[Inicia] SuperFreteService - calculateShipping()");
-        List<ShippingPrices> body = superFreteService.calculateShipping(postalCode);
+        List<ShippingPrices> body = superFreteApplicationService.calculateShipping(postalCode);
         log.info("[Finaliza] SuperFreteService - calculateShipping()");
         return ResponseEntity.ok(body);
     }
     @Override
     public ResponseEntity<ShippingOfOrder> sendShippingToSuperFrete(OrderInfoFromCustomer orderInfo) {
         log.info("[Inicia] SuperFreteService - getPrintableLabel()");
-        ShippingOfOrder response = superFreteService.getPrintableLabel(orderInfo);
+        ShippingOfOrder response = superFreteApplicationService.getPrintableLabel(orderInfo);
         log.info("[Finaliza] SuperFreteService - getPrintableLabel()");
         return ResponseEntity.ok(response);
     }
     @Override
     public ResponseEntity<DeliveryInfo> getOrderInfo(String orderID) {
         log.info("[Inicia] SuperFreteService - getDeliveryInfo()");
-        DeliveryInfo response = superFreteService.getDeliveryInfo(orderID);
+        DeliveryInfo response = superFreteApplicationService.getDeliveryInfo(orderID);
         log.info("[Finaliza] SuperFreteService - getDeliveryInfo()");
         return ResponseEntity.ok(response);
     }
     @Override
     public ResponseEntity<PrintInfo> getPrintableLabel(OrdersIDs orders) {
         log.info("[Inicia] SuperFreteService - getPrintableLabel()");
-        PrintInfo response = superFreteService.getPrintableLabel(orders);
+        PrintInfo response = superFreteApplicationService.getPrintableLabel(orders);
         log.info("[Finaliza] SuperFreteService - getPrintableLabel()");
         return ResponseEntity.ok(response);
     }
     @Override
     public ResponseEntity<OrderCancellationResponse> cancelOrder( AbortingRequest body) {
         log.info("[Inicia] SuperFreteService - cancelOrder()");
-        OrderCancellationResponse response = superFreteService.cancelOrder(body);
+        OrderCancellationResponse response = superFreteApplicationService.cancelOrder(body);
         log.info("[Finaliza] SuperFreteService - cancelOrder()");
         return ResponseEntity.ok(response);
     }
