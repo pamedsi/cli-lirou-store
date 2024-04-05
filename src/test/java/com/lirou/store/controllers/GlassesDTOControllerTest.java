@@ -21,7 +21,7 @@ import jakarta.ws.rs.core.MediaType;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
-class GlassesControllerTest {
+class GlassesDTOControllerTest {
 
 	@Autowired
 	private MockMvc mvc;

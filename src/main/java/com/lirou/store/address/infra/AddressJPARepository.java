@@ -11,5 +11,5 @@ import java.util.Optional;
 @Repository
 public interface AddressJPARepository extends JpaRepository <UserAddress, Long> {
     List<UserAddress> findAllByOwnerAndDeletedFalse(User owner);
-    Optional<UserAddress> findByIdentifier(String identifier);
+    Optional<UserAddress> findByIdentifierAndDeletedFalse(String identifier);
 }

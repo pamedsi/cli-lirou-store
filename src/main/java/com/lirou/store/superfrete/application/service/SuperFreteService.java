@@ -33,7 +33,7 @@ import com.lirou.store.superfrete.application.api.models.shippingInfToSendToSupe
 
 import lombok.extern.log4j.Log4j2;
 
-import static com.lirou.store.address.application.service.AddressService.isAValidePostalCode;
+import static com.lirou.store.address.application.service.AddressApplicationService.isAValidePostalCode;
 
 @Service
 @Log4j2

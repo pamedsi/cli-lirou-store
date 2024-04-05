@@ -1,7 +1,6 @@
 package com.lirou.store.search.application.service;
 
 import com.lirou.store.glasses.application.api.GlassesDTO;
-import com.lirou.store.glasses.domain.Glasses;
 import com.lirou.store.search.infra.GlassesSearchRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -20,7 +19,7 @@ public class SearchService {
 
     public Page<GlassesDTO> searchProductWithQuery(String query, Pageable pageable) {
         log.info("[Inicia] SearchRepository - searchGlasses()");
-        Page<Glasses> glassesList = searchRepository.searchGlasses(query, pageable);
+        Page<com.lirou.store.glasses.domain.Glasses> glassesList = searchRepository.searchGlasses(query, pageable);
         // Implementar buscas a outros tipos de produtos aqui também.
         log.info("[Finaliza] SearchRepository - searchGlasses()");
         return GlassesDTO.toPageDTO(glassesList);

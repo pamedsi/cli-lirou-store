@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lirou.store.handler.exceptions.NameExisteInDatabaseException;
 import com.lirou.store.handler.exceptions.NotFoundException;
 import com.lirou.store.models.Message;
 import com.lirou.store.glasses.application.service.GlassesService;
@@ -42,27 +41,24 @@ public class GlassesController{
     }
     @GetMapping("/{identifier}")
     public ResponseEntity<GlassesDTO> findSingleGlasses(@PathVariable("identifier") @ValidIdentifier String identifier) throws NotFoundException {
-        GlassesDTO glassesDTO = glassesService.findGlassesByIdentifier(identifier);
+        GlassesDTO glassesDTO = glassesService.getGlassesWithIdentifier(identifier);
         return ResponseEntity.ok(glassesDTO);
     }
     @PostMapping
-    public ResponseEntity<Message> postGlasses(@RequestBody @Valid GlassesDTO glassesDTO) throws NameExisteInDatabaseException {
+    public ResponseEntity<Message> postGlasses(@RequestBody @Valid GlassesDTO glassesDTO) {
         glassesService.saveNewGlasses(glassesDTO);
         return ResponseEntity.status(201).body(new Message(glassesDTO.title() + " salvo!"));
     }
-
     @PutMapping("/{identifier}")
     public ResponseEntity<?> putGlasses(@RequestBody @Valid GlassesDTO glassesDTO, @PathVariable("identifier") String glassesIdentifier) throws NotFoundException {
-        glassesService.updateGlasses(glassesIdentifier, glassesDTO);
+        glassesService.editGlasses(glassesIdentifier, glassesDTO);
         return ResponseEntity.ok(new Message("Atualização feita com sucesso!"));
     }
-
     @DeleteMapping("/{identifier}")
     public ResponseEntity<?> deleteGlasses(@PathVariable("identifier") String glassesIdentifier) throws NotFoundException {
         String titleOfDeletedGlasses = glassesService.removeGlasses(glassesIdentifier);
         return ResponseEntity.ok(new Message(titleOfDeletedGlasses + " deletado!"));
     }
-  
     @PatchMapping("/{identifier}")
     public ResponseEntity<?> changeAvailability(@PathVariable("identifier") String glassesIdentifier, @RequestBody @Valid GlassesAvailability availability) throws NotFoundException {
         String availableOrNot = glassesService.changeAvailability(glassesIdentifier, availability.available());

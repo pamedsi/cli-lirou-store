@@ -1,7 +1,7 @@
 package com.lirou.store.user.application.api;
 
 import com.lirou.store.models.Message;
-import com.lirou.store.user.application.service.UserService;
+import com.lirou.store.user.application.service.UserApplicationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @Log4j2
 @RequiredArgsConstructor
 public class UserController {
-    private final UserService userService;
+    private final UserApplicationService userApplicationService;
 
     @PostMapping("/api/user")
     public ResponseEntity<?> createUser(@RequestBody UserDTO userDTO){
         log.info("[inicia] UserService -> createUser()");
-        userService.createUser(userDTO);
+        userApplicationService.createUser(userDTO);
         log.info("[finaliza] UserService -> createUser()");
         return ResponseEntity.status(201).body(new Message("Usuário criado com sucesso!"));
     }
