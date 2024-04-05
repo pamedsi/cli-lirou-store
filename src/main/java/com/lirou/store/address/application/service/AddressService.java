@@ -1,10 +1,10 @@
-package com.lirou.store.services;
+package com.lirou.store.address.application.service;
 
-import com.lirou.store.domain.DTOs.UserAddressDTO;
-import com.lirou.store.domain.entities.UserAddress;
+import com.lirou.store.address.application.api.UserAddressDTO;
+import com.lirou.store.address.domain.UserAddress;
 import com.lirou.store.user.domain.User;
 import com.lirou.store.exceptions.NotFoundException;
-import com.lirou.store.repository.AddressRepository;
+import com.lirou.store.address.infra.AddressRepository;
 import com.lirou.store.user.infra.UserRepository;
 import com.lirou.store.security.TokenService;
 import jakarta.ws.rs.BadRequestException;

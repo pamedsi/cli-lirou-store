@@ -1,4 +1,4 @@
-package com.lirou.store.enums;
+package com.lirou.store.address.domain;
 
 
 public enum State {

@@ -1,4 +1,4 @@
-package com.lirou.store.repository.searches;
+package com.lirou.store.search.infra;
 
 
 import com.lirou.store.glasses.domain.Glasses;

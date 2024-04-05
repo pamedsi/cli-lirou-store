@@ -1,6 +1,6 @@
-package com.lirou.store.domain.DTOs;
+package com.lirou.store.address.application.api;
 
-import com.lirou.store.domain.entities.UserAddress;
+import com.lirou.store.address.domain.UserAddress;
 
 import java.util.List;
 

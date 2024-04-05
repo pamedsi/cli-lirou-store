@@ -1,4 +1,4 @@
-package com.lirou.store.domain;
+package com.lirou.store.models;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

@@ -1,7 +1,7 @@
 package com.lirou.store.glasses.domain;
 
 import com.lirou.store.glasses.application.api.GlassesDTO;
-import com.lirou.store.domain.Product;
+import com.lirou.store.models.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;

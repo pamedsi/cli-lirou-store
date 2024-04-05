@@ -1,7 +1,7 @@
-package com.lirou.store.controllers;
+package com.lirou.store.search.application.api;
 
 import com.lirou.store.glasses.application.api.GlassesDTO;
-import com.lirou.store.services.SearchService;
+import com.lirou.store.search.application.service.SearchService;
 
 import lombok.RequiredArgsConstructor;
 
