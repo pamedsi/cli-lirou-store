@@ -4,7 +4,7 @@ import com.lirou.store.address.application.api.UserAddressDTO;
 import com.lirou.store.address.domain.UserAddress;
 import com.lirou.store.user.domain.User;
 import com.lirou.store.handler.exceptions.NotFoundException;
-import com.lirou.store.address.infra.AddressRepository;
+import com.lirou.store.address.infra.AddressJPARepository;
 import com.lirou.store.user.infra.UserRepository;
 import com.lirou.store.security.TokenService;
 import jakarta.ws.rs.BadRequestException;
@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class AddressService {
     private final UserRepository userRepository;
-    private final AddressRepository addressRepository;
+    private final AddressJPARepository addressJPARepository;
     private final TokenService tokenService;
     public List<UserAddressDTO> getAllAddresses(String token) throws NotFoundException {
         String email = tokenService.decode(token);
@@ -27,7 +27,7 @@ public class AddressService {
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new NotFoundException("Usuário não encontrado!")
         );
-        List<UserAddress> addresses = addressRepository.findAllByOwnerAndDeletedFalse(user);
+        List<UserAddress> addresses = addressJPARepository.findAllByOwnerAndDeletedFalse(user);
         return UserAddressDTO.severalToDTO(addresses);
     }
 
@@ -37,14 +37,14 @@ public class AddressService {
                 () -> new NotFoundException("Usuário não encontrado!")
         );
         UserAddress newAddress = new UserAddress(addressDTO, user);
-        addressRepository.save(newAddress);
+        addressJPARepository.save(newAddress);
     }
 
     public void editAddress(String token, UserAddressDTO addressDTO, String identifier) throws NotFoundException {
         UserAndAddress userAndAddress = checkIfUserOwnsTheAddress(token, identifier);
         UserAddress addressToUpdate = userAndAddress.userAddress();
         updateAddressFromDTO(addressToUpdate, addressDTO);
-        addressRepository.save(addressToUpdate);
+        addressJPARepository.save(addressToUpdate);
     }
 
     private UserAndAddress checkIfUserOwnsTheAddress(String token, String identifier) throws NotFoundException {
@@ -52,7 +52,7 @@ public class AddressService {
         User user = userRepository.findByEmail(email).orElseThrow(
                 () -> new NotFoundException("Usuário não encontrado!")
         );
-        UserAddress address = addressRepository.findByIdentifier(identifier).orElseThrow(
+        UserAddress address = addressJPARepository.findByIdentifier(identifier).orElseThrow(
                 () -> new NotFoundException("Endereço não encontrado!")
         );
         if (!address.getOwner().equals(user)) throw new BadRequestException("Usuário não é dono do endereço que está tentando alterar");
@@ -74,7 +74,7 @@ public class AddressService {
         UserAndAddress userAndAddress = checkIfUserOwnsTheAddress(token, addressIdentifier);
         UserAddress addressToDelete = userAndAddress.userAddress();
         addressToDelete.setDeleted(true);
-        addressRepository.save(addressToDelete);
+        addressJPARepository.save(addressToDelete);
     }
 
     // Peguei essa regex no Fremework Demoiselle, mexi um pouco no código, mas o original está na URL abaixo:

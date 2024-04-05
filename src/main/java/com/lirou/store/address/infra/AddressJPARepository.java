@@ -9,8 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface AddressRepository extends JpaRepository <UserAddress, Long> {
+public interface AddressJPARepository extends JpaRepository <UserAddress, Long> {
     List<UserAddress> findAllByOwnerAndDeletedFalse(User owner);
-
     Optional<UserAddress> findByIdentifier(String identifier);
 }
