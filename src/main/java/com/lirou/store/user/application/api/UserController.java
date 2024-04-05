@@ -17,17 +17,17 @@ public class UserController implements UserAPI {
 
     @Override
     public ResponseEntity<?> createUser(NewUserRequestDTO newUserRequestDTO) {
-        log.info("[inicia] UserController -> createUser()");
+        log.info("[starts] UserController -> createUser()");
         userApplicationService.createUser(newUserRequestDTO);
-        log.info("[finaliza] UserController -> createUser()");
+        log.info("[ends] UserController -> createUser()");
         return ResponseEntity.status(201).body(new Message("Usuário criado com sucesso!"));
     }
 
     @Override
     public ResponseEntity<Page<UserDetailsDTO>> getUsers(String token, Pageable pageable) {
-        log.info("[inicia] UserController -> getUsers()");
+        log.info("[starts] UserController -> getUsers()");
         Page<UserDetailsDTO> page = userApplicationService.getUsers(pageable);
-        log.info("[finaliza] UserController -> getUsers()");
+        log.info("[ends] UserController -> getUsers()");
         return ResponseEntity.ok(page);
     }
 
