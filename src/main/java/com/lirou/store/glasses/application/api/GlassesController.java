@@ -15,11 +15,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lirou.store.exceptions.NameExisteInDatabaseException;
-import com.lirou.store.exceptions.NotFoundException;
+import com.lirou.store.handler.exceptions.NameExisteInDatabaseException;
+import com.lirou.store.handler.exceptions.NotFoundException;
 import com.lirou.store.models.Message;
 import com.lirou.store.glasses.application.service.GlassesService;
-import com.lirou.store.validation.identifierValidator.ValidIdentifier;
+import com.lirou.store.shared.validation.identifierValidator.ValidIdentifier;
 
 import jakarta.validation.Valid;
 

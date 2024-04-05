@@ -1,6 +1,6 @@
 package com.lirou.store.address.application.api;
 
-import com.lirou.store.exceptions.NotFoundException;
+import com.lirou.store.handler.exceptions.NotFoundException;
 import com.lirou.store.address.application.service.AddressService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;

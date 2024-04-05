@@ -18,7 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.lirou.store.services.SuperFreteService;
+import com.lirou.store.superfrete.application.service.SuperFreteService;
 
 import jakarta.ws.rs.BadRequestException;
 import jakarta.ws.rs.core.MediaType;

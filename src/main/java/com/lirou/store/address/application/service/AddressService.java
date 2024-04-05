@@ -3,7 +3,7 @@ package com.lirou.store.address.application.service;
 import com.lirou.store.address.application.api.UserAddressDTO;
 import com.lirou.store.address.domain.UserAddress;
 import com.lirou.store.user.domain.User;
-import com.lirou.store.exceptions.NotFoundException;
+import com.lirou.store.handler.exceptions.NotFoundException;
 import com.lirou.store.address.infra.AddressRepository;
 import com.lirou.store.user.infra.UserRepository;
 import com.lirou.store.security.TokenService;
@@ -12,6 +12,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -73,6 +75,17 @@ public class AddressService {
         UserAddress addressToDelete = userAndAddress.userAddress();
         addressToDelete.setDeleted(true);
         addressRepository.save(addressToDelete);
+    }
+
+    // Peguei essa regex no Fremework Demoiselle, mexi um pouco no código, mas o original está na URL abaixo:
+    //    https://github.com/demoiselle/validation/blob/master/impl/src/main/java/br/gov/frameworkdemoiselle/validation/internal/validator/CepValidator.java
+
+    public static boolean isAValidePostalCode(String cep) {
+        if (cep == null || cep.isEmpty()) return false;
+
+        Pattern pattern = Pattern.compile("^(([0-9]{2}\\.[0-9]{3}-[0-9]{3})|([0-9]{2}[0-9]{3}-[0-9]{3})|([0-9]{8}))$");
+        Matcher matcher = pattern.matcher(cep);
+        return matcher.find();
     }
 }
 

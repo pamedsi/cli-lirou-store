@@ -1,5 +1,6 @@
 package com.lirou.store.services;
 
+import com.lirou.store.superfrete.application.service.SuperFreteService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.MethodOrderer;
@@ -12,8 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.lirou.store.exceptions.BadRequestExceptions;
-import com.lirou.store.models.superfrete.AbortingRequest;
+import com.lirou.store.handler.exceptions.BadRequestExceptions;
+import com.lirou.store.superfrete.application.api.models.AbortingRequest;
 
 
 

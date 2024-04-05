@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 
 import com.lirou.store.glasses.application.api.GlassesDTO;
 import com.lirou.store.glasses.domain.Glasses;
-import com.lirou.store.exceptions.NameExisteInDatabaseException;
-import com.lirou.store.exceptions.NotFoundException;
+import com.lirou.store.handler.exceptions.NameExisteInDatabaseException;
+import com.lirou.store.handler.exceptions.NotFoundException;
 import com.lirou.store.glasses.infra.GlassesRepository;
 
 @Service
