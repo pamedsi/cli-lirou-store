@@ -46,4 +46,12 @@ public class UserController implements UserAPI {
         log.info("[ends] UserController -> editUser()");
         return ResponseEntity.accepted().build();
     }
+
+    @Override
+    public ResponseEntity<?> deleteUser(String token, String userIdentifier) {
+        log.info("[starts] UserController -> deleteUser()");
+        userApplicationService.deleteUser(token, userIdentifier);
+        log.info("[ends] UserController -> deleteUser()");
+        return ResponseEntity.accepted().build();
+    }
 }

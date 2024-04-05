@@ -26,4 +26,8 @@ public interface UserAPI {
     @PutMapping
     @ResponseStatus(HttpStatus.OK)
     ResponseEntity<?> editUser(@RequestHeader("Authorization") String token, @RequestBody UserRequestDTO userDTO);
+
+    @DeleteMapping("/{identifier}")
+    @ResponseStatus(HttpStatus.ACCEPTED)
+    ResponseEntity<?> deleteUser(@RequestHeader("Authorization") String token, @PathVariable("identifier") String userIdentifier);
 }

@@ -4,6 +4,7 @@ import com.lirou.store.security.TokenService;
 import com.lirou.store.user.application.api.UserRequestDTO;
 import com.lirou.store.user.application.api.UserDetailsDTO;
 import com.lirou.store.user.domain.User;
+import com.lirou.store.user.domain.UserRole;
 import com.lirou.store.user.infra.UserInfraRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -49,6 +50,16 @@ public class UserApplicationService implements UserService {
         userInfraRepository.saveUser(user);
         log.info("[ends] UserApplicationService -> editUser()");
     }
+    @Override
+    public void deleteUser(String token, String userIdentifier) {
+        log.info("[starts] UserApplicationService -> deleteUser()");
+        String email = tokenService.decode(token);
+        User userWhoIsTrying = userInfraRepository.getUserWithEmail(email);
+        User userToBeDeleted = checkIfCanDelete(userWhoIsTrying, userIdentifier);
+        userToBeDeleted.setDeletedAccount(true);
+        userInfraRepository.saveUser(userToBeDeleted);
+        log.info("[ends] UserApplicationService -> deleteUser()");
+    }
     private void updateUserFromDTO(User user, UserRequestDTO userDTO) {
         user.setName(userDTO.name());
         user.setEmail(userDTO.email());
@@ -56,5 +67,12 @@ public class UserApplicationService implements UserService {
         user.setBirthDate(userDTO.birthDate());
         user.setCPF(userDTO.CPF().orElse(null));
         user.updatePassword(userDTO.password());
+    }
+    private User checkIfCanDelete(User userWhoTriedToDelete, String userIdentifierToBeDeleted) {
+        User userToBeDeleted = userInfraRepository.getUserWithIdentifier(userIdentifierToBeDeleted);
+        boolean userWhoTriedIsTheOneToBeDeleted = userToBeDeleted.equals(userWhoTriedToDelete);
+        boolean userWhoTriedIsAdmin = userWhoTriedToDelete.getRole() == UserRole.ADMIN;
+        if (!userWhoTriedIsAdmin && !userWhoTriedIsTheOneToBeDeleted) throw new RuntimeException("Você não pode excluir este usuário");
+        return userToBeDeleted;
     }
 }

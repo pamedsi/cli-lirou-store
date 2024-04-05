@@ -10,4 +10,5 @@ public interface UserService {
     Page<UserDetailsDTO> getUsers(Pageable pageable);
     UserDetailsDTO getUser(String userIdentifier);
     void editUser(String token, UserRequestDTO userDTO);
+    void deleteUser(String token, String userIdentifier);
 }
