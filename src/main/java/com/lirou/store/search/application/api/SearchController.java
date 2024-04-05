@@ -1,7 +1,7 @@
 package com.lirou.store.search.application.api;
 
 import com.lirou.store.glasses.application.api.GlassesDTO;
-import com.lirou.store.search.application.service.SearchService;
+import com.lirou.store.search.application.service.SearchApplicationService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -17,12 +17,12 @@ import org.springframework.web.bind.annotation.*;
 @Log4j2
 public class SearchController {
 
-    private final SearchService searchService;
+    private final SearchApplicationService searchApplicationService;
 
     @GetMapping
     public ResponseEntity<?> searchProduct(@RequestParam(value = "query", required = false, defaultValue = "") String query, @PageableDefault(size = 24) Pageable pageable) {
         log.info("[Inicia] SearchService - searchProductWithQuery()");
-        Page<GlassesDTO> result = searchService.searchProductWithQuery(query, pageable);
+        Page<GlassesDTO> result = searchApplicationService.searchProductWithQuery(query, pageable);
         log.info("[Finaliza] SearchService - searchProductWithQuery()");
         return ResponseEntity.ok(result);
     }
