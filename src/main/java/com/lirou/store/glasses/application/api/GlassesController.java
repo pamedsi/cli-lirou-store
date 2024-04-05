@@ -1,4 +1,4 @@
-package com.lirou.store.controllers;
+package com.lirou.store.glasses.application.api;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,12 +15,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.lirou.store.domain.DTOs.GlassesDTO;
 import com.lirou.store.exceptions.NameExisteInDatabaseException;
 import com.lirou.store.exceptions.NotFoundException;
-import com.lirou.store.models.GlassesAvailability;
 import com.lirou.store.models.Message;
-import com.lirou.store.services.GlassesService;
+import com.lirou.store.glasses.application.service.GlassesService;
 import com.lirou.store.validation.identifierValidator.ValidIdentifier;
 
 import jakarta.validation.Valid;

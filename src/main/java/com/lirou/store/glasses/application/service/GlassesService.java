@@ -1,14 +1,14 @@
-package com.lirou.store.services;
+package com.lirou.store.glasses.application.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import com.lirou.store.domain.DTOs.GlassesDTO;
-import com.lirou.store.domain.entities.Glasses;
+import com.lirou.store.glasses.application.api.GlassesDTO;
+import com.lirou.store.glasses.domain.Glasses;
 import com.lirou.store.exceptions.NameExisteInDatabaseException;
 import com.lirou.store.exceptions.NotFoundException;
-import com.lirou.store.repository.GlassesRepository;
+import com.lirou.store.glasses.infra.GlassesRepository;
 
 @Service
 public class GlassesService {

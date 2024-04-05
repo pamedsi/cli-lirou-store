@@ -1,4 +1,4 @@
-package com.lirou.store.repository;
+package com.lirou.store.glasses.infra;
 
 import java.util.Optional;
 
@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
 
-import com.lirou.store.domain.entities.Glasses;
+import com.lirou.store.glasses.domain.Glasses;
 
 @Repository
 public interface GlassesRepository extends JpaRepository<Glasses, Long>, PagingAndSortingRepository<Glasses, Long> {

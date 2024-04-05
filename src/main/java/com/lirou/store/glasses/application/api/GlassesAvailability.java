@@ -1,4 +1,4 @@
-package com.lirou.store.models;
+package com.lirou.store.glasses.application.api;
 
 import jakarta.validation.constraints.NotNull;
 

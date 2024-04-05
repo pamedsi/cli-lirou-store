@@ -1,7 +1,7 @@
 package com.lirou.store.repository.searches;
 
 
-import com.lirou.store.domain.entities.Glasses;
+import com.lirou.store.glasses.domain.Glasses;
 import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;

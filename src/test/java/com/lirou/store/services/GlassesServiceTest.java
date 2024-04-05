@@ -3,6 +3,7 @@ package com.lirou.store.services;
 import java.math.BigDecimal;
 import java.util.Optional;
 
+import com.lirou.store.glasses.application.service.GlassesService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,11 +16,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import com.lirou.store.domain.DTOs.GlassesDTO;
-import com.lirou.store.domain.entities.Glasses;
+import com.lirou.store.glasses.application.api.GlassesDTO;
+import com.lirou.store.glasses.domain.Glasses;
 import com.lirou.store.exceptions.NameExisteInDatabaseException;
 import com.lirou.store.exceptions.NotFoundException;
-import com.lirou.store.repository.GlassesRepository;
+import com.lirou.store.glasses.infra.GlassesRepository;
 
 @ExtendWith(MockitoExtension.class)
 public class GlassesServiceTest {

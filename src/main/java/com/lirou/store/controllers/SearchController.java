@@ -1,6 +1,6 @@
 package com.lirou.store.controllers;
 
-import com.lirou.store.domain.DTOs.GlassesDTO;
+import com.lirou.store.glasses.application.api.GlassesDTO;
 import com.lirou.store.services.SearchService;
 
 import lombok.RequiredArgsConstructor;
