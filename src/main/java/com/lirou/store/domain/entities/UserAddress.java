@@ -2,6 +2,7 @@ package com.lirou.store.domain.entities;
 
 import com.lirou.store.enums.State;
 import com.lirou.store.domain.DTOs.UserAddressDTO;
+import com.lirou.store.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 

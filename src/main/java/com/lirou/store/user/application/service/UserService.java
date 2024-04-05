@@ -1,8 +1,8 @@
-package com.lirou.store.services;
+package com.lirou.store.user.application.service;
 
-import com.lirou.store.domain.DTOs.UserDTO;
-import com.lirou.store.domain.entities.User;
-import com.lirou.store.repository.UserRepository;
+import com.lirou.store.user.application.api.UserDTO;
+import com.lirou.store.user.domain.User;
+import com.lirou.store.user.infra.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;

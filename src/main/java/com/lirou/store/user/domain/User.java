@@ -1,7 +1,6 @@
-package com.lirou.store.domain.entities;
+package com.lirou.store.user.domain;
 
-import com.lirou.store.enums.UserRole;
-import com.lirou.store.domain.DTOs.UserDTO;
+import com.lirou.store.user.application.api.UserDTO;
 import jakarta.persistence.*;
 import lombok.*;
 

@@ -1,7 +1,7 @@
 package com.lirou.store.repository;
 
 import com.lirou.store.domain.entities.UserAddress;
-import com.lirou.store.domain.entities.User;
+import com.lirou.store.user.domain.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
