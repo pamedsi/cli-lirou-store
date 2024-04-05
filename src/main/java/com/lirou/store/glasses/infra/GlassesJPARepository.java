@@ -12,7 +12,6 @@ import com.lirou.store.glasses.domain.Glasses;
 
 @Repository
 public interface GlassesJPARepository extends JpaRepository<Glasses, Long>, PagingAndSortingRepository<Glasses, Long> {
-
     Page<Glasses> findAllByDeletedFalse(Pageable pageable);
     Boolean existsByTitleAndDeletedFalse(String title);
     Optional<Glasses> findByIdentifierAndDeletedFalse(String glassesIdentifier);

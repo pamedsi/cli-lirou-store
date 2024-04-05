@@ -14,7 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.lirou.store.glasses.application.service.GlassesService;
+import com.lirou.store.glasses.application.service.GlassesApplicationService;
 
 import jakarta.ws.rs.core.MediaType;
 
@@ -27,7 +27,7 @@ class GlassesDTOControllerTest {
 	private MockMvc mvc;
 	
 	@MockBean
-	private GlassesService glassesService;
+	private GlassesApplicationService glassesApplicationService;
 	
 	//testando metodo de modificar a disponibilidade
 	@Test

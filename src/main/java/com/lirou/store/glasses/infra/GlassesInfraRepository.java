@@ -4,13 +4,12 @@ import com.lirou.store.glasses.application.api.GlassesDTO;
 import com.lirou.store.glasses.application.repository.GlassesRepository;
 import com.lirou.store.glasses.domain.Glasses;
 
+import com.lirou.store.handler.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 @RequiredArgsConstructor
@@ -26,9 +25,9 @@ public class GlassesInfraRepository implements GlassesRepository {
         return glassesDTOS;
     }
     @Override
-    public Optional<Glasses> getGlasses(String identifier) {
+    public Glasses getGlasses(String identifier) {
         log.info("[starts] GlassesInfraRepository - getGlasses()");
-        Optional<Glasses> glasses = glassesJPARepository.findByIdentifierAndDeletedFalse(identifier);
+        Glasses glasses = glassesJPARepository.findByIdentifierAndDeletedFalse(identifier).orElseThrow(() -> new NotFoundException("Óculos não encontrado!"));
         log.info("[ends] GlassesInfraRepository - getGlasses()");
         return glasses;
     }

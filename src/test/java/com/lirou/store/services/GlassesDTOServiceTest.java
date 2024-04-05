@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.util.Optional;
 
 import com.lirou.store.glasses.application.api.GlassesDTO;
-import com.lirou.store.glasses.application.service.GlassesService;
+import com.lirou.store.glasses.application.service.GlassesApplicationService;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,7 +25,7 @@ import com.lirou.store.glasses.infra.GlassesJPARepository;
 public class GlassesDTOServiceTest {
 
 	@InjectMocks
-	private GlassesService glassesService;
+	private GlassesApplicationService glassesApplicationService;
 	
 	@Mock
 	private GlassesJPARepository glassesJPARepository;
@@ -53,7 +53,7 @@ public class GlassesDTOServiceTest {
 		BDDMockito.given(glassesJPARepository.existsByTitleAndDeletedFalse(glassesdto.title())).willReturn(false);
 		
 		//act
-		glassesService.saveNewGlasses(glassesdto);
+		glassesApplicationService.saveNewGlasses(glassesdto);
 		
 		//assert
 		BDDMockito.then(glassesJPARepository).should().save(glassesCaptor.capture());
@@ -72,7 +72,7 @@ public class GlassesDTOServiceTest {
 		BDDMockito.given(glassesJPARepository.existsByTitleAndDeletedFalse(glassesdto.title())).willReturn(true);
 		
 		//assert && act
-		Assertions.assertThrows(NameExisteInDatabaseException.class,() -> glassesService.saveNewGlasses(glassesdto));
+		Assertions.assertThrows(NameExisteInDatabaseException.class,() -> glassesApplicationService.saveNewGlasses(glassesdto));
 
 	}
 	
@@ -84,7 +84,7 @@ public class GlassesDTOServiceTest {
 		BDDMockito.given(glassesJPARepository.findByIdentifierAndDeletedFalse(glassesdto.identifier())).willReturn(Optional.of(new com.lirou.store.glasses.domain.Glasses()));
 		
 		//act
-		glassesService.editGlasses(glassesdto.identifier(),glassesdto);
+		glassesApplicationService.editGlasses(glassesdto.identifier(),glassesdto);
 				
 		//assert
 		BDDMockito.then(glassesJPARepository).should().save(glassesCaptor.capture());
@@ -108,7 +108,7 @@ public class GlassesDTOServiceTest {
 		
 		//act		
 		//assert
-		Assertions.assertThrows(NotFoundException.class,() -> glassesService.editGlasses(glassesdto.identifier(),glassesdto));
+		Assertions.assertThrows(NotFoundException.class,() -> glassesApplicationService.editGlasses(glassesdto.identifier(),glassesdto));
 
 	}
 	
@@ -120,7 +120,7 @@ public class GlassesDTOServiceTest {
 			BDDMockito.given(glassesJPARepository.findByIdentifierAndDeletedFalse(glassesdto.identifier())).willReturn(Optional.of(new com.lirou.store.glasses.domain.Glasses()));
 			
 			//act
-			glassesService.removeGlasses(glassesdto.identifier());
+			glassesApplicationService.removeGlasses(glassesdto.identifier());
 					
 			//assert
 			BDDMockito.then(glassesJPARepository).should().save(glassesCaptor.capture());
@@ -137,7 +137,7 @@ public class GlassesDTOServiceTest {
 			
 			//act		
 			//assert
-			Assertions.assertThrows(NotFoundException.class,() -> glassesService.editGlasses(glassesdto.identifier(),glassesdto));
+			Assertions.assertThrows(NotFoundException.class,() -> glassesApplicationService.editGlasses(glassesdto.identifier(),glassesdto));
 
 		}
 	
@@ -149,7 +149,7 @@ public class GlassesDTOServiceTest {
 		BDDMockito.given(glassesJPARepository.findByIdentifierAndDeletedFalse("123")).willReturn(Optional.of(glasses));
 		
 		//Assert && Act
-		Assertions.assertEquals("disponibilizado!", glassesService.changeAvailability("123", true));
+		Assertions.assertEquals("disponibilizado!", glassesApplicationService.changeAvailability("123", true));
 	}
 	
 	@Test()
@@ -158,7 +158,7 @@ public class GlassesDTOServiceTest {
 		BDDMockito.given(glassesJPARepository.findByIdentifierAndDeletedFalse("123")).willReturn(Optional.of(glasses));
 		
 		//Assert && Act
-		Assertions.assertEquals("indisponibilizado!", glassesService.changeAvailability("123", false));
+		Assertions.assertEquals("indisponibilizado!", glassesApplicationService.changeAvailability("123", false));
 	}
 	
 	@Test()
@@ -167,6 +167,6 @@ public class GlassesDTOServiceTest {
 		BDDMockito.given(glassesJPARepository.findByIdentifierAndDeletedFalse("123")).willReturn(Optional.empty());
 		
 		//Assert && Act
-		Assertions.assertThrows(NotFoundException.class,() -> glassesService.changeAvailability("123", true));
+		Assertions.assertThrows(NotFoundException.class,() -> glassesApplicationService.changeAvailability("123", true));
 	}
 }
