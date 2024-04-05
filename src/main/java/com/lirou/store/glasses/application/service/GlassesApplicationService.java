@@ -15,23 +15,23 @@ import org.springframework.stereotype.Service;
 public class GlassesApplicationService implements GlassesService {
     private final GlassesInfraRepository glassesInfraRepository;
     public Page<GlassesDTO> getAllGlasses(Pageable pageable) {
-        log.info("[starts] GlassesInfraRepository - getAllGlasses()");
+        log.info("[starts] GlassesApplicationService - getAllGlasses()");
         Page<GlassesDTO> glassesDTOs = glassesInfraRepository.getAllGlasses(pageable);
-        log.info("[ends] GlassesInfraRepository - getAllGlasses()");
+        log.info("[ends] GlassesApplicationService - getAllGlasses()");
         return glassesDTOs;
     }
     public void saveNewGlasses(GlassesDTO glassesDTO) {
-        log.info("[starts] GlassesService - saveNewGlasses()");
+        log.info("[starts] GlassesApplicationService - saveNewGlasses()");
         Glasses newGlasses = new Glasses(glassesDTO);
         glassesInfraRepository.saveGlasses(newGlasses);
-        log.info("[ends] GlassesService - saveNewGlasses()");
+        log.info("[ends] GlassesApplicationService - saveNewGlasses()");
     }
     public void editGlasses(String glassesIdentifier, GlassesDTO changes) {
-        log.info("[starts] GlassesService - editGlasses()");
+        log.info("[starts] GlassesApplicationService - editGlasses()");
         Glasses glassesToEdit = glassesInfraRepository.getGlasses(glassesIdentifier);
         updateGlassesFromDTO(glassesToEdit, changes);
         glassesInfraRepository.saveGlasses(glassesToEdit);
-        log.info("[ends] GlassesService - editGlasses()");
+        log.info("[ends] GlassesApplicationService - editGlasses()");
     }
     private void updateGlassesFromDTO(Glasses glassesToEdit, GlassesDTO changes) {
         glassesToEdit.setTitle(changes.title());
@@ -43,19 +43,19 @@ public class GlassesApplicationService implements GlassesService {
         glassesToEdit.setPrice(changes.price());
     }
     public String removeGlasses(String glassesIdentifier) {
-        log.info("[starts] GlassesService - removeGlasses()");
+        log.info("[starts] GlassesApplicationService - removeGlasses()");
         Glasses glassesToDelete = glassesInfraRepository.getGlasses(glassesIdentifier);
         glassesToDelete.setDeleted(true);
         glassesInfraRepository.saveGlasses(glassesToDelete);
-        log.info("[ends] GlassesService - removeGlasses()");
+        log.info("[ends] GlassesApplicationService - removeGlasses()");
         return glassesToDelete.getTitle();
     }
     public String changeAvailability(String identifier, Boolean available) {
-        log.info("[starts] GlassesService - changeAvailability()");
+        log.info("[starts] GlassesApplicationService - changeAvailability()");
         Glasses glasses = glassesInfraRepository.getGlasses(identifier);
         glasses.setAvailable(available);
         if (available) return "disponibilizado!";
-        log.info("[ends] GlassesService - changeAvailability()");
+        log.info("[ends] GlassesApplicationService - changeAvailability()");
         return "indisponibilizado!";
     }
     public GlassesDTO getGlassesWithIdentifier(String glassesIdentifier) {
