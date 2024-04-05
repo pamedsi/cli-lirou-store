@@ -7,13 +7,13 @@ import lombok.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.UUID;
 
 import static com.lirou.store.security.PasswordHashing.hash;
 
 @Table (name = "user_entity")
 @Entity
-@Getter
-@Setter
+@Data
 @RequiredArgsConstructor
 public class User {
     @Id
@@ -21,6 +21,8 @@ public class User {
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private Long id;
+    @Column
+    private String identifier;
     @Column
     private String name;
     @Column (unique = true)
@@ -32,7 +34,6 @@ public class User {
     @Column (unique = true)
     private String CPF;
     @Column
-    @Setter
     @Enumerated (EnumType.STRING)
     private UserRole role;
     @Column
@@ -42,6 +43,7 @@ public class User {
     private String passwordHash;
 
     public User(UserDTO userDTO) {
+        this.identifier = UUID.randomUUID().toString();
         this.name = userDTO.name();
         this.email = userDTO.email();
         this.passwordHash = hash(userDTO.password());
