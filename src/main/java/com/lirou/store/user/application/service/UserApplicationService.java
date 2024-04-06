@@ -1,5 +1,6 @@
 package com.lirou.store.user.application.service;
 
+import com.lirou.store.handler.exceptions.UnauthorizedException;
 import com.lirou.store.security.TokenService;
 import com.lirou.store.user.application.api.UserRequestDTO;
 import com.lirou.store.user.application.api.UserDetailsDTO;
@@ -72,7 +73,7 @@ public class UserApplicationService implements UserService {
         User userToBeDeleted = userInfraRepository.getUserWithIdentifier(userIdentifierToBeDeleted);
         boolean userWhoTriedIsTheOneToBeDeleted = userToBeDeleted.equals(userWhoTriedToDelete);
         boolean userWhoTriedIsAdmin = userWhoTriedToDelete.getRole() == UserRole.ADMIN;
-        if (!userWhoTriedIsAdmin && !userWhoTriedIsTheOneToBeDeleted) throw new RuntimeException("Você não pode excluir este usuário");
+        if (!userWhoTriedIsAdmin && !userWhoTriedIsTheOneToBeDeleted) throw new UnauthorizedException("Você não pode excluir este usuário");
         return userToBeDeleted;
     }
 }
