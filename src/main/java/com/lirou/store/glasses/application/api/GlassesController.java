@@ -41,14 +41,14 @@ public class GlassesController implements GlassesAPI {
         return ResponseEntity.ok(glassesDTO);
     }
     @Override
-    public ResponseEntity<Message> postGlasses(@RequestBody @Valid GlassesDTO glassesDTO) {
+    public ResponseEntity<Message> postGlasses(@RequestBody @Valid GlassesRequestDTO glassesDTO) {
         log.info("[starts] GlassesController - postGlasses()");
         glassesApplicationService.saveNewGlasses(glassesDTO);
         log.info("[ends] GlassesController - postGlasses()");
         return ResponseEntity.status(201).body(new Message(glassesDTO.title() + " salvo!"));
     }
     @Override
-    public ResponseEntity<?> putGlasses(@RequestBody @Valid GlassesDTO glassesDTO, @PathVariable("identifier") String glassesIdentifier) {
+    public ResponseEntity<?> putGlasses(@RequestBody @Valid GlassesRequestDTO glassesDTO, @ValidIdentifier @PathVariable("identifier") String glassesIdentifier) {
         log.info("[ends] GlassesController - putGlasses()");
         glassesApplicationService.editGlasses(glassesIdentifier, glassesDTO);
         log.info("[ends] GlassesController - putGlasses()");

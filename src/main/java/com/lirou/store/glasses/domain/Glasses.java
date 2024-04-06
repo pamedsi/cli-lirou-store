@@ -1,6 +1,6 @@
 package com.lirou.store.glasses.domain;
 
-import com.lirou.store.glasses.application.api.GlassesDTO;
+import com.lirou.store.glasses.application.api.GlassesRequestDTO;
 import com.lirou.store.models.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -22,7 +22,7 @@ public class Glasses extends Product {
     @Column
     private String brand;
 
-    public Glasses(GlassesDTO glassesDTO) {
+    public Glasses(GlassesRequestDTO glassesDTO) {
         super(glassesDTO.title(), glassesDTO.price(), glassesDTO.pic(), glassesDTO.available());
         this.model = glassesDTO.model();
         this.frame = glassesDTO.frame();

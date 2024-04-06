@@ -1,6 +1,7 @@
 package com.lirou.store.glasses.application.service;
 
 import com.lirou.store.glasses.application.api.GlassesDTO;
+import com.lirou.store.glasses.application.api.GlassesRequestDTO;
 import com.lirou.store.glasses.domain.Glasses;
 import com.lirou.store.glasses.infra.GlassesInfraRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,20 +21,20 @@ public class GlassesApplicationService implements GlassesService {
         log.info("[ends] GlassesApplicationService - getAllGlasses()");
         return glassesDTOs;
     }
-    public void saveNewGlasses(GlassesDTO glassesDTO) {
+    public void saveNewGlasses(GlassesRequestDTO glassesDTO) {
         log.info("[starts] GlassesApplicationService - saveNewGlasses()");
         Glasses newGlasses = new Glasses(glassesDTO);
         glassesInfraRepository.saveGlasses(newGlasses);
         log.info("[ends] GlassesApplicationService - saveNewGlasses()");
     }
-    public void editGlasses(String glassesIdentifier, GlassesDTO changes) {
+    public void editGlasses(String glassesIdentifier, GlassesRequestDTO changes) {
         log.info("[starts] GlassesApplicationService - editGlasses()");
         Glasses glassesToEdit = glassesInfraRepository.getGlasses(glassesIdentifier);
         updateGlassesFromDTO(glassesToEdit, changes);
         glassesInfraRepository.saveGlasses(glassesToEdit);
         log.info("[ends] GlassesApplicationService - editGlasses()");
     }
-    private void updateGlassesFromDTO(Glasses glassesToEdit, GlassesDTO changes) {
+    private void updateGlassesFromDTO(Glasses glassesToEdit, GlassesRequestDTO changes) {
         glassesToEdit.setTitle(changes.title());
         glassesToEdit.setPic(changes.pic());
         glassesToEdit.setModel(changes.model());

@@ -25,11 +25,11 @@ public interface GlassesAPI {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    ResponseEntity<Message> postGlasses(@RequestBody @Valid GlassesDTO glassesDTO);
+    ResponseEntity<Message> postGlasses(@RequestBody @Valid GlassesRequestDTO glassesDTO);
 
     @PutMapping("/{identifier}")
     @ResponseStatus(HttpStatus.ACCEPTED)
-    ResponseEntity<?> putGlasses(@RequestBody @Valid GlassesDTO glassesDTO, @PathVariable("identifier") String glassesIdentifier);
+    ResponseEntity<?> putGlasses(@RequestBody @Valid GlassesRequestDTO glassesDTO, @PathVariable("identifier") String glassesIdentifier);
 
     @DeleteMapping("/{identifier}")
     @ResponseStatus(HttpStatus.ACCEPTED)
