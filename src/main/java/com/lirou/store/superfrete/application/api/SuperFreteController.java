@@ -17,14 +17,16 @@ import com.lirou.store.superfrete.application.api.models.ShippingPrices;
 import com.lirou.store.superfrete.application.service.SuperFreteApplicationService;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.web.bind.annotation.RestController;
 
 @Log4j2
 @RequiredArgsConstructor
+@RestController
 public class SuperFreteController implements SuperFreteAPI {
     private final SuperFreteApplicationService superFreteApplicationService;
 
     @Override
-    public ResponseEntity<?> calculateShipping(String postalCode) throws BadRequestExceptions {
+    public ResponseEntity<List<ShippingPrices>> calculateShipping(String postalCode) throws BadRequestExceptions {
         log.info("[Inicia] SuperFreteService - calculateShipping()");
         List<ShippingPrices> body = superFreteApplicationService.calculateShipping(postalCode);
         log.info("[Finaliza] SuperFreteService - calculateShipping()");
