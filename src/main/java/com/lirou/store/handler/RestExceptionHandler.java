@@ -5,8 +5,10 @@ import com.lirou.store.handler.exceptions.UnauthorizedException;
 
 import jakarta.servlet.http.HttpServletRequest;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -17,19 +19,26 @@ import java.util.List;
 
 
 @RestControllerAdvice
+@Log4j2
 public class RestExceptionHandler {
 
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ExceptionDetails> badRequestHandler(BadRequestException exception,  HttpServletRequest request) {
+    @ExceptionHandler({MethodArgumentNotValidException.class, BadRequestException.class})
+    public ResponseEntity<ExceptionDetails> badRequestHandler(Exception exception,  HttpServletRequest request) {
+        log.error(exception.getMessage());
         return ResponseEntity.badRequest().body(new ExceptionDetails(
                 getExceptionTitle(exception.getClass().toString()),
-                exception.getMessage(),
+                "Verifique se os campos estão preenchidos corretamente!",
                 400,
                 LocalDateTime.now(),
                 request.getServletPath(),
                 request.getMethod()
         ));
     }
+
+//    @ExceptionHandler({MethodArgumentNotValidException.class, BadRequestException.class})
+//    public ResponseEntity<?> teste(MethodArgumentNotValidException exception,  HttpServletRequest request) {
+//        return ResponseEntity.ok("oi");
+//    }
 
     @ExceptionHandler({NotFoundException.class})
     public ResponseEntity<ExceptionDetails> notFoundHandler(NotFoundException exception, HttpServletRequest request) {
@@ -62,7 +71,7 @@ public class RestExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 new ExceptionDetails(
                         getExceptionTitle(exception.getClass().toString()),
-                        exception.getMessage(),
+                        "Erro interno! Favor contatar o suporte!",
                         500,
                         LocalDateTime.now(),
                         request.getServletPath(),

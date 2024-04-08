@@ -21,7 +21,7 @@ import jakarta.ws.rs.core.MediaType;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ExtendWith(MockitoExtension.class)
-class GlassesDTOControllerTest {
+class GlassesControllerTest {
 
 	@Autowired
 	private MockMvc mvc;
@@ -31,7 +31,7 @@ class GlassesDTOControllerTest {
 	
 	//testando metodo de modificar a disponibilidade
 	@Test
-	void deveriaModificarAdisponibilidade() throws Exception {
+	void deveriaModificarADisponibilidade() throws Exception {
 		//arrange
 		String availability = """
 				{
@@ -47,11 +47,11 @@ class GlassesDTOControllerTest {
 				).andReturn().getResponse();
 		
 		//assert
-		Assertions.assertEquals(200, response.getStatus());
+		Assertions.assertEquals(202, response.getStatus());
 	}
 	
 	@Test
-	void nãoDeveriaModificarAdisponibilidade() throws Exception {
+	void naoDeveriaModificarADisponibilidade() throws Exception {
 		//arrange
 		String availability = "{}";
 		String id = "1010";
@@ -69,7 +69,7 @@ class GlassesDTOControllerTest {
 	
 	// metodo de salvar no banco
 	@Test
-	void nãoDeveriaSalvarNoBanco() throws Exception {
+	void naoDeveriaSalvarNoBanco() throws Exception {
 		//arrange
 		String availability = "{}";
 		

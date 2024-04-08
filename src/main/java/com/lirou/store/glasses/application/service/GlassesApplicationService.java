@@ -55,9 +55,8 @@ public class GlassesApplicationService implements GlassesService {
         log.info("[starts] GlassesApplicationService - changeAvailability()");
         Glasses glasses = glassesInfraRepository.getGlasses(identifier);
         glasses.setAvailable(available);
-        if (available) return "disponibilizado!";
         log.info("[ends] GlassesApplicationService - changeAvailability()");
-        return "indisponibilizado!";
+        return available ? "disponibilizado" : "indisponibilizado!";
     }
     public GlassesDTO getGlassesWithIdentifier(String glassesIdentifier) {
         Glasses glasses = glassesInfraRepository.getGlasses(glassesIdentifier);
