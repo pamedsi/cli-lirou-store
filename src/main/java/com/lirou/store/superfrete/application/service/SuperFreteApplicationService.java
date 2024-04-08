@@ -42,12 +42,14 @@ public class SuperFreteApplicationService implements SuperFreteService{
     private SuperFreteAddress from;
     private PackageDimensions volumes;
     private HttpHeaders headers;
+    private final RestTemplate restTemplate;
 
     public SuperFreteApplicationService(@Value("${token}") String token, @Value("${SUPER_FRETE_URL}") String baseURL, @Value("${address}") String address) {
         createFrom(address);
         createVolumes();
         createHeaders(token);
         this.baseURL = baseURL;
+        this.restTemplate = new RestTemplate();
     }
 
     private void createFrom(String address){
@@ -84,7 +86,6 @@ public class SuperFreteApplicationService implements SuperFreteService{
     public List<ShippingPrices> calculateShipping(String to) throws BadRequestExceptions {
         if (!isAValidePostalCode(to)) throw new BadRequestExceptions("CEP inválido!");
 
-        RestTemplate restTemplate = new RestTemplate();
         String services =  "1,2,17";
         BodyForCalculateShipping body = new BodyForCalculateShipping(
                 new PostalCode(from.postal_code()),
@@ -113,7 +114,6 @@ public class SuperFreteApplicationService implements SuperFreteService{
         );
         String json = new Gson().toJson(body, ShippingInfToSendToSuperFreteDTO.class);
         HttpEntity<?> requestEntityToSuperFrete = new HttpEntity<>(json, headers);
-        RestTemplate restTemplate = new RestTemplate();
         log.info("Gerando etiqueta...");
         String responseBodyJson = restTemplate.exchange(baseURL + "/api/v0/cart" , HttpMethod.POST, requestEntityToSuperFrete, String.class).getBody();
         log.info("Etiqueta gerada.");
@@ -125,32 +125,29 @@ public class SuperFreteApplicationService implements SuperFreteService{
         // ...
         String ordersIDs = new Gson().toJson(new OrdersIDs(List.of(response.id())));
         HttpEntity<?> requestEntityToPayShipping = new HttpEntity<>(ordersIDs, headers);
-        RestTemplate restTemplate = new RestTemplate();
         log.info("Pagando frete...");
         String responseBody = restTemplate.exchange(baseURL + "/api/v0/checkout" , HttpMethod.POST, requestEntityToPayShipping, String.class).getBody();
         log.info("Frete pago.");
         return new Gson().fromJson(responseBody, ShippingOfOrder.class);
     }
-
     public DeliveryInfo getDeliveryInfo(String orderID) {
         HttpEntity<?> requestEntity = new HttpEntity<>(headers);
-        RestTemplate restTemplate = new RestTemplate();
         String responseBody = restTemplate.exchange(baseURL + "/api/v0/order/info/" + orderID , HttpMethod.GET, requestEntity, String.class).getBody();
         return new Gson().fromJson(responseBody, DeliveryInfo.class);
     }
     public PrintInfo getPrintableLabel(OrdersIDs ordersIDs) {
         HttpEntity<?> requestEntity = new HttpEntity<>(ordersIDs, headers);
-        RestTemplate restTemplate = new RestTemplate();
         String responseBody = restTemplate.exchange(baseURL + "/api/v0/tag/print" , HttpMethod.POST, requestEntity, String.class).getBody();
         return new Gson().fromJson(responseBody, PrintInfo.class);
     }
     public ShippingOfOrder getPrintableLabel(OrderInfoFromCustomer orderInfo) {
         ProtocolData protocolData = createShippingOrder(orderInfo);
+        log.info(protocolData);
+        System.exit(1);
         return payShipping(protocolData);
     }
     public OrderCancellationResponse cancelOrder(AbortingRequest requestBody) {
         HttpEntity<?> requestEntity = new HttpEntity<>(requestBody, headers);
-        RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<?> response = restTemplate.exchange(baseURL + "/api/v0/order/cancel" , HttpMethod.POST, requestEntity, String.class);
         return new Gson().fromJson((String) response.getBody(), OrderCancellationResponse.class);
     }
@@ -158,7 +155,4 @@ public class SuperFreteApplicationService implements SuperFreteService{
     public static String removeNonDigits(String cep) {
         return cep.replaceAll("[^0-9]", "");
     }
-
-
-
 }

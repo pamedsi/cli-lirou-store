@@ -1,10 +1,7 @@
-package com.lirou.store.models;
+package com.lirou.store.shared.models;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -12,6 +9,7 @@ import java.util.UUID;
 
 @MappedSuperclass
 @Data
+@NoArgsConstructor
 public abstract class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -20,7 +18,7 @@ public abstract class Product {
     private Long id;
     @Column
     @Setter(AccessLevel.NONE)
-    private String identifier = UUID.randomUUID().toString();
+    private String identifier;
     @Column (nullable = false)
     private String title;
     @Column
@@ -35,7 +33,8 @@ public abstract class Product {
     private Boolean deleted = false;
     @Column
     @Setter (AccessLevel.NONE)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt;
+
     public void decrementQuantity() { this.quantityInStock--; }
 
     public Product(String title, BigDecimal price, String pic, Boolean available) {
@@ -43,5 +42,7 @@ public abstract class Product {
         this.price = price;
         this.pic = pic;
         this.available = available;
+        this.identifier = UUID.randomUUID().toString();
+        this.createdAt = LocalDateTime.now();
     }
 }

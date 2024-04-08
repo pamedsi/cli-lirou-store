@@ -1,17 +1,20 @@
 package com.lirou.store.glasses.domain;
 
 import com.lirou.store.glasses.application.api.GlassesRequestDTO;
-import com.lirou.store.models.Product;
+
+import com.lirou.store.shared.models.Product;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Setter
 @Getter
 @Entity
 @Table
+@NoArgsConstructor
 public class Glasses extends Product {
     @Column
     private String model;
@@ -30,7 +33,14 @@ public class Glasses extends Product {
         this.brand = glassesDTO.brand();
     }
 
-    public Glasses() {
-        super(null, null, null, null);
+    public void updateGlassesFromDTO(Glasses glassesToEdit, GlassesRequestDTO changes) {
+        glassesToEdit.setTitle(changes.title());
+        glassesToEdit.setPrice(changes.price());
+        glassesToEdit.setPic(changes.pic());
+        glassesToEdit.setAvailable(changes.available());
+        this.model = changes.model();
+        this.frame = changes.frame();
+        this.color = changes.color();
+        this.brand = changes.brand();
     }
 }
