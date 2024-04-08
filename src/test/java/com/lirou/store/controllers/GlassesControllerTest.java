@@ -29,10 +29,10 @@ class GlassesControllerTest {
 	@MockBean
 	private GlassesApplicationService glassesApplicationService;
 	
-	//testando metodo de modificar a disponibilidade
+	// Testando método de modificar a disponibilidade
 	@Test
 	void deveriaModificarADisponibilidade() throws Exception {
-		//arrange
+		// Arrange
 		String availability = """
 				{
 				  "available": "true"
@@ -40,52 +40,52 @@ class GlassesControllerTest {
 				""";
 		String id = "1010";
 		
-		//act
+		// Act
 		 MockHttpServletResponse response = mvc.perform(patch("/api/glasses/{identifier}", id)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(availability)
 				).andReturn().getResponse();
 		
-		//assert
+		// Assert
 		Assertions.assertEquals(202, response.getStatus());
 	}
 	
 	@Test
 	void naoDeveriaModificarADisponibilidade() throws Exception {
-		//arrange
+		// Arrange
 		String availability = "{}";
 		String id = "1010";
 		
-		//act
+		// Act
 		 MockHttpServletResponse response = mvc.perform(patch("/api/glasses/{identifier}", id)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(availability)
 				).andReturn().getResponse();
 		
-		//assert
+		// Assert
 		Assertions.assertEquals(400, response.getStatus());
 	}
 	
 	
-	// metodo de salvar no banco
+	// Método de salvar no banco
 	@Test
 	void naoDeveriaSalvarNoBanco() throws Exception {
-		//arrange
+		// Arrange
 		String availability = "{}";
 		
-		//act
+		// Act
 		 MockHttpServletResponse response = mvc.perform(post("/api/glasses")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(availability)
 				).andReturn().getResponse();
 		
-		//assert
+		// Assert
 		Assertions.assertEquals(400, response.getStatus());
 	}
 	
 	@Test
 	void deveriaSalvarNoBanco() throws Exception {
-		//arrange
+		// Arrange
 		String availability = """
 			{
 			  "title": "Juliet X Metal Vermelho -1",
@@ -98,13 +98,13 @@ class GlassesControllerTest {
 			}
 			""";
 		
-		//act
+		// Act
 		 MockHttpServletResponse response = mvc.perform(post("/api/glasses")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(availability)
 				).andReturn().getResponse();
 		
-		//assert
+		// Assert
 		Assertions.assertEquals(201, response.getStatus());
 	}
 
