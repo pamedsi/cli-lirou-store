@@ -47,21 +47,28 @@ public class UserAddress {
     private LocalDateTime createdAt;
 
     public UserAddress(UserAddressDTO addressDTO, User user){
-        this.identifier = UUID.randomUUID().toString();
-        this.owner = user;
-        this.street = addressDTO.street();
-        this.number = addressDTO.number();
-        this.complement = addressDTO.complement();
-        this.district = addressDTO.district();
-        this.city = addressDTO.city();
-        this.state = State.fromAcronym(addressDTO.state());
-        this.postalCode = addressDTO.postalCode();
-        this.obs = addressDTO.obs();
-        this.deleted = false;
-        this.createdAt = LocalDateTime.now();
+        identifier = UUID.randomUUID().toString();
+        owner = user;
+        street = addressDTO.street();
+        number = addressDTO.number();
+        complement = addressDTO.complement();
+        district = addressDTO.district();
+        city = addressDTO.city();
+        state = State.fromAcronym(addressDTO.state());
+        postalCode = addressDTO.postalCode();
+        obs = addressDTO.obs();
+        deleted = false;
+        createdAt = LocalDateTime.now();
     }
 
-    public void setState(String state) {
-        this.state = State.fromAcronym(state);
+    public void updateAddressFromDTO(UserAddressDTO addressDTO) {
+        city = addressDTO.city();
+        obs = addressDTO.obs();
+        complement = addressDTO.complement();
+        number = addressDTO.number();
+        state = State.valueOf(addressDTO.state());
+        district = addressDTO.district();
+        street = addressDTO.street();
+        postalCode = addressDTO.postalCode();
     }
 }

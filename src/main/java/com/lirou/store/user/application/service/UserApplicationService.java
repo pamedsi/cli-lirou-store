@@ -4,9 +4,9 @@ import com.lirou.store.handler.exceptions.UnauthorizedException;
 import com.lirou.store.security.TokenService;
 import com.lirou.store.user.application.api.UserRequestDTO;
 import com.lirou.store.user.application.api.UserDetailsDTO;
+import com.lirou.store.user.application.repository.UserRepository;
 import com.lirou.store.user.domain.User;
 import com.lirou.store.user.domain.UserRole;
-import com.lirou.store.user.infra.UserInfraRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -17,19 +17,19 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Log4j2
 public class UserApplicationService implements UserService {
-    private final UserInfraRepository userInfraRepository;
+    private final UserRepository repository;
     private final TokenService tokenService;
 
     public void createUser(UserRequestDTO userRequestDTO) {
         log.info("[starts] UserApplicationService -> createUser()");
         User newUser = new User(userRequestDTO);
-        userInfraRepository.saveUser(newUser);
+        repository.saveUser(newUser);
         log.info("[ends] UserApplicationService -> createUser()");
     }
     @Override
     public Page<UserDetailsDTO> getUsers(Pageable pageable) {
         log.info("[starts] UserApplicationService -> getUsers()");
-        Page<User> users = userInfraRepository.getAllUsers(pageable);
+        Page<User> users = repository.getAllUsers(pageable);
         Page<UserDetailsDTO> usersDTO = UserDetailsDTO.toPageDTO(users);
         log.info("[ends] UserApplicationService -> getUsers()");
         return usersDTO;
@@ -37,7 +37,7 @@ public class UserApplicationService implements UserService {
     @Override
     public UserDetailsDTO getUser(String userIdentifier) {
         log.info("[starts] UserApplicationService -> getUser()");
-        User user = userInfraRepository.getUserWithIdentifier(userIdentifier);
+        User user = repository.getUserWithIdentifier(userIdentifier);
         UserDetailsDTO userDTO = new UserDetailsDTO(user);
         log.info("[ends] UserApplicationService -> getUser()");
         return userDTO;
@@ -46,19 +46,19 @@ public class UserApplicationService implements UserService {
     public void editUser(String token, UserRequestDTO userDTO) {
         log.info("[starts] UserApplicationService -> editUser()");
         String email = tokenService.decode(token);
-        User user = userInfraRepository.getUserWithEmail(email);
+        User user = repository.getUserWithEmail(email);
         updateUserFromDTO(user, userDTO);
-        userInfraRepository.saveUser(user);
+        repository.saveUser(user);
         log.info("[ends] UserApplicationService -> editUser()");
     }
     @Override
     public void deleteUser(String token, String userIdentifier) {
         log.info("[starts] UserApplicationService -> deleteUser()");
         String email = tokenService.decode(token);
-        User userWhoIsTrying = userInfraRepository.getUserWithEmail(email);
+        User userWhoIsTrying = repository.getUserWithEmail(email);
         User userToBeDeleted = checkIfCanDelete(userWhoIsTrying, userIdentifier);
         userToBeDeleted.setDeletedAccount(true);
-        userInfraRepository.saveUser(userToBeDeleted);
+        repository.saveUser(userToBeDeleted);
         log.info("[ends] UserApplicationService -> deleteUser()");
     }
     private void updateUserFromDTO(User user, UserRequestDTO userDTO) {
@@ -70,7 +70,7 @@ public class UserApplicationService implements UserService {
         user.updatePassword(userDTO.password());
     }
     private User checkIfCanDelete(User userWhoTriedToDelete, String userIdentifierToBeDeleted) {
-        User userToBeDeleted = userInfraRepository.getUserWithIdentifier(userIdentifierToBeDeleted);
+        User userToBeDeleted = repository.getUserWithIdentifier(userIdentifierToBeDeleted);
         boolean userWhoTriedIsTheOneToBeDeleted = userToBeDeleted.equals(userWhoTriedToDelete);
         boolean userWhoTriedIsAdmin = userWhoTriedToDelete.getRole() == UserRole.ADMIN;
         if (!userWhoTriedIsAdmin && !userWhoTriedIsTheOneToBeDeleted) throw new UnauthorizedException("Você não pode excluir este usuário");

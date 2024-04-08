@@ -1,7 +1,7 @@
 package com.lirou.store.user.application.api;
 
 import com.lirou.store.models.Message;
-import com.lirou.store.user.application.service.UserApplicationService;
+import com.lirou.store.user.application.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
 public class UserController implements UserAPI {
-    private final UserApplicationService userApplicationService;
+    private final UserService userService;
 
     @Override
     public ResponseEntity<?> createUser(UserRequestDTO userRequestDTO) {
         log.info("[starts] UserController -> createUser()");
-        userApplicationService.createUser(userRequestDTO);
+        userService.createUser(userRequestDTO);
         log.info("[ends] UserController -> createUser()");
         return ResponseEntity.status(201).body(new Message("Usuário criado com sucesso!"));
     }
@@ -26,7 +26,7 @@ public class UserController implements UserAPI {
     @Override
     public ResponseEntity<Page<UserDetailsDTO>> getUsers(String token, Pageable pageable) {
         log.info("[starts] UserController -> getUsers()");
-        Page<UserDetailsDTO> page = userApplicationService.getUsers(pageable);
+        Page<UserDetailsDTO> page = userService.getUsers(pageable);
         log.info("[ends] UserController -> getUsers()");
         return ResponseEntity.ok(page);
     }
@@ -34,7 +34,7 @@ public class UserController implements UserAPI {
     @Override
     public ResponseEntity<UserDetailsDTO> getUser(String token, String userIdentifier) {
         log.info("[starts] UserController -> getUser()");
-        UserDetailsDTO user = userApplicationService.getUser(userIdentifier);
+        UserDetailsDTO user = userService.getUser(userIdentifier);
         log.info("[ends] UserController -> getUser()");
         return ResponseEntity.ok(user);
     }
@@ -42,7 +42,7 @@ public class UserController implements UserAPI {
     @Override
     public ResponseEntity<?> editUser(String token, UserRequestDTO userDTO) {
         log.info("[starts] UserController -> editUser()");
-        userApplicationService.editUser(token, userDTO);
+        userService.editUser(token, userDTO);
         log.info("[ends] UserController -> editUser()");
         return ResponseEntity.accepted().build();
     }
@@ -50,7 +50,7 @@ public class UserController implements UserAPI {
     @Override
     public ResponseEntity<?> deleteUser(String token, String userIdentifier) {
         log.info("[starts] UserController -> deleteUser()");
-        userApplicationService.deleteUser(token, userIdentifier);
+        userService.deleteUser(token, userIdentifier);
         log.info("[ends] UserController -> deleteUser()");
         return ResponseEntity.accepted().build();
     }
