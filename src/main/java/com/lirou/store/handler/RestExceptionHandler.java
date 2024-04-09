@@ -6,6 +6,7 @@ import com.lirou.store.handler.exceptions.UnauthorizedException;
 import jakarta.servlet.http.HttpServletRequest;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -34,11 +35,18 @@ public class RestExceptionHandler {
                 request.getMethod()
         ));
     }
-
-//    @ExceptionHandler({MethodArgumentNotValidException.class, BadRequestException.class})
-//    public ResponseEntity<?> teste(MethodArgumentNotValidException exception,  HttpServletRequest request) {
-//        return ResponseEntity.ok("oi");
-//    }
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ExceptionDetails> dataIntegrityViolationHandler(DataIntegrityViolationException exception,  HttpServletRequest request) {
+        log.error(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionDetails(
+                getExceptionTitle(exception.getClass().toString()),
+                "Um dos campos que você inseriu já existe no banco de dados.",
+                409,
+                LocalDateTime.now(),
+                request.getServletPath(),
+                request.getMethod()
+        ));
+    }
 
     @ExceptionHandler({NotFoundException.class})
     public ResponseEntity<ExceptionDetails> notFoundHandler(NotFoundException exception, HttpServletRequest request) {
