@@ -1,92 +1,93 @@
 package com.lirou.store.handler;
 
-import com.lirou.store.models.ExceptionDetails;
+import com.lirou.store.handler.exceptions.NotFoundException;
+import com.lirou.store.handler.exceptions.UnauthorizedException;
 
-import jakarta.ws.rs.NotFoundException;
-import org.springframework.context.MessageSourceResolvable;
+import jakarta.servlet.http.HttpServletRequest;
+
+import lombok.extern.log4j.Log4j2;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.method.ParameterValidationResult;
-
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import jakarta.ws.rs.BadRequestException;
-
-import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+
 @RestControllerAdvice
+@Log4j2
 public class RestExceptionHandler {
 
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ExceptionDetails> badRequestHandler(BadRequestException exception) {
+    @ExceptionHandler({MethodArgumentNotValidException.class, BadRequestException.class})
+    public ResponseEntity<ExceptionDetails> badRequestHandler(Exception exception,  HttpServletRequest request) {
+        log.error(exception.getMessage());
         return ResponseEntity.badRequest().body(new ExceptionDetails(
-                exception.getMessage(),
+                getExceptionTitle(exception.getClass().toString()),
+                "Verifique se os campos estão preenchidos corretamente!",
                 400,
-                LocalDateTime.now()
+                LocalDateTime.now(),
+                request.getServletPath(),
+                request.getMethod()
+        ));
+    }
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ExceptionDetails> dataIntegrityViolationHandler(DataIntegrityViolationException exception,  HttpServletRequest request) {
+        log.error(exception.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionDetails(
+                getExceptionTitle(exception.getClass().toString()),
+                "Um dos campos que você inseriu já existe no banco de dados.",
+                409,
+                LocalDateTime.now(),
+                request.getServletPath(),
+                request.getMethod()
         ));
     }
 
-    @ExceptionHandler(ClassNotFoundException.class)
-    public ResponseEntity<ExceptionDetails> classNotFoundHandler(ClassNotFoundException exception) {
-        return ResponseEntity.badRequest().body(new ExceptionDetails(
-                exception.getMessage(),
-                500,
-                LocalDateTime.now()
-        ));
-    }
-
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ExceptionDetails> badRequestHandler(NotFoundException exception) {
+    @ExceptionHandler({NotFoundException.class})
+    public ResponseEntity<ExceptionDetails> notFoundHandler(NotFoundException exception, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new ExceptionDetails(
+                        getExceptionTitle(exception.getClass().toString()),
                         exception.getMessage(),
                         404,
-                        LocalDateTime.now()
+                        LocalDateTime.now(),
+                        request.getServletPath(),
+                        request.getMethod()
                 ));
     }
 
-    @ExceptionHandler(HandlerMethodValidationException.class)
-    public ResponseEntity<ExceptionDetails> badRequestHandler(HandlerMethodValidationException exception) {
-        List<ParameterValidationResult> validationResults = exception.getAllValidationResults();
-        List<List<String>> errors = validationResults.stream().map(error -> error.getResolvableErrors().stream().map(MessageSourceResolvable::getDefaultMessage).toList()).toList();
-
-        ExceptionDetails body = new ExceptionDetails(
-                errors.toString(),
-                400,
-                LocalDateTime.now()
-        );
-
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(body);
+    @ExceptionHandler (UnauthorizedException.class)
+    public ResponseEntity<ExceptionDetails> unauthorisedHandler(UnauthorizedException exception, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body (
+                new ExceptionDetails (
+                        getExceptionTitle(exception.getClass().toString()),
+                        exception.getMessage(),
+                        401,
+                        LocalDateTime.now(),
+                        request.getServletPath(),
+                        request.getMethod()
+                ));
     }
 
-    @ExceptionHandler (DataIntegrityViolationException.class)
-    public ResponseEntity<?> repeatedDataHandler(DataIntegrityViolationException ex) {
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(
+    @ExceptionHandler (Exception.class)
+    public ResponseEntity<?> generalException(Exception exception, HttpServletRequest request) {
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 new ExceptionDetails(
-                        ex.getMessage(),
-                        409,
-                        LocalDateTime.now()
+                        getExceptionTitle(exception.getClass().toString()),
+                        "Erro interno! Favor contatar o suporte!",
+                        500,
+                        LocalDateTime.now(),
+                        request.getServletPath(),
+                        request.getMethod()
                 ));
     }
-
-    @ExceptionHandler (HttpMessageNotReadableException.class)
-    public ResponseEntity<?> noBodyHandler(HttpMessageNotReadableException ex) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(
-                new ExceptionDetails(
-                        getOnlyMessageValue(ex),
-                        400,
-                        LocalDateTime.now()
-                ));
-    }
-
-    private String getOnlyMessageValue(Exception ex) {
-        return ex.getMessage().split(":")[0];
+    
+    private String getExceptionTitle(String classTitle) {
+        return List.of(classTitle.split("\\.")).getLast().replace("Exception", "");
     }
 }
