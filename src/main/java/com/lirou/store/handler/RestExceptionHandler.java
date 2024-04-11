@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import jakarta.ws.rs.BadRequestException;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 @RestControllerAdvice
@@ -27,7 +26,7 @@ public class RestExceptionHandler {
     public ResponseEntity<ExceptionDetails> badRequestHandler(Exception exception,  HttpServletRequest request) {
         log.error(exception.getMessage());
         return ResponseEntity.badRequest().body(new ExceptionDetails(
-                getExceptionTitle(exception.getClass().toString()),
+                ExceptionDetails.getExceptionTitle(exception.getClass().toString()),
                 "Verifique se os campos estão preenchidos corretamente!",
                 400,
                 LocalDateTime.now(),
@@ -39,8 +38,8 @@ public class RestExceptionHandler {
     public ResponseEntity<ExceptionDetails> dataIntegrityViolationHandler(DataIntegrityViolationException exception,  HttpServletRequest request) {
         log.error(exception.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new ExceptionDetails(
-                getExceptionTitle(exception.getClass().toString()),
-                "Um dos campos que você inseriu já existe no banco de dados.",
+                ExceptionDetails.getExceptionTitle(exception.getClass().toString()),
+                ExceptionDetails.getMessageFromDataIntegrityViolation(exception.getMessage()),
                 409,
                 LocalDateTime.now(),
                 request.getServletPath(),
@@ -50,9 +49,10 @@ public class RestExceptionHandler {
 
     @ExceptionHandler({NotFoundException.class})
     public ResponseEntity<ExceptionDetails> notFoundHandler(NotFoundException exception, HttpServletRequest request) {
+        log.error(exception.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(
                 new ExceptionDetails(
-                        getExceptionTitle(exception.getClass().toString()),
+                        ExceptionDetails.getExceptionTitle(exception.getClass().toString()),
                         exception.getMessage(),
                         404,
                         LocalDateTime.now(),
@@ -63,9 +63,10 @@ public class RestExceptionHandler {
 
     @ExceptionHandler (UnauthorizedException.class)
     public ResponseEntity<ExceptionDetails> unauthorisedHandler(UnauthorizedException exception, HttpServletRequest request) {
+        log.error(exception.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body (
                 new ExceptionDetails (
-                        getExceptionTitle(exception.getClass().toString()),
+                        ExceptionDetails.getExceptionTitle(exception.getClass().toString()),
                         exception.getMessage(),
                         401,
                         LocalDateTime.now(),
@@ -76,18 +77,15 @@ public class RestExceptionHandler {
 
     @ExceptionHandler (Exception.class)
     public ResponseEntity<?> generalException(Exception exception, HttpServletRequest request) {
+        log.error(exception.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(
                 new ExceptionDetails(
-                        getExceptionTitle(exception.getClass().toString()),
+                        ExceptionDetails.getExceptionTitle(exception.getClass().toString()),
                         "Erro interno! Favor contatar o suporte!",
                         500,
                         LocalDateTime.now(),
                         request.getServletPath(),
                         request.getMethod()
                 ));
-    }
-    
-    private String getExceptionTitle(String classTitle) {
-        return List.of(classTitle.split("\\.")).getLast().replace("Exception", "");
     }
 }
