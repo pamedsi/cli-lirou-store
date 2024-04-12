@@ -21,7 +21,7 @@ public class User {
     @Getter(AccessLevel.NONE)
     @Setter(AccessLevel.NONE)
     private Long id;
-    @Column
+    @Column (unique = true)
     @Setter(AccessLevel.NONE)
     private String identifier;
     @Column

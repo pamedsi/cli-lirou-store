@@ -12,8 +12,8 @@ public record UserDetailsDTO (
         String identifier,
         String name,
         String email,
+        String phoneNumber,
         Long age,
-        String CPF,
         UserRole role
 ) {
     public UserDetailsDTO (User userEntity) {
@@ -21,8 +21,8 @@ public record UserDetailsDTO (
                 userEntity.getIdentifier(),
                 userEntity.getName(),
                 userEntity.getEmail(),
+                userEntity.getPhoneNumber(),
                 userEntity.getAge(),
-                userEntity.getCPF(),
                 userEntity.getRole()
         );
     }
