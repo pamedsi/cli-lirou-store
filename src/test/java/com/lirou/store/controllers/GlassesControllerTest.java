@@ -3,12 +3,9 @@ package com.lirou.store.controllers;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
-import java.util.ArrayList;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.BDDMockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,8 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.lirou.store.services.GlassesService;
-import com.lirou.store.services.SuperFreteService;
+import com.lirou.store.glasses.application.service.GlassesApplicationService;
 
 import jakarta.ws.rs.core.MediaType;
 
@@ -31,12 +27,12 @@ class GlassesControllerTest {
 	private MockMvc mvc;
 	
 	@MockBean
-	private GlassesService glassesService;
+	private GlassesApplicationService glassesApplicationService;
 	
-	//testando metodo de modificar a disponibilidade
+	// Testando método de modificar a disponibilidade
 	@Test
-	void deveriaModificarAdisponibilidade() throws Exception {
-		//arrange
+	void deveriaModificarADisponibilidade() throws Exception {
+		// Arrange
 		String availability = """
 				{
 				  "available": "true"
@@ -44,52 +40,52 @@ class GlassesControllerTest {
 				""";
 		String id = "1010";
 		
-		//act
+		// Act
 		 MockHttpServletResponse response = mvc.perform(patch("/api/glasses/{identifier}", id)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(availability)
 				).andReturn().getResponse();
 		
-		//assert
-		Assertions.assertEquals(200, response.getStatus());
+		// Assert
+		Assertions.assertEquals(202, response.getStatus());
 	}
 	
 	@Test
-	void nãoDeveriaModificarAdisponibilidade() throws Exception {
-		//arrange
+	void naoDeveriaModificarADisponibilidade() throws Exception {
+		// Arrange
 		String availability = "{}";
 		String id = "1010";
 		
-		//act
+		// Act
 		 MockHttpServletResponse response = mvc.perform(patch("/api/glasses/{identifier}", id)
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(availability)
 				).andReturn().getResponse();
 		
-		//assert
+		// Assert
 		Assertions.assertEquals(400, response.getStatus());
 	}
 	
 	
-	// metodo de salvar no banco
+	// Método de salvar no banco
 	@Test
-	void nãoDeveriaSalvarNoBanco() throws Exception {
-		//arrange
+	void naoDeveriaSalvarNoBanco() throws Exception {
+		// Arrange
 		String availability = "{}";
 		
-		//act
+		// Act
 		 MockHttpServletResponse response = mvc.perform(post("/api/glasses")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(availability)
 				).andReturn().getResponse();
 		
-		//assert
+		// Assert
 		Assertions.assertEquals(400, response.getStatus());
 	}
 	
 	@Test
 	void deveriaSalvarNoBanco() throws Exception {
-		//arrange
+		// Arrange
 		String availability = """
 			{
 			  "title": "Juliet X Metal Vermelho -1",
@@ -102,13 +98,13 @@ class GlassesControllerTest {
 			}
 			""";
 		
-		//act
+		// Act
 		 MockHttpServletResponse response = mvc.perform(post("/api/glasses")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(availability)
 				).andReturn().getResponse();
 		
-		//assert
+		// Assert
 		Assertions.assertEquals(201, response.getStatus());
 	}
 
