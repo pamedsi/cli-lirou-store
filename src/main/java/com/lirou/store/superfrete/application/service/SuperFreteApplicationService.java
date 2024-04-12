@@ -44,7 +44,7 @@ public class SuperFreteApplicationService implements SuperFreteService{
     private HttpHeaders headers;
     private final RestTemplate restTemplate;
 
-    public SuperFreteApplicationService(@Value("${token}") String token, @Value("${SUPER_FRETE_URL}") String baseURL, @Value("${address}") String address) {
+    public SuperFreteApplicationService(@Value("${SUPER_FRETE_TOKEN}") String token, @Value("${SUPER_FRETE_URL}") String baseURL, @Value("${address}") String address) {
         createFrom(address);
         createVolumes();
         createHeaders(token);
